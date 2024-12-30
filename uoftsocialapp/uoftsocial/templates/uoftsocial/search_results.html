@@ -1,0 +1,60 @@
+{% extends "uoftsocial/base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Search Results</h2>
+    {% if corrected_query and corrected_query != request.GET.query %}
+    <p>Did you mean: <a href="?query={{ corrected_query }}">{{ corrected_query }}</a>?</p>
+    {% endif %}
+  <p>
+    Showing results for:
+    <strong>{{ request.GET.query }}</strong>
+    <br>
+    Filtered by:
+    <strong>{{ request.GET.filter_by|default:"All" }}</strong>
+    <br>
+    Ordered by:
+    <strong>{{ request.GET.order_by|default:"date_posted" }}</strong>
+  </p>
+
+  <hr>
+
+  <!-- If the user or the form indicated "posts" or "all", show posts -->
+  {% if posts %}
+    <h3>Posts</h3>
+      {% for post in posts %}
+      <article class="media content-section">
+          <img class = "rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+          <div class="media-body">
+          <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+          </div>
+          <h2><a class="article-title" href="{% url 'posts:post-detail' post.id %}">{{ post.title }}</a></h2>
+          <p class="article-content">{{ post.content|safe }}</p>
+          </div>
+      </article>
+  {% endfor %}
+  {% endif %}
+
+  <!-- If the user or the form indicated "users" or "all", show users -->
+  {% if users %}
+    <h3>Users</h3>
+      {% for user in users %}
+        <article class="media content-section">
+            <img class = "rounded-circle article-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+              <div class="article-metadata">
+                  <a class="mr-2" href="{% url 'user-posts' user.username %}">{{ user.username }}</a>
+              </div>
+            </div>
+        </article>
+      {% endfor %}
+  {% endif %}
+
+  <!-- If no results at all, let them know. -->
+  {% if not posts and not users %}
+    <p>No results found.</p>
+  {% endif %}
+
+{% endblock content %}

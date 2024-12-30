@@ -42,7 +42,41 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
+    "tinymce",
+    'dal',
+    'dal_select2',
+    'uoftsocialapp',
+    'posts',
+    'channels'
 ]
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "400px",
+    "width": "100%",
+    "cleanup_on_startup": True,
+    "custom_undo_redo_levels": 20,
+    "selector": "textarea",
+    "plugins": """
+        textcolor save link image media preview codesample contextmenu
+        table code lists fullscreen  insertdatetime  nonbreaking
+        contextmenu directionality searchreplace wordcount visualblocks
+        visualchars code fullscreen autolink lists  charmap print  hr
+        anchor pagebreak
+        """,
+    "toolbar1": """
+        fullscreen preview bold italic underline | fontselect,
+        fontsizeselect | forecolor backcolor | alignleft alignright |
+        aligncenter alignjustify | indent outdent | bullist numlist table |
+        | link image media | codesample |
+        """,
+    "toolbar2": """
+        """,
+    "contextmenu": "formats | link image",
+    "menubar": True,
+    "statusbar": True,
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -141,3 +175,17 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = "AKIAU5LH57IH3ETAYMGR"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "digitalcampus-files"
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_REGION_NAME = 'us-east-2' # Your region name
+AWS_S3_ADDRESSING_STYLE = "virtual"

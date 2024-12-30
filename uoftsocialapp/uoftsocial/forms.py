@@ -1,0 +1,35 @@
+from django import forms
+from posts.models import Post
+from users.models import User
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Search...',
+            'class': 'form-control mr-sm-2'
+        })
+    )
+
+    FILTER_CHOICES = [
+        ('', 'All'),
+        ('posts', 'Posts'),
+        ('users', 'Users'),
+    ]
+    filter_by = forms.ChoiceField(
+        choices=FILTER_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control mr-sm-2'})
+    )
+
+    ORDER_CHOICES = [
+        ('date_posted', 'Date Posted'),
+        ('title', 'Title'),
+        ('username', 'Username'),
+    ]
+    order_by = forms.ChoiceField(
+        choices=ORDER_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control mr-sm-2'})
+    )

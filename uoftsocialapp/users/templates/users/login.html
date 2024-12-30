@@ -1,16 +1,12 @@
 {% extends "uoftsocial/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
 <div class="content-section">
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Log In</legend>
-            <div id="div_id_username" class="form-group"> <label for="id_username" class=" requiredField">
-                Username<span class="asteriskField">*</span> </label> <div> <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" class="textinput form-control" required="" id="id_username"> </div> </div>
-            <div id="div_id_password" class="form-group"> <label for="id_password" class=" requiredField">
-                Password<span class="asteriskField">*</span> </label> <div> <input type="password" name="password" autocomplete="current-password" class="passwordinput form-control" required="" id="id_password"> </div> </div>
+            {{ form|crispy }}
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Login</button>
@@ -21,7 +17,7 @@
     </form>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Don't Have An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a>
+            Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
         </small>
     </div>
 </div>
