@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+from uoftsocial.views import ReactView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -48,7 +49,11 @@ urlpatterns = [
             template_name='users/password/password_reset_confirm.html'), 
         name='password_reset_confirm'),
 
-    path("", include('uoftsocial.urls'))
+    path("", include('uoftsocial.urls')),
+
+    # path('', ReactView.as_view(), name='ReactView')
+    path('chat/', include('chat.urls')),
+
 ]
 
 if settings.DEBUG:

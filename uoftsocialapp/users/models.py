@@ -25,7 +25,7 @@ class Profile(models.Model):
         'self', related_name='pending_follow_requests', symmetrical=False, blank=True
     )
     group_channels = models.ManyToManyField(
-        'channels.GroupChannel', related_name='channel_members', blank=True
+        'chat.GroupChannel', related_name='channel_members', blank=True
     )
 
 

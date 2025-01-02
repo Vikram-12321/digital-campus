@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("channels", "0001_initial"),
+        ("chat", "0001_initial"),
         ("users", "0001_initial"),
     ]
 
@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             model_name="profile",
             name="group_channels",
             field=models.ManyToManyField(
-                blank=True, related_name="channel_members", to="channels.groupchannel"
+                blank=True, related_name="channel_members", to="chat.groupchannel"
             ),
         ),
     ]

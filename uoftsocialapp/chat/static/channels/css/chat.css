@@ -1,0 +1,9 @@
+#chat-log {
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+#typing-indicator {
+    margin-top: 5px;
+    font-style: italic;
+}

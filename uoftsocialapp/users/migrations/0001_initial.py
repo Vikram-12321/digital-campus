@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                     models.ManyToManyField(
                         blank=True,
                         related_name="channel_members",
-                        to="uoftsocial.groupchannel",
+                        to="chat.groupchannel",
                     ),
                 ),
                 (

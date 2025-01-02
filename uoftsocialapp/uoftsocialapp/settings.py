@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'dal_select2',
     'uoftsocialapp',
     'posts',
-    'channels'
+    'channels.apps.ChannelsConfig',  # If your channels directory is an app
+    'corsheaders',  # Added CORS headers
+    'rest_framework',  # Added Django REST Framework
+    'chat'
 ]
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -86,14 +89,16 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS Middleware added
 ]
+
 
 ROOT_URLCONF = "uoftsocialapp.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "uoftsocial/templates"],  # Updated to include front-end template
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -106,7 +111,19 @@ TEMPLATES = [
     },
 ]
 
+#ASGI Application Specified
+ASGI_APPLICATION = 'uoftsocialapp.asgi.application'
 WSGI_APPLICATION = "uoftsocialapp.wsgi.application"
+
+# Production Channel Layers
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -159,6 +176,20 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+# REST Framework and JWT Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
+
+# CORS Headers Configuration
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Front-end dev server
+# ]
+
+CORS_ORIGIN_ALL_ALL = True
+
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Default primary key field type
@@ -189,3 +220,5 @@ AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_S3_REGION_NAME = 'us-east-2' # Your region name
 AWS_S3_ADDRESSING_STYLE = "virtual"
+
+
