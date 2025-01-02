@@ -7,6 +7,7 @@ from .additional_views.list_views import (
 from .additional_views.search_views import search, autocomplete
 from .additional_views.follow_views import Follow
 from .views import CourseAutocomplete, about, account
+from .api_views import CourseDetailView
 
 urlpatterns = [
     path("", PostListView.as_view(), name='uoft-social-app-home'),
@@ -30,6 +31,9 @@ urlpatterns = [
 
     path('search/', search, name='search'),
     path('autocomplete/', autocomplete, name='autocomplete'),
+
+    #API Endpoint
+    path('api/uoftsocial/<str:name>/', CourseDetailView.as_view(), name='api-course-detail'),
 
 
 ]

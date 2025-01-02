@@ -5,29 +5,6 @@ from dal import autocomplete
 from posts.models import Post
 from . models import Course
 
-#Rest Framework
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from . serializer import ReactSerializer
-
-
-class ReactView(APIView):
-
-    serializer_class = ReactSerializer
-
-    def get(self, request):
-        output = [{"name":output.name
-                   }
-                   for output in Course.objects.all()]
-        return Response(output)
-    
-    def post(self, request):
-        serializer = ReactSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-
-
 def home(request):
     context = { 
         'posts': Post.objects.all() 

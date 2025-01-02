@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import *
+from .models import Course
 
-class ReactSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['name']
