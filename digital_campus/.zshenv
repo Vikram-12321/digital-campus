@@ -1,0 +1,5 @@
+export EMAIL_USER="appdigitalcampus@gmail.com"
+export EMAIL_PASS="Vikram+Dylan"
+export AWS_ACCESS_KEY="AKIAIU5LHB5AIRD6IHQBL5P07M"
+export AWS_SECRET_ACCESS_KEY="EKcCJIu1G80iigFPza9G3UDpbCbbW3UbG/eTKRTA"
+export AWS_STORAGE_BUCKET_NAME="digitalcampus-files"

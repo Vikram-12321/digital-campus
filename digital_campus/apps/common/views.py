@@ -1,0 +1,32 @@
+from django.shortcuts import render
+from dal import autocomplete
+
+#Models
+from apps.posts.models import Post
+from . models import Course
+
+def home(request):
+    context = { 
+        'posts': Post.objects.all() 
+    }
+    return render(request, 'digital_campus/home.html', context)
+
+def about(request):
+    return render(request, 'digital_campus/about.html')
+
+def account(request):
+    return render(request, 'digital_campus/account.html')
+
+
+class CourseAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # If user not logged in or has no permission, return empty
+        if not self.request.user.is_authenticated:
+            return Course.objects.none()
+        
+        qs = Course.objects.all()
+
+        if self.q:  # typed text from user
+            qs = qs.filter(name__icontains=self.q)
+        return qs
+    
