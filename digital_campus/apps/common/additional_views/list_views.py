@@ -8,13 +8,47 @@ from django.contrib.auth.models import User
 from apps.posts.models import Post
 from django.db.models import Q
 
+from django.views.generic import ListView
+from django.http import JsonResponse, Http404
+from django.template.loader import render_to_string
+
 class PostListView(ListView):
     model = Post
-    template_name = 'digital_campus/home.html' # <app>/<model>_<viewtype>.html
+    template_name = 'digital_campus/home.html'         # your home page
     context_object_name = 'posts'
-    ordering = ['-date_posted'] # Algorithim Implementation for Post Ordering HERE
-    paginate_by = 5 # Pagination
+    paginate_by = 5                            # still page under the hood
+    ordering = ['-date_posted']
 
+    def get_queryset(self):
+        # grab all posts, newest first, and prefetch attachments in one go
+        return Post.objects.all()\
+                .order_by('-date_posted')\
+                .prefetch_related('attachments')
+
+    def get(self, request, *args, **kwargs):
+        # standard setup
+        self.object_list = self.get_queryset()
+        try:
+            context = self.get_context_data()
+        except Http404:
+            # page number out of range
+            if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+                # return empty so JS knows to stop
+                return JsonResponse({'posts_html': ''})
+            # for non-AJAX, re-raise so you get the normal 404 page
+            raise
+
+        # AJAX scroll request? return only the partial
+        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+            posts_html = render_to_string(
+                'digital_campus/post_list.html',
+                {'posts': context['posts']},
+                request=request
+            )
+            return JsonResponse({'posts_html': posts_html})
+
+        # normal full-page load
+        return self.render_to_response(context)
 
 class UserPostListView(ListView):
     model = Post

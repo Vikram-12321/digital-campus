@@ -3,6 +3,9 @@ from django.urls import path
 from .api_views import UserDetailView
 from django.contrib.auth import views as auth_views
 from .views import register, profile
+from django.urls import path, include  # Importing the include function
+
+
 
 urlpatterns = [
     path("register/", register, name='register'),
@@ -32,4 +35,6 @@ urlpatterns = [
 
     #API View
     path('api/users/<str:username>/', UserDetailView.as_view(), name='api-user-detail'),
+
+
 ]

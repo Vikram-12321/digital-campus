@@ -1,36 +1,80 @@
-{% extends "uoftsocial/base.html" %}
+{% extends "digital_campus/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">
+    {% if view.object %}Edit{% else %}New{% endif %} Post
+  </h2>
+  {# ---------- ATTACHMENT LIST (edit mode only) ---------- #}
+  {% if view.object and view.object.attachments.exists %}
+    <div class="mb-4">
+      <h5>Current files:</h5>
+      <ul class="list-unstyled">
+        {% for att in view.object.attachments.all %}
+          <li class="d-flex align-items-center mb-2">
+            <a href="{{ att.file.url }}" target="_blank" class="me-2">
+              {{ att.file.name|cut:'posts/'|truncatechars:40 }}
+            </a>
+            <a href="{% url 'posts:attachment-delete' att.pk %}"
+               class="btn btn-sm btn-outline-danger">
+              Remove
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 
-<div class="content-section mt-4">
-    <h2>Create a New Post</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-outline-info" type="submit">Post</button>
-    </form>
+  <form id="post-form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      {{ form.title|as_crispy_field }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.content|as_crispy_field }}
+    </div>
+
+    <div class="mb-4">
+      {{ form.files|as_crispy_field }}
+    </div>
+
+    <button class="btn btn-primary">
+      {% if view.object %}Update{% else %}Create Post{% endif %}
+    </button>
+  </form>
 </div>
 
-<!-- TinyMCE from CDN -->
-<script src="https://cdn.tiny.cloud/1/u82j3gx5yt6wtou51vbz05nemly0hmli7l72quph2zfqn1d3/tinymce/5/tinymce.min.js" referrerpolicy="origin"> 
-// API KEY = u82j3gx5yt6wtou51vbz05nemly0hmli7l72quph2zfqn1d3
-</script>
 <script>
-  tinymce.init({
-    // The default Django field ID for "content" is "id_content"
-    selector: '#id_content',
-    height: 400,
-    menubar: false,
-    plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste code help wordcount'
-    ],
-    toolbar:
-      'undo redo | formatselect | bold italic backcolor | \
-       alignleft aligncenter alignright alignjustify | \
-       bullist numlist outdent indent | removeformat | help'
-  });
-</script>
+/* unchanged JS submit helper */
+(function () {
+  const form = document.getElementById("post-form");
+  if (!form) return;
 
-{% endblock content %}
+  form.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+    const data = new FormData(form);
+    const url  = form.action || window.location.href;
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        body: data,
+      });
+
+      if (resp.redirected) {
+        window.location.href = resp.url;
+        return;
+      }
+
+      const html  = await resp.text();
+      form.outerHTML = html.match(/<form[\s\S]*<\/form>/)[0];
+    } catch (err) {
+      console.error("Network error:", err);
+    }
+  });
+})();
+</script>
+{% endblock %}

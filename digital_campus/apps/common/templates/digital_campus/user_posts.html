@@ -1,9 +1,9 @@
-{% extends "uoftsocial/base.html" %}
+{% extends "digital_campus/base.html" %}
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'uoftsocial/css/user_profile.css' %}">
-<script src="{% static 'uoftsocial/js/user_profile.js' %}"></script>
+<link rel="stylesheet" href="{% static 'common/css/user_profile.css' %}">
+<script src="{% static 'common/js/user_profile.js' %}"></script>
 
 <div class="container mt-4">
 
@@ -32,13 +32,13 @@
         {% if request.user.is_authenticated and request.user != profile_user %}
           {% if profile_user.profile in request.user.profile.following.all %}
             <!-- Already following -> show Unfollow button -->
-            <form action="{% url 'unfollow-user' profile_user.username %}" method="post" class="mt-3">
+            <form action="{% url 'common:unfollow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger">Unfollow</button>
             </form>
           {% else %}
             <!-- Not following -> show Follow/Request button -->
-            <form action="{% url 'follow-user' profile_user.username %}" method="post" class="mt-3">
+            <form action="{% url 'common:follow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
               {% if profile_user.profile.is_private %}
                 <button type="submit" class="btn btn-primary">Request to Follow</button>

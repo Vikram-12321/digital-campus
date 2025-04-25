@@ -89,7 +89,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = "digital_campus.urls"
 
@@ -155,14 +154,21 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static and Media files
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [BASE_DIR / "apps/common/static"]
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
+# Static and Media files (all served from S3 bucket via storages)
+AWS_S3_CUSTOM_DOMAIN   = 'digitalcampus-files.s3.us-east-2.amazonaws.com'
+
+STATIC_URL             = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+STATICFILES_STORAGE    = 'digital_campus.storage_backends.StaticStorage'
+
+MEDIA_URL              = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE    = 'digital_campus.storage_backends.MediaStorage'
+
+# local dev fallback dirs (collected but not served)
+STATIC_ROOT            = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS       = [BASE_DIR / 'apps/common/static']
+
 
 # REST Framework and JWT Configuration
 REST_FRAMEWORK = {
@@ -196,7 +202,8 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = "digitalcampus-files"
 AWS_S3_FILE_OVERWRITE = False
+AWS_S3_ACL = None
 AWS_DEFAULT_ACL = None
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_S3_ADDRESSING_STYLE = "virtual"

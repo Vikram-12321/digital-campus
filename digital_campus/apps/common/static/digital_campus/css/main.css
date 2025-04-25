@@ -1,191 +1,160 @@
 body {
-    background: #fafafa;
-    color: #333333;
-    margin-top: 5rem;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    color: #444444;
-  }
-  
-  ul {
-    margin: 0;
-  }
-  
-  .bg-steel {
-    background-color: #5f788a;
-  }
-  
-  .site-header .navbar-nav .nav-link {
-    color: #cbd5db;
-  }
-  
-  .site-header .navbar-nav .nav-link:hover {
-    color: #ffffff;
-  }
-  
-  .site-header .navbar-nav .nav-link.active {
-    font-weight: 500;
-  }
-  
-  .content-section {
-    background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    margin-bottom: 20px;
-  }
-  
-  .article-title {
-    color: #444444;
-  }
-  
-  a.article-title:hover {
-    color: #428bca;
-    text-decoration: none;
-  }
-  
-  .article-content {
-    white-space: pre-line;
-  }
-  
-  .article-img {
-    height: 65px;
-    width: 65px;
-    margin-right: 16px;
-  }
-  
-  .article-metadata {
-    padding-bottom: 1px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #e3e3e3
-  }
-  
-  .article-metadata a:hover {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .article-svg {
-    width: 25px;
-    height: 25px;
-    vertical-align: middle;
-  }
-  
-  .account-img {
-    height: 125px;
-    width: 125px;
-    margin-right: 20px;
-    margin-bottom: 16px;
-  }
-  
-  .account-heading {
-    font-size: 2.5rem;
-  }
-
-
-  /* channels/static/channels/css/chat.css */
-
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #2C2F33; /* Discord-like dark gray */
-    font-family: 'Helvetica Neue', sans-serif;
-    color: #FFF;
+  background: #fafafa;
+  color: #333333;
+  margin-top: 5rem;
 }
 
-#chat-container {
-    display: flex;
-    height: 100vh;
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
 }
 
-#rooms-list {
-    width: 250px;
-    background-color: #23272A; /* slightly darker */
-    overflow-y: auto;
+ul {
+  margin: 0;
 }
 
-.room-item {
-    padding: 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #2C2F33;
-    color: #BBB;
-}
-.room-item:hover {
-    background-color: #2C2F33;
-    color: #FFF;
+.bg-steel {
+  background-color: #5f788a;
 }
 
-#chat-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
 }
 
-#chat-log {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
 }
 
-.chat-message {
-    margin-bottom: 10px;
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
 }
 
-.chat-message img.profile-pic {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 8px;
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
 }
 
-.chat-message .username {
-    font-weight: bold;
-    color: #7289DA; /* Discord bluish color */
+.article-title {
+  color: #444444;
 }
 
-.chat-message .timestamp {
-    font-size: 0.8em;
-    color: #999;
-    margin-left: 5px;
+a.article-title:hover {
+  color: #428bca;
+  text-decoration: none;
 }
 
-#typing-indicator {
-    font-style: italic;
-    color: #7289DA;
-    margin-bottom: 5px;
+.article-content {
+  white-space: pre-line;
 }
 
-#message-input-container {
-    display: flex;
-    padding: 10px;
-    background-color: #23272A;
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
 }
 
-#chat-message-input {
-    flex: 1;
-    background-color: #2C2F33;
-    border: none;
-    padding: 10px;
-    color: #FFF;
-    border-radius: 5px;
-    margin-right: 5px;
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3;
 }
 
-#chat-message-input:focus {
-    outline: none;
+.article-metadata a:hover {
+  color: #333;
+  text-decoration: none;
 }
 
-#chat-message-send {
-    background-color: #7289DA;
-    border: none;
-    padding: 10px 16px;
-    color: #FFF;
-    border-radius: 5px;
-    cursor: pointer;
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
 }
 
-#chat-message-send:hover {
-    background-color: #677BC4;
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
 }
+
+.account-heading {
+  font-size: 2.5rem;
+}
+
+/* collapse overflow */
+.collapsible-content.collapsed {
+  /* clip to 300px or half the viewport, whichever is smaller */
+  max-height: min(500px, 80vh);
+  overflow: hidden;
+  position: relative;
+}
+.collapsible-content.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(rgba(255,255,255,0), white);
+}
+
+/* constrain giant images in detail view */
+.post-image img {
+  max-width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+/* constrain uploaded videos */
+.post-video video {
+  max-width: 100%;
+  height: auto;
+  max-height: 80vh;
+  display: block;
+  margin: 0 auto;
+}
+
+
+/* style the toggle arrow container */
+.expand-toggle {
+  text-align: center;
+  cursor: pointer;
+  margin: .5rem 0 1rem;
+}
+
+/* ensure the arrow sits on its own line at the bottom */
+article.media {
+  display: flex;
+  flex-wrap: wrap;
+}
+article.media .expand-toggle {
+  width: 100%;
+}
+
+
+
+/* Drag-and-drop zone styling */
+.upload-zone {
+  border: 2px dashed #bbb;
+  border-radius: 6px;
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  transition: background 0.2s, border-color 0.2s;
+  margin-bottom: 1rem;
+}
+.upload-zone.dragover {
+  background: #f0f8ff;
+  border-color: #78a;
+}
+
+/* Constrain previews inside the drop zone */
+.upload-zone img,
+.upload-zone video {
+  max-width: 200px;
+  max-height: 150px;
+  margin: .5rem;
+}
+
+

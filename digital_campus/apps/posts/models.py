@@ -2,18 +2,53 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-from tinymce.models import HTMLField
+from digital_campus.storage_backends import MediaStorage  # only if you want to explicitly set storage
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 
+def validate_media_size(file):
+    limit_mb = 50
+    if file.size > limit_mb * 1024 * 1024:
+        raise ValidationError(f"File too large ( > {limit_mb}MB )")
+    
+def validate_video_size(file):
+    print("blah")
+    
+class Attachment(models.Model):
+    POST_MEDIA_TYPES = (
+        ('image', 'Image'),
+        ('video', 'Video'),
+    )
+    post = models.ForeignKey('Post', related_name='attachments', on_delete=models.CASCADE)
+    file = models.FileField(
+        upload_to='posts/%Y/%m/%d/attachments/',
+        storage=MediaStorage(),
+        validators=[
+            FileExtensionValidator(['jpg','jpeg','png','gif','mp4','mov','avi','mkv']),
+            validate_media_size
+        ]
+    )
+    media_type = models.CharField(max_length=5, choices=POST_MEDIA_TYPES, editable=False)
+
+    def save(self, *args, **kwargs):
+        # auto‐set media_type based on file MIME
+        if self.file.name.lower().endswith(('.mp4','.mov','.avi','.mkv')):
+            self.media_type = 'video'
+        else:
+            self.media_type = 'image'
+        super().save(*args, **kwargs)
 
 class Post(models.Model):
-    title = models.CharField(max_length=100)
-    content = HTMLField()
-    date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title        = models.CharField(max_length=200)
+    content      = models.TextField()
+    author       = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    date_posted  = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
-        return reverse('posts:post-detail', kwargs={'pk':self.pk})
+        return reverse('posts:post-detail', kwargs={'pk': self.pk})
+
+
 

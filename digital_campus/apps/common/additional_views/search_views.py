@@ -163,7 +163,7 @@ def search(request):
         # So the template can show "Did you mean...?" if corrected_query != user’s original
         'corrected_query': corrected_query,
     }
-    return render(request, 'uoftsocial/search_results.html', context)
+    return render(request, 'digital_campus/search_results.html', context)
 
 
 

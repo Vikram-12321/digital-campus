@@ -5,23 +5,23 @@ from .additional_views.list_views import (
     UserPostListView,
 )
 from .additional_views.search_views import search, autocomplete
-from .additional_views.follow_views import Follow
+from .additional_views.follow_views import *
 from .views import CourseAutocomplete, about, account
 from .api_views import CourseDetailView
-from apps import posts
-
+app_name = 'common'
 urlpatterns = [
+    
     path("", PostListView.as_view(), name='digital-campus-app-home'),
     path("user/<str:username>/", UserPostListView.as_view(), name='user-posts'),
-    path('user/<str:username>/follow/', Follow.follow_user, name='follow-user'),
+    path('user/<str:username>/follow/', follow_user, name='follow-user'),
     # Follow/unfollow
-    path('user/<str:username>/follow/', Follow.follow_user, name='follow-user'),
-    path('user/<str:username>/unfollow/', Follow.unfollow_user, name='unfollow-user'),
+    path('user/<str:username>/follow/', follow_user, name='follow-user'),
+    path('user/<str:username>/unfollow/', unfollow_user, name='unfollow-user'),
 
     # Accept/decline follow requests
-    path('follow-requests/accept/<int:request_profile_id>/', Follow.accept_follow_request, name='accept-follow-request'),
-    path('follow-requests/decline/<int:request_profile_id>/', Follow.decline_follow_request, name='decline-follow-request'),\
-    path('follow-requests/', Follow.view_follow_requests, name='view-follow-requests'),
+    path('follow-requests/accept/<int:request_profile_id>/', accept_follow_request, name='accept-follow-request'),
+    path('follow-requests/decline/<int:request_profile_id>/', decline_follow_request, name='decline-follow-request'),\
+    path('follow-requests/', view_follow_requests, name='view-follow-requests'),
 
     path('course-autocomplete/', CourseAutocomplete.as_view(), name='course-autocomplete'),
     path("about/", about, name='digital-campus-app-about'),

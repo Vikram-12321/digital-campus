@@ -1,0 +1,1658 @@
+.
+├── apps
+│   ├── chat
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── consumers.py
+│   │   ├── forms.py
+│   │   ├── migrations
+│   │   │   ├── __init__.py
+│   │   │   └── 0001_initial.py
+│   │   ├── models.py
+│   │   ├── routing.py
+│   │   ├── static
+│   │   │   └── chat
+│   │   │       ├── css
+│   │   │       │   └── chat.css
+│   │   │       └── js
+│   │   │           └── chat.js
+│   │   ├── templates
+│   │   │   └── chat
+│   │   │       └── chat_room.html
+│   │   ├── templatetags
+│   │   │   ├── __init__.py
+│   │   │   └── custom_filters.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── common
+│   │   ├── __init__.py
+│   │   ├── additional_views
+│   │   │   ├── follow_views.py
+│   │   │   ├── list_views.py
+│   │   │   └── search_views.py
+│   │   ├── admin.py
+│   │   ├── api_views.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── migrations
+│   │   │   ├── __init__.py
+│   │   │   └── 0001_initial.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── static
+│   │   │   └── digital_campus
+│   │   │       ├── css
+│   │   │       │   ├── main.css
+│   │   │       │   └── user_profile.css
+│   │   │       └── js
+│   │   │           ├── jquery-3.5.1.min.js
+│   │   │           └── user_profile.js
+│   │   ├── templates
+│   │   │   └── digital_campus
+│   │   │       ├── about.html
+│   │   │       ├── base.html
+│   │   │       ├── follow_requests.html
+│   │   │       ├── home.html
+│   │   │       ├── post_list.html
+│   │   │       ├── search_results.html
+│   │   │       └── user_posts.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── posts
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── api_views.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── migrations
+│   │   │   ├── __init__.py
+│   │   │   ├── 0001_initial.py
+│   │   │   └── 0002_post_image_alter_post_content.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── templates
+│   │   │   └── posts
+│   │   │       ├── post_confirm_delete.html
+│   │   │       ├── post_detail.html
+│   │   │       └── post_form.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   └── users
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── api_views.py
+│       ├── apps.py
+│       ├── forms.py
+│       ├── migrations
+│       │   ├── __init__.py
+│       │   └── 0001_initial.py
+│       ├── models.py
+│       ├── serializers.py
+│       ├── signals.py
+│       ├── templates
+│       │   └── users
+│       │       ├── login.html
+│       │       ├── logout.html
+│       │       ├── password
+│       │       │   ├── password_reset_complete.html
+│       │       │   ├── password_reset_confirm.html
+│       │       │   ├── password_reset_done.html
+│       │       │   └── password_reset.html
+│       │       ├── profile.html
+│       │       └── register.html
+│       ├── tests.py
+│       ├── urls.py
+│       └── views.py
+├── cors.json
+├── db.sqlite3
+├── digital_campus
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── storage_backends.py
+│   ├── urls.py
+│   └── wsgi.py
+├── dummy.html
+├── manage.py
+├── media
+│   ├── default.jpg
+│   └── profile_pics
+│       ├── download.jpeg
+│       └── vikram.bhojanalamail.utoronto.ca.jpg
+├── package-lock.json
+├── project-structure.txt
+├── requirements.txt
+└── staticfiles
+    ├── admin
+    │   ├── css
+    │   │   ├── autocomplete.4a81fc4242d0.css
+    │   │   ├── autocomplete.4a81fc4242d0.css.gz
+    │   │   ├── autocomplete.css
+    │   │   ├── autocomplete.css.gz
+    │   │   ├── base.523eb49842a7.css
+    │   │   ├── base.523eb49842a7.css.gz
+    │   │   ├── base.css
+    │   │   ├── base.css.gz
+    │   │   ├── changelists.9237a1ac391b.css
+    │   │   ├── changelists.9237a1ac391b.css.gz
+    │   │   ├── changelists.css
+    │   │   ├── changelists.css.gz
+    │   │   ├── dark_mode.css
+    │   │   ├── dark_mode.css.gz
+    │   │   ├── dark_mode.ef27a31af300.css
+    │   │   ├── dark_mode.ef27a31af300.css.gz
+    │   │   ├── dashboard.css
+    │   │   ├── dashboard.css.gz
+    │   │   ├── dashboard.e90f2068217b.css
+    │   │   ├── dashboard.e90f2068217b.css.gz
+    │   │   ├── forms.c14e1cb06392.css
+    │   │   ├── forms.c14e1cb06392.css.gz
+    │   │   ├── forms.css
+    │   │   ├── forms.css.gz
+    │   │   ├── login.586129c60a93.css
+    │   │   ├── login.586129c60a93.css.gz
+    │   │   ├── login.css
+    │   │   ├── login.css.gz
+    │   │   ├── nav_sidebar.269a1bd44627.css
+    │   │   ├── nav_sidebar.269a1bd44627.css.gz
+    │   │   ├── nav_sidebar.css
+    │   │   ├── nav_sidebar.css.gz
+    │   │   ├── responsive_rtl.7d1130848605.css
+    │   │   ├── responsive_rtl.7d1130848605.css.gz
+    │   │   ├── responsive_rtl.css
+    │   │   ├── responsive_rtl.css.gz
+    │   │   ├── responsive.css
+    │   │   ├── responsive.css.gz
+    │   │   ├── responsive.f6533dab034d.css
+    │   │   ├── responsive.f6533dab034d.css.gz
+    │   │   ├── rtl.512d4b53fc59.css
+    │   │   ├── rtl.512d4b53fc59.css.gz
+    │   │   ├── rtl.css
+    │   │   ├── rtl.css.gz
+    │   │   ├── vendor
+    │   │   │   └── select2
+    │   │   │       ├── LICENSE-SELECT2.f94142512c91.md
+    │   │   │       ├── LICENSE-SELECT2.f94142512c91.md.gz
+    │   │   │       ├── LICENSE-SELECT2.md
+    │   │   │       ├── LICENSE-SELECT2.md.gz
+    │   │   │       ├── select2.a2194c262648.css
+    │   │   │       ├── select2.a2194c262648.css.gz
+    │   │   │       ├── select2.css
+    │   │   │       ├── select2.css.gz
+    │   │   │       ├── select2.min.9f54e6414f87.css
+    │   │   │       ├── select2.min.9f54e6414f87.css.gz
+    │   │   │       ├── select2.min.css
+    │   │   │       └── select2.min.css.gz
+    │   │   ├── widgets.css
+    │   │   ├── widgets.css.gz
+    │   │   ├── widgets.ee33ab26c7c2.css
+    │   │   └── widgets.ee33ab26c7c2.css.gz
+    │   ├── img
+    │   │   ├── calendar-icons.39b290681a8b.svg
+    │   │   ├── calendar-icons.39b290681a8b.svg.gz
+    │   │   ├── calendar-icons.svg
+    │   │   ├── calendar-icons.svg.gz
+    │   │   ├── gis
+    │   │   │   ├── move_vertex_off.7a23bf31ef8a.svg
+    │   │   │   ├── move_vertex_off.7a23bf31ef8a.svg.gz
+    │   │   │   ├── move_vertex_off.svg
+    │   │   │   ├── move_vertex_off.svg.gz
+    │   │   │   ├── move_vertex_on.0047eba25b67.svg
+    │   │   │   ├── move_vertex_on.0047eba25b67.svg.gz
+    │   │   │   ├── move_vertex_on.svg
+    │   │   │   └── move_vertex_on.svg.gz
+    │   │   ├── icon-addlink.d519b3bab011.svg
+    │   │   ├── icon-addlink.d519b3bab011.svg.gz
+    │   │   ├── icon-addlink.svg
+    │   │   ├── icon-addlink.svg.gz
+    │   │   ├── icon-alert.034cc7d8a67f.svg
+    │   │   ├── icon-alert.034cc7d8a67f.svg.gz
+    │   │   ├── icon-alert.svg
+    │   │   ├── icon-alert.svg.gz
+    │   │   ├── icon-calendar.ac7aea671bea.svg
+    │   │   ├── icon-calendar.ac7aea671bea.svg.gz
+    │   │   ├── icon-calendar.svg
+    │   │   ├── icon-calendar.svg.gz
+    │   │   ├── icon-changelink.18d2fd706348.svg
+    │   │   ├── icon-changelink.18d2fd706348.svg.gz
+    │   │   ├── icon-changelink.svg
+    │   │   ├── icon-changelink.svg.gz
+    │   │   ├── icon-clock.e1d4dfac3f2b.svg
+    │   │   ├── icon-clock.e1d4dfac3f2b.svg.gz
+    │   │   ├── icon-clock.svg
+    │   │   ├── icon-clock.svg.gz
+    │   │   ├── icon-deletelink.564ef9dc3854.svg
+    │   │   ├── icon-deletelink.564ef9dc3854.svg.gz
+    │   │   ├── icon-deletelink.svg
+    │   │   ├── icon-deletelink.svg.gz
+    │   │   ├── icon-no.439e821418cd.svg
+    │   │   ├── icon-no.439e821418cd.svg.gz
+    │   │   ├── icon-no.svg
+    │   │   ├── icon-no.svg.gz
+    │   │   ├── icon-unknown-alt.81536e128bb6.svg
+    │   │   ├── icon-unknown-alt.81536e128bb6.svg.gz
+    │   │   ├── icon-unknown-alt.svg
+    │   │   ├── icon-unknown-alt.svg.gz
+    │   │   ├── icon-unknown.a18cb4398978.svg
+    │   │   ├── icon-unknown.a18cb4398978.svg.gz
+    │   │   ├── icon-unknown.svg
+    │   │   ├── icon-unknown.svg.gz
+    │   │   ├── icon-viewlink.41eb31f7826e.svg
+    │   │   ├── icon-viewlink.41eb31f7826e.svg.gz
+    │   │   ├── icon-viewlink.svg
+    │   │   ├── icon-viewlink.svg.gz
+    │   │   ├── icon-yes.d2f9f035226a.svg
+    │   │   ├── icon-yes.d2f9f035226a.svg.gz
+    │   │   ├── icon-yes.svg
+    │   │   ├── icon-yes.svg.gz
+    │   │   ├── inline-delete.fec1b761f254.svg
+    │   │   ├── inline-delete.fec1b761f254.svg.gz
+    │   │   ├── inline-delete.svg
+    │   │   ├── inline-delete.svg.gz
+    │   │   ├── LICENSE
+    │   │   ├── LICENSE.2c54f4e1ca1c
+    │   │   ├── LICENSE.2c54f4e1ca1c.gz
+    │   │   ├── LICENSE.gz
+    │   │   ├── README.a70711a38d87.txt
+    │   │   ├── README.a70711a38d87.txt.gz
+    │   │   ├── README.txt
+    │   │   ├── README.txt.gz
+    │   │   ├── search.7cf54ff789c6.svg
+    │   │   ├── search.7cf54ff789c6.svg.gz
+    │   │   ├── search.svg
+    │   │   ├── search.svg.gz
+    │   │   ├── selector-icons.b4555096cea2.svg
+    │   │   ├── selector-icons.b4555096cea2.svg.gz
+    │   │   ├── selector-icons.svg
+    │   │   ├── selector-icons.svg.gz
+    │   │   ├── sorting-icons.3a097b59f104.svg
+    │   │   ├── sorting-icons.3a097b59f104.svg.gz
+    │   │   ├── sorting-icons.svg
+    │   │   ├── sorting-icons.svg.gz
+    │   │   ├── tooltag-add.e59d620a9742.svg
+    │   │   ├── tooltag-add.e59d620a9742.svg.gz
+    │   │   ├── tooltag-add.svg
+    │   │   ├── tooltag-add.svg.gz
+    │   │   ├── tooltag-arrowright.bbfb788a849e.svg
+    │   │   ├── tooltag-arrowright.bbfb788a849e.svg.gz
+    │   │   ├── tooltag-arrowright.svg
+    │   │   └── tooltag-arrowright.svg.gz
+    │   └── js
+    │       ├── actions.eac7e3441574.js
+    │       ├── actions.eac7e3441574.js.gz
+    │       ├── actions.js
+    │       ├── actions.js.gz
+    │       ├── admin
+    │       │   ├── DateTimeShortcuts.9f6e209cebca.js
+    │       │   ├── DateTimeShortcuts.9f6e209cebca.js.gz
+    │       │   ├── DateTimeShortcuts.js
+    │       │   ├── DateTimeShortcuts.js.gz
+    │       │   ├── RelatedObjectLookups.8609f99b9ab2.js
+    │       │   ├── RelatedObjectLookups.8609f99b9ab2.js.gz
+    │       │   ├── RelatedObjectLookups.js
+    │       │   └── RelatedObjectLookups.js.gz
+    │       ├── autocomplete.01591ab27be7.js
+    │       ├── autocomplete.01591ab27be7.js.gz
+    │       ├── autocomplete.js
+    │       ├── autocomplete.js.gz
+    │       ├── calendar.f8a5d055eb33.js
+    │       ├── calendar.f8a5d055eb33.js.gz
+    │       ├── calendar.js
+    │       ├── calendar.js.gz
+    │       ├── cancel.ecc4c5ca7b32.js
+    │       ├── cancel.ecc4c5ca7b32.js.gz
+    │       ├── cancel.js
+    │       ├── cancel.js.gz
+    │       ├── change_form.9d8ca4f96b75.js
+    │       ├── change_form.9d8ca4f96b75.js.gz
+    │       ├── change_form.js
+    │       ├── change_form.js.gz
+    │       ├── collapse.f84e7410290f.js
+    │       ├── collapse.f84e7410290f.js.gz
+    │       ├── collapse.js
+    │       ├── collapse.js.gz
+    │       ├── core.cf103cd04ebf.js
+    │       ├── core.cf103cd04ebf.js.gz
+    │       ├── core.js
+    │       ├── core.js.gz
+    │       ├── filters.0e360b7a9f80.js
+    │       ├── filters.0e360b7a9f80.js.gz
+    │       ├── filters.js
+    │       ├── filters.js.gz
+    │       ├── inlines.22d4d93c00b4.js
+    │       ├── inlines.22d4d93c00b4.js.gz
+    │       ├── inlines.js
+    │       ├── inlines.js.gz
+    │       ├── jquery.init.b7781a0897fc.js
+    │       ├── jquery.init.b7781a0897fc.js.gz
+    │       ├── jquery.init.js
+    │       ├── jquery.init.js.gz
+    │       ├── nav_sidebar.3b9190d420b1.js
+    │       ├── nav_sidebar.3b9190d420b1.js.gz
+    │       ├── nav_sidebar.js
+    │       ├── nav_sidebar.js.gz
+    │       ├── popup_response.c6cc78ea5551.js
+    │       ├── popup_response.c6cc78ea5551.js.gz
+    │       ├── popup_response.js
+    │       ├── popup_response.js.gz
+    │       ├── prepopulate_init.6cac7f3105b8.js
+    │       ├── prepopulate_init.6cac7f3105b8.js.gz
+    │       ├── prepopulate_init.js
+    │       ├── prepopulate_init.js.gz
+    │       ├── prepopulate.bd2361dfd64d.js
+    │       ├── prepopulate.bd2361dfd64d.js.gz
+    │       ├── prepopulate.js
+    │       ├── prepopulate.js.gz
+    │       ├── SelectBox.7d3ce5a98007.js
+    │       ├── SelectBox.7d3ce5a98007.js.gz
+    │       ├── SelectBox.js
+    │       ├── SelectBox.js.gz
+    │       ├── SelectFilter2.bdb8d0cc579e.js
+    │       ├── SelectFilter2.bdb8d0cc579e.js.gz
+    │       ├── SelectFilter2.js
+    │       ├── SelectFilter2.js.gz
+    │       ├── theme.ab270f56bb9c.js
+    │       ├── theme.ab270f56bb9c.js.gz
+    │       ├── theme.js
+    │       ├── theme.js.gz
+    │       ├── urlify.ae970a820212.js
+    │       ├── urlify.ae970a820212.js.gz
+    │       ├── urlify.js
+    │       ├── urlify.js.gz
+    │       └── vendor
+    │           ├── jquery
+    │           │   ├── jquery.0208b96062ba.js
+    │           │   ├── jquery.0208b96062ba.js.gz
+    │           │   ├── jquery.js
+    │           │   ├── jquery.js.gz
+    │           │   ├── jquery.min.641dd1437010.js
+    │           │   ├── jquery.min.641dd1437010.js.gz
+    │           │   ├── jquery.min.js
+    │           │   ├── jquery.min.js.gz
+    │           │   ├── LICENSE.de877aa6d744.txt
+    │           │   ├── LICENSE.de877aa6d744.txt.gz
+    │           │   ├── LICENSE.txt
+    │           │   └── LICENSE.txt.gz
+    │           ├── select2
+    │           │   ├── i18n
+    │           │   │   ├── af.4f6fcd73488c.js
+    │           │   │   ├── af.4f6fcd73488c.js.gz
+    │           │   │   ├── af.js
+    │           │   │   ├── af.js.gz
+    │           │   │   ├── ar.65aa8e36bf5d.js
+    │           │   │   ├── ar.65aa8e36bf5d.js.gz
+    │           │   │   ├── ar.js
+    │           │   │   ├── ar.js.gz
+    │           │   │   ├── az.270c257daf81.js
+    │           │   │   ├── az.270c257daf81.js.gz
+    │           │   │   ├── az.js
+    │           │   │   ├── az.js.gz
+    │           │   │   ├── bg.39b8be30d4f0.js
+    │           │   │   ├── bg.39b8be30d4f0.js.gz
+    │           │   │   ├── bg.js
+    │           │   │   ├── bg.js.gz
+    │           │   │   ├── bn.6d42b4dd5665.js
+    │           │   │   ├── bn.6d42b4dd5665.js.gz
+    │           │   │   ├── bn.js
+    │           │   │   ├── bn.js.gz
+    │           │   │   ├── bs.91624382358e.js
+    │           │   │   ├── bs.91624382358e.js.gz
+    │           │   │   ├── bs.js
+    │           │   │   ├── bs.js.gz
+    │           │   │   ├── ca.a166b745933a.js
+    │           │   │   ├── ca.a166b745933a.js.gz
+    │           │   │   ├── ca.js
+    │           │   │   ├── ca.js.gz
+    │           │   │   ├── cs.4f43e8e7d33a.js
+    │           │   │   ├── cs.4f43e8e7d33a.js.gz
+    │           │   │   ├── cs.js
+    │           │   │   ├── cs.js.gz
+    │           │   │   ├── da.766346afe4dd.js
+    │           │   │   ├── da.766346afe4dd.js.gz
+    │           │   │   ├── da.js
+    │           │   │   ├── da.js.gz
+    │           │   │   ├── de.8a1c222b0204.js
+    │           │   │   ├── de.8a1c222b0204.js.gz
+    │           │   │   ├── de.js
+    │           │   │   ├── de.js.gz
+    │           │   │   ├── dsb.56372c92d2f1.js
+    │           │   │   ├── dsb.56372c92d2f1.js.gz
+    │           │   │   ├── dsb.js
+    │           │   │   ├── dsb.js.gz
+    │           │   │   ├── el.27097f071856.js
+    │           │   │   ├── el.27097f071856.js.gz
+    │           │   │   ├── el.js
+    │           │   │   ├── el.js.gz
+    │           │   │   ├── en.cf932ba09a98.js
+    │           │   │   ├── en.cf932ba09a98.js.gz
+    │           │   │   ├── en.js
+    │           │   │   ├── en.js.gz
+    │           │   │   ├── es.66dbc2652fb1.js
+    │           │   │   ├── es.66dbc2652fb1.js.gz
+    │           │   │   ├── es.js
+    │           │   │   ├── es.js.gz
+    │           │   │   ├── et.2b96fd98289d.js
+    │           │   │   ├── et.2b96fd98289d.js.gz
+    │           │   │   ├── et.js
+    │           │   │   ├── et.js.gz
+    │           │   │   ├── eu.adfe5c97b72c.js
+    │           │   │   ├── eu.adfe5c97b72c.js.gz
+    │           │   │   ├── eu.js
+    │           │   │   ├── eu.js.gz
+    │           │   │   ├── fa.3b5bd1961cfd.js
+    │           │   │   ├── fa.3b5bd1961cfd.js.gz
+    │           │   │   ├── fa.js
+    │           │   │   ├── fa.js.gz
+    │           │   │   ├── fi.614ec42aa9ba.js
+    │           │   │   ├── fi.614ec42aa9ba.js.gz
+    │           │   │   ├── fi.js
+    │           │   │   ├── fi.js.gz
+    │           │   │   ├── fr.05e0542fcfe6.js
+    │           │   │   ├── fr.05e0542fcfe6.js.gz
+    │           │   │   ├── fr.js
+    │           │   │   ├── fr.js.gz
+    │           │   │   ├── gl.d99b1fedaa86.js
+    │           │   │   ├── gl.d99b1fedaa86.js.gz
+    │           │   │   ├── gl.js
+    │           │   │   ├── gl.js.gz
+    │           │   │   ├── he.e420ff6cd3ed.js
+    │           │   │   ├── he.e420ff6cd3ed.js.gz
+    │           │   │   ├── he.js
+    │           │   │   ├── he.js.gz
+    │           │   │   ├── hi.70640d41628f.js
+    │           │   │   ├── hi.70640d41628f.js.gz
+    │           │   │   ├── hi.js
+    │           │   │   ├── hi.js.gz
+    │           │   │   ├── hr.a2b092cc1147.js
+    │           │   │   ├── hr.a2b092cc1147.js.gz
+    │           │   │   ├── hr.js
+    │           │   │   ├── hr.js.gz
+    │           │   │   ├── hsb.fa3b55265efe.js
+    │           │   │   ├── hsb.fa3b55265efe.js.gz
+    │           │   │   ├── hsb.js
+    │           │   │   ├── hsb.js.gz
+    │           │   │   ├── hu.6ec6039cb8a3.js
+    │           │   │   ├── hu.6ec6039cb8a3.js.gz
+    │           │   │   ├── hu.js
+    │           │   │   ├── hu.js.gz
+    │           │   │   ├── hy.c7babaeef5a6.js
+    │           │   │   ├── hy.c7babaeef5a6.js.gz
+    │           │   │   ├── hy.js
+    │           │   │   ├── hy.js.gz
+    │           │   │   ├── id.04debded514d.js
+    │           │   │   ├── id.04debded514d.js.gz
+    │           │   │   ├── id.js
+    │           │   │   ├── id.js.gz
+    │           │   │   ├── is.3ddd9a6a97e9.js
+    │           │   │   ├── is.3ddd9a6a97e9.js.gz
+    │           │   │   ├── is.js
+    │           │   │   ├── is.js.gz
+    │           │   │   ├── it.be4fe8d365b5.js
+    │           │   │   ├── it.be4fe8d365b5.js.gz
+    │           │   │   ├── it.js
+    │           │   │   ├── it.js.gz
+    │           │   │   ├── ja.170ae885d74f.js
+    │           │   │   ├── ja.170ae885d74f.js.gz
+    │           │   │   ├── ja.js
+    │           │   │   ├── ja.js.gz
+    │           │   │   ├── ka.2083264a54f0.js
+    │           │   │   ├── ka.2083264a54f0.js.gz
+    │           │   │   ├── ka.js
+    │           │   │   ├── ka.js.gz
+    │           │   │   ├── km.c23089cb06ca.js
+    │           │   │   ├── km.c23089cb06ca.js.gz
+    │           │   │   ├── km.js
+    │           │   │   ├── km.js.gz
+    │           │   │   ├── ko.e7be6c20e673.js
+    │           │   │   ├── ko.e7be6c20e673.js.gz
+    │           │   │   ├── ko.js
+    │           │   │   ├── ko.js.gz
+    │           │   │   ├── lt.23c7ce903300.js
+    │           │   │   ├── lt.23c7ce903300.js.gz
+    │           │   │   ├── lt.js
+    │           │   │   ├── lt.js.gz
+    │           │   │   ├── lv.08e62128eac1.js
+    │           │   │   ├── lv.08e62128eac1.js.gz
+    │           │   │   ├── lv.js
+    │           │   │   ├── lv.js.gz
+    │           │   │   ├── mk.dabbb9087130.js
+    │           │   │   ├── mk.dabbb9087130.js.gz
+    │           │   │   ├── mk.js
+    │           │   │   ├── mk.js.gz
+    │           │   │   ├── ms.4ba82c9a51ce.js
+    │           │   │   ├── ms.4ba82c9a51ce.js.gz
+    │           │   │   ├── ms.js
+    │           │   │   ├── ms.js.gz
+    │           │   │   ├── nb.da2fce143f27.js
+    │           │   │   ├── nb.da2fce143f27.js.gz
+    │           │   │   ├── nb.js
+    │           │   │   ├── nb.js.gz
+    │           │   │   ├── ne.3d79fd3f08db.js
+    │           │   │   ├── ne.3d79fd3f08db.js.gz
+    │           │   │   ├── ne.js
+    │           │   │   ├── ne.js.gz
+    │           │   │   ├── nl.997868a37ed8.js
+    │           │   │   ├── nl.997868a37ed8.js.gz
+    │           │   │   ├── nl.js
+    │           │   │   ├── nl.js.gz
+    │           │   │   ├── pl.6031b4f16452.js
+    │           │   │   ├── pl.6031b4f16452.js.gz
+    │           │   │   ├── pl.js
+    │           │   │   ├── pl.js.gz
+    │           │   │   ├── ps.38dfa47af9e0.js
+    │           │   │   ├── ps.38dfa47af9e0.js.gz
+    │           │   │   ├── ps.js
+    │           │   │   ├── ps.js.gz
+    │           │   │   ├── pt-BR.e1b294433e7f.js
+    │           │   │   ├── pt-BR.e1b294433e7f.js.gz
+    │           │   │   ├── pt-BR.js
+    │           │   │   ├── pt-BR.js.gz
+    │           │   │   ├── pt.33b4a3b44d43.js
+    │           │   │   ├── pt.33b4a3b44d43.js.gz
+    │           │   │   ├── pt.js
+    │           │   │   ├── pt.js.gz
+    │           │   │   ├── ro.f75cb460ec3b.js
+    │           │   │   ├── ro.f75cb460ec3b.js.gz
+    │           │   │   ├── ro.js
+    │           │   │   ├── ro.js.gz
+    │           │   │   ├── ru.934aa95f5b5f.js
+    │           │   │   ├── ru.934aa95f5b5f.js.gz
+    │           │   │   ├── ru.js
+    │           │   │   ├── ru.js.gz
+    │           │   │   ├── sk.33d02cef8d11.js
+    │           │   │   ├── sk.33d02cef8d11.js.gz
+    │           │   │   ├── sk.js
+    │           │   │   ├── sk.js.gz
+    │           │   │   ├── sl.131a78bc0752.js
+    │           │   │   ├── sl.131a78bc0752.js.gz
+    │           │   │   ├── sl.js
+    │           │   │   ├── sl.js.gz
+    │           │   │   ├── sq.5636b60d29c9.js
+    │           │   │   ├── sq.5636b60d29c9.js.gz
+    │           │   │   ├── sq.js
+    │           │   │   ├── sq.js.gz
+    │           │   │   ├── sr-Cyrl.f254bb8c4c7c.js
+    │           │   │   ├── sr-Cyrl.f254bb8c4c7c.js.gz
+    │           │   │   ├── sr-Cyrl.js
+    │           │   │   ├── sr-Cyrl.js.gz
+    │           │   │   ├── sr.5ed85a48f483.js
+    │           │   │   ├── sr.5ed85a48f483.js.gz
+    │           │   │   ├── sr.js
+    │           │   │   ├── sr.js.gz
+    │           │   │   ├── sv.7a9c2f71e777.js
+    │           │   │   ├── sv.7a9c2f71e777.js.gz
+    │           │   │   ├── sv.js
+    │           │   │   ├── sv.js.gz
+    │           │   │   ├── th.f38c20b0221b.js
+    │           │   │   ├── th.f38c20b0221b.js.gz
+    │           │   │   ├── th.js
+    │           │   │   ├── th.js.gz
+    │           │   │   ├── tk.7c572a68c78f.js
+    │           │   │   ├── tk.7c572a68c78f.js.gz
+    │           │   │   ├── tk.js
+    │           │   │   ├── tk.js.gz
+    │           │   │   ├── tr.b5a0643d1545.js
+    │           │   │   ├── tr.b5a0643d1545.js.gz
+    │           │   │   ├── tr.js
+    │           │   │   ├── tr.js.gz
+    │           │   │   ├── uk.8cede7f4803c.js
+    │           │   │   ├── uk.8cede7f4803c.js.gz
+    │           │   │   ├── uk.js
+    │           │   │   ├── uk.js.gz
+    │           │   │   ├── vi.097a5b75b3e1.js
+    │           │   │   ├── vi.097a5b75b3e1.js.gz
+    │           │   │   ├── vi.js
+    │           │   │   ├── vi.js.gz
+    │           │   │   ├── zh-CN.2cff662ec5f9.js
+    │           │   │   ├── zh-CN.2cff662ec5f9.js.gz
+    │           │   │   ├── zh-CN.js
+    │           │   │   ├── zh-CN.js.gz
+    │           │   │   ├── zh-TW.04554a227c2b.js
+    │           │   │   ├── zh-TW.04554a227c2b.js.gz
+    │           │   │   ├── zh-TW.js
+    │           │   │   └── zh-TW.js.gz
+    │           │   ├── LICENSE.f94142512c91.md
+    │           │   ├── LICENSE.f94142512c91.md.gz
+    │           │   ├── LICENSE.md
+    │           │   ├── LICENSE.md.gz
+    │           │   ├── select2.full.c2afdeda3058.js
+    │           │   ├── select2.full.c2afdeda3058.js.gz
+    │           │   ├── select2.full.js
+    │           │   ├── select2.full.js.gz
+    │           │   ├── select2.full.min.fcd7500d8e13.js
+    │           │   ├── select2.full.min.fcd7500d8e13.js.gz
+    │           │   ├── select2.full.min.js
+    │           │   └── select2.full.min.js.gz
+    │           └── xregexp
+    │               ├── LICENSE.bf79e414957a.txt
+    │               ├── LICENSE.bf79e414957a.txt.gz
+    │               ├── LICENSE.txt
+    │               ├── LICENSE.txt.gz
+    │               ├── xregexp.efda034b9537.js
+    │               ├── xregexp.efda034b9537.js.gz
+    │               ├── xregexp.js
+    │               ├── xregexp.js.gz
+    │               ├── xregexp.min.b0439563a5d3.js
+    │               ├── xregexp.min.b0439563a5d3.js.gz
+    │               ├── xregexp.min.js
+    │               └── xregexp.min.js.gz
+    ├── autocomplete_light
+    │   ├── autocomplete_light.js
+    │   ├── autocomplete_light.min.js
+    │   ├── select2.css
+    │   ├── select2.js
+    │   └── select2.min.js
+    ├── chat
+    │   ├── css
+    │   │   ├── chat.00c933e96db1.css
+    │   │   ├── chat.00c933e96db1.css.gz
+    │   │   ├── chat.css
+    │   │   └── chat.css.gz
+    │   └── js
+    │       ├── chat.d41d8cd98f00.js
+    │       └── chat.js
+    ├── digital_campus
+    │   ├── css
+    │   │   ├── main.6cf277233cef.css
+    │   │   ├── main.6cf277233cef.css.gz
+    │   │   ├── main.css
+    │   │   ├── main.css.gz
+    │   │   ├── user_profile.a8e847cbe010.css
+    │   │   ├── user_profile.a8e847cbe010.css.gz
+    │   │   ├── user_profile.css
+    │   │   └── user_profile.css.gz
+    │   └── js
+    │       ├──       bootstrap.bundle.min.js
+    │       ├── jquery-3.5.1.min.12b69d0ae6c6.js
+    │       ├── jquery-3.5.1.min.12b69d0ae6c6.js.gz
+    │       ├── jquery-3.5.1.min.js
+    │       ├── jquery-3.5.1.min.js.gz
+    │       ├── user_profile.85fc3a13baab.js
+    │       ├── user_profile.85fc3a13baab.js.gz
+    │       ├── user_profile.js
+    │       └── user_profile.js.gz
+    ├── django_tinymce
+    │   ├── init_tinymce.a3200e9c9aeb.js
+    │   ├── init_tinymce.a3200e9c9aeb.js.gz
+    │   ├── init_tinymce.js
+    │   └── init_tinymce.js.gz
+    ├── rest_framework
+    │   ├── css
+    │   │   ├── bootstrap-theme.min.1d4b05b397c3.css
+    │   │   ├── bootstrap-theme.min.1d4b05b397c3.css.gz
+    │   │   ├── bootstrap-theme.min.css
+    │   │   ├── bootstrap-theme.min.css.51806092cc05.map
+    │   │   ├── bootstrap-theme.min.css.51806092cc05.map.gz
+    │   │   ├── bootstrap-theme.min.css.gz
+    │   │   ├── bootstrap-theme.min.css.map
+    │   │   ├── bootstrap-theme.min.css.map.gz
+    │   │   ├── bootstrap-tweaks.css
+    │   │   ├── bootstrap-tweaks.css.gz
+    │   │   ├── bootstrap-tweaks.ee4ee6acf9eb.css
+    │   │   ├── bootstrap-tweaks.ee4ee6acf9eb.css.gz
+    │   │   ├── bootstrap.min.css
+    │   │   ├── bootstrap.min.css.cafbda9c0e9e.map
+    │   │   ├── bootstrap.min.css.cafbda9c0e9e.map.gz
+    │   │   ├── bootstrap.min.css.gz
+    │   │   ├── bootstrap.min.css.map
+    │   │   ├── bootstrap.min.css.map.gz
+    │   │   ├── bootstrap.min.f17d4516b026.css
+    │   │   ├── bootstrap.min.f17d4516b026.css.gz
+    │   │   ├── default.789dfb5732d7.css
+    │   │   ├── default.789dfb5732d7.css.gz
+    │   │   ├── default.css
+    │   │   ├── default.css.gz
+    │   │   ├── font-awesome-4.0.3.c1e1ea213abf.css
+    │   │   ├── font-awesome-4.0.3.c1e1ea213abf.css.gz
+    │   │   ├── font-awesome-4.0.3.css
+    │   │   ├── font-awesome-4.0.3.css.gz
+    │   │   ├── prettify.a987f72342ee.css
+    │   │   ├── prettify.a987f72342ee.css.gz
+    │   │   ├── prettify.css
+    │   │   └── prettify.css.gz
+    │   ├── docs
+    │   │   ├── css
+    │   │   │   ├── base.css
+    │   │   │   ├── base.css.gz
+    │   │   │   ├── base.e630f8f4990e.css
+    │   │   │   ├── base.e630f8f4990e.css.gz
+    │   │   │   ├── highlight.css
+    │   │   │   ├── highlight.css.gz
+    │   │   │   ├── highlight.e0e4d973c6d7.css
+    │   │   │   ├── highlight.e0e4d973c6d7.css.gz
+    │   │   │   ├── jquery.json-view.min.a2e6beeb6710.css
+    │   │   │   ├── jquery.json-view.min.a2e6beeb6710.css.gz
+    │   │   │   ├── jquery.json-view.min.css
+    │   │   │   └── jquery.json-view.min.css.gz
+    │   │   ├── img
+    │   │   │   ├── favicon.5195b4d0f3eb.ico
+    │   │   │   ├── favicon.5195b4d0f3eb.ico.gz
+    │   │   │   ├── favicon.ico
+    │   │   │   ├── favicon.ico.gz
+    │   │   │   ├── grid.a4b938cf382b.png
+    │   │   │   └── grid.png
+    │   │   └── js
+    │   │       ├── api.18a5ba8a1bd8.js
+    │   │       ├── api.18a5ba8a1bd8.js.gz
+    │   │       ├── api.js
+    │   │       ├── api.js.gz
+    │   │       ├── highlight.pack.479b5f21dcba.js
+    │   │       ├── highlight.pack.479b5f21dcba.js.gz
+    │   │       ├── highlight.pack.js
+    │   │       ├── highlight.pack.js.gz
+    │   │       ├── jquery.json-view.min.b7c2d6981377.js
+    │   │       ├── jquery.json-view.min.b7c2d6981377.js.gz
+    │   │       ├── jquery.json-view.min.js
+    │   │       └── jquery.json-view.min.js.gz
+    │   ├── fonts
+    │   │   ├── fontawesome-webfont.3293616ec0c6.woff
+    │   │   ├── fontawesome-webfont.83e37a11f9d7.svg
+    │   │   ├── fontawesome-webfont.83e37a11f9d7.svg.gz
+    │   │   ├── fontawesome-webfont.8b27bc96115c.eot
+    │   │   ├── fontawesome-webfont.dcb26c7239d8.ttf
+    │   │   ├── fontawesome-webfont.dcb26c7239d8.ttf.gz
+    │   │   ├── fontawesome-webfont.eot
+    │   │   ├── fontawesome-webfont.svg
+    │   │   ├── fontawesome-webfont.svg.gz
+    │   │   ├── fontawesome-webfont.ttf
+    │   │   ├── fontawesome-webfont.ttf.gz
+    │   │   ├── fontawesome-webfont.woff
+    │   │   ├── glyphicons-halflings-regular.08eda92397ae.svg
+    │   │   ├── glyphicons-halflings-regular.08eda92397ae.svg.gz
+    │   │   ├── glyphicons-halflings-regular.448c34a56d69.woff2
+    │   │   ├── glyphicons-halflings-regular.e18bbf611f2a.ttf
+    │   │   ├── glyphicons-halflings-regular.e18bbf611f2a.ttf.gz
+    │   │   ├── glyphicons-halflings-regular.eot
+    │   │   ├── glyphicons-halflings-regular.f4769f9bdb74.eot
+    │   │   ├── glyphicons-halflings-regular.fa2772327f55.woff
+    │   │   ├── glyphicons-halflings-regular.svg
+    │   │   ├── glyphicons-halflings-regular.svg.gz
+    │   │   ├── glyphicons-halflings-regular.ttf
+    │   │   ├── glyphicons-halflings-regular.ttf.gz
+    │   │   ├── glyphicons-halflings-regular.woff
+    │   │   └── glyphicons-halflings-regular.woff2
+    │   ├── img
+    │   │   ├── glyphicons-halflings-white.9bbc6e960299.png
+    │   │   ├── glyphicons-halflings-white.png
+    │   │   ├── glyphicons-halflings.90233c9067e9.png
+    │   │   ├── glyphicons-halflings.png
+    │   │   ├── grid.a4b938cf382b.png
+    │   │   └── grid.png
+    │   └── js
+    │       ├── ajax-form.4e1cdcb7acab.js
+    │       ├── ajax-form.4e1cdcb7acab.js.gz
+    │       ├── ajax-form.js
+    │       ├── ajax-form.js.gz
+    │       ├── bootstrap.min.2f34b630ffe3.js
+    │       ├── bootstrap.min.2f34b630ffe3.js.gz
+    │       ├── bootstrap.min.js
+    │       ├── bootstrap.min.js.gz
+    │       ├── coreapi-0.1.1.e580e3854595.js
+    │       ├── coreapi-0.1.1.e580e3854595.js.gz
+    │       ├── coreapi-0.1.1.js
+    │       ├── coreapi-0.1.1.js.gz
+    │       ├── csrf.455080a7b2ce.js
+    │       ├── csrf.455080a7b2ce.js.gz
+    │       ├── csrf.js
+    │       ├── csrf.js.gz
+    │       ├── default.5b08897dbdc3.js
+    │       ├── default.5b08897dbdc3.js.gz
+    │       ├── default.js
+    │       ├── default.js.gz
+    │       ├── jquery-3.7.1.min.2c872dbe60f4.js
+    │       ├── jquery-3.7.1.min.2c872dbe60f4.js.gz
+    │       ├── jquery-3.7.1.min.js
+    │       ├── jquery-3.7.1.min.js.gz
+    │       ├── load-ajax-form.8cdb3a9f3466.js
+    │       ├── load-ajax-form.js
+    │       ├── prettify-min.709bfcc456c6.js
+    │       ├── prettify-min.709bfcc456c6.js.gz
+    │       ├── prettify-min.js
+    │       └── prettify-min.js.gz
+    ├── staticfiles.json
+    ├── tinymce
+    │   ├── icons
+    │   │   └── default
+    │   │       ├── icons.min.f84b893469e5.js
+    │   │       ├── icons.min.f84b893469e5.js.gz
+    │   │       ├── icons.min.js
+    │   │       └── icons.min.js.gz
+    │   ├── langs
+    │   │   ├── ar_SA.2507cacb7ed7.js
+    │   │   ├── ar_SA.2507cacb7ed7.js.gz
+    │   │   ├── ar_SA.js
+    │   │   ├── ar_SA.js.gz
+    │   │   ├── ar.67c850c06937.js
+    │   │   ├── ar.67c850c06937.js.gz
+    │   │   ├── ar.js
+    │   │   ├── ar.js.gz
+    │   │   ├── az.120d6baf03db.js
+    │   │   ├── az.120d6baf03db.js.gz
+    │   │   ├── az.js
+    │   │   ├── az.js.gz
+    │   │   ├── be.96532c79fd74.js
+    │   │   ├── be.96532c79fd74.js.gz
+    │   │   ├── be.js
+    │   │   ├── be.js.gz
+    │   │   ├── bg_BG.79dc62e39438.js
+    │   │   ├── bg_BG.79dc62e39438.js.gz
+    │   │   ├── bg_BG.js
+    │   │   ├── bg_BG.js.gz
+    │   │   ├── bn_BD.5142fe00b6be.js
+    │   │   ├── bn_BD.5142fe00b6be.js.gz
+    │   │   ├── bn_BD.js
+    │   │   ├── bn_BD.js.gz
+    │   │   ├── ca.6cbea8e6cf43.js
+    │   │   ├── ca.6cbea8e6cf43.js.gz
+    │   │   ├── ca.js
+    │   │   ├── ca.js.gz
+    │   │   ├── cs.5f87c28ba62f.js
+    │   │   ├── cs.5f87c28ba62f.js.gz
+    │   │   ├── cs.js
+    │   │   ├── cs.js.gz
+    │   │   ├── cy.e689fcb77de1.js
+    │   │   ├── cy.e689fcb77de1.js.gz
+    │   │   ├── cy.js
+    │   │   ├── cy.js.gz
+    │   │   ├── da.8af3626c4dcd.js
+    │   │   ├── da.8af3626c4dcd.js.gz
+    │   │   ├── da.js
+    │   │   ├── da.js.gz
+    │   │   ├── de.e4a7d2a9dc07.js
+    │   │   ├── de.e4a7d2a9dc07.js.gz
+    │   │   ├── de.js
+    │   │   ├── de.js.gz
+    │   │   ├── dv.21ae305e888f.js
+    │   │   ├── dv.21ae305e888f.js.gz
+    │   │   ├── dv.js
+    │   │   ├── dv.js.gz
+    │   │   ├── el.b058946e85a3.js
+    │   │   ├── el.b058946e85a3.js.gz
+    │   │   ├── el.js
+    │   │   ├── el.js.gz
+    │   │   ├── eo.8362be7a5a70.js
+    │   │   ├── eo.8362be7a5a70.js.gz
+    │   │   ├── eo.js
+    │   │   ├── eo.js.gz
+    │   │   ├── es_MX.6032c91fc2f3.js
+    │   │   ├── es_MX.6032c91fc2f3.js.gz
+    │   │   ├── es_MX.js
+    │   │   ├── es_MX.js.gz
+    │   │   ├── es.f631943c1bc8.js
+    │   │   ├── es.f631943c1bc8.js.gz
+    │   │   ├── es.js
+    │   │   ├── es.js.gz
+    │   │   ├── et.f1d92a3b0b09.js
+    │   │   ├── et.f1d92a3b0b09.js.gz
+    │   │   ├── et.js
+    │   │   ├── et.js.gz
+    │   │   ├── eu.6b32691d5260.js
+    │   │   ├── eu.6b32691d5260.js.gz
+    │   │   ├── eu.js
+    │   │   ├── eu.js.gz
+    │   │   ├── fa.e4bf22951770.js
+    │   │   ├── fa.e4bf22951770.js.gz
+    │   │   ├── fa.js
+    │   │   ├── fa.js.gz
+    │   │   ├── fi.d48c379f52b4.js
+    │   │   ├── fi.d48c379f52b4.js.gz
+    │   │   ├── fi.js
+    │   │   ├── fi.js.gz
+    │   │   ├── fr_FR.0ab07b1e0a36.js
+    │   │   ├── fr_FR.0ab07b1e0a36.js.gz
+    │   │   ├── fr_FR.js
+    │   │   ├── fr_FR.js.gz
+    │   │   ├── ga.74c12fef7e38.js
+    │   │   ├── ga.74c12fef7e38.js.gz
+    │   │   ├── ga.js
+    │   │   ├── ga.js.gz
+    │   │   ├── gl.1e87919a6c3b.js
+    │   │   ├── gl.1e87919a6c3b.js.gz
+    │   │   ├── gl.js
+    │   │   ├── gl.js.gz
+    │   │   ├── he_IL.f55981472c79.js
+    │   │   ├── he_IL.f55981472c79.js.gz
+    │   │   ├── he_IL.js
+    │   │   ├── he_IL.js.gz
+    │   │   ├── hi.09b456dbca57.js
+    │   │   ├── hi.09b456dbca57.js.gz
+    │   │   ├── hi.js
+    │   │   ├── hi.js.gz
+    │   │   ├── hr.dd26094fca6f.js
+    │   │   ├── hr.dd26094fca6f.js.gz
+    │   │   ├── hr.js
+    │   │   ├── hr.js.gz
+    │   │   ├── hu_HU.85afcda06895.js
+    │   │   ├── hu_HU.85afcda06895.js.gz
+    │   │   ├── hu_HU.js
+    │   │   ├── hu_HU.js.gz
+    │   │   ├── hy.3af7e2130d56.js
+    │   │   ├── hy.3af7e2130d56.js.gz
+    │   │   ├── hy.js
+    │   │   ├── hy.js.gz
+    │   │   ├── id.0e0ad50e6bf6.js
+    │   │   ├── id.0e0ad50e6bf6.js.gz
+    │   │   ├── id.js
+    │   │   ├── id.js.gz
+    │   │   ├── is_IS.8fd573a3704c.js
+    │   │   ├── is_IS.8fd573a3704c.js.gz
+    │   │   ├── is_IS.js
+    │   │   ├── is_IS.js.gz
+    │   │   ├── it.dafa7115c0d1.js
+    │   │   ├── it.dafa7115c0d1.js.gz
+    │   │   ├── it.js
+    │   │   ├── it.js.gz
+    │   │   ├── ja.c047091142ec.js
+    │   │   ├── ja.c047091142ec.js.gz
+    │   │   ├── ja.js
+    │   │   ├── ja.js.gz
+    │   │   ├── ka_GE.2a97d9921404.js
+    │   │   ├── ka_GE.2a97d9921404.js.gz
+    │   │   ├── ka_GE.js
+    │   │   ├── ka_GE.js.gz
+    │   │   ├── kab.09735a616ad3.js
+    │   │   ├── kab.09735a616ad3.js.gz
+    │   │   ├── kab.js
+    │   │   ├── kab.js.gz
+    │   │   ├── kk.b8a236f76676.js
+    │   │   ├── kk.b8a236f76676.js.gz
+    │   │   ├── kk.js
+    │   │   ├── kk.js.gz
+    │   │   ├── ko_KR.fe7ff94c9706.js
+    │   │   ├── ko_KR.fe7ff94c9706.js.gz
+    │   │   ├── ko_KR.js
+    │   │   ├── ko_KR.js.gz
+    │   │   ├── ku.3b0dd7cd0b10.js
+    │   │   ├── ku.3b0dd7cd0b10.js.gz
+    │   │   ├── ku.js
+    │   │   ├── ku.js.gz
+    │   │   ├── lt.e7a9c0e94864.js
+    │   │   ├── lt.e7a9c0e94864.js.gz
+    │   │   ├── lt.js
+    │   │   ├── lt.js.gz
+    │   │   ├── lv.0f62d67be996.js
+    │   │   ├── lv.0f62d67be996.js.gz
+    │   │   ├── lv.js
+    │   │   ├── lv.js.gz
+    │   │   ├── nb_NO.673ffe4553d0.js
+    │   │   ├── nb_NO.673ffe4553d0.js.gz
+    │   │   ├── nb_NO.js
+    │   │   ├── nb_NO.js.gz
+    │   │   ├── ne.ea4f06bbb04c.js
+    │   │   ├── ne.ea4f06bbb04c.js.gz
+    │   │   ├── ne.js
+    │   │   ├── ne.js.gz
+    │   │   ├── nl_BE.6b19a8a3e57b.js
+    │   │   ├── nl_BE.6b19a8a3e57b.js.gz
+    │   │   ├── nl_BE.js
+    │   │   ├── nl_BE.js.gz
+    │   │   ├── nl.458c29070755.js
+    │   │   ├── nl.458c29070755.js.gz
+    │   │   ├── nl.js
+    │   │   ├── nl.js.gz
+    │   │   ├── oc.78457045da7d.js
+    │   │   ├── oc.78457045da7d.js.gz
+    │   │   ├── oc.js
+    │   │   ├── oc.js.gz
+    │   │   ├── pl.81fd4e97dcea.js
+    │   │   ├── pl.81fd4e97dcea.js.gz
+    │   │   ├── pl.js
+    │   │   ├── pl.js.gz
+    │   │   ├── pt_BR.284ba23ba666.js
+    │   │   ├── pt_BR.284ba23ba666.js.gz
+    │   │   ├── pt_BR.js
+    │   │   ├── pt_BR.js.gz
+    │   │   ├── README.f37924b0ab47.md
+    │   │   ├── README.f37924b0ab47.md.gz
+    │   │   ├── README.md
+    │   │   ├── README.md.gz
+    │   │   ├── ro.8eb404a9a783.js
+    │   │   ├── ro.8eb404a9a783.js.gz
+    │   │   ├── ro.js
+    │   │   ├── ro.js.gz
+    │   │   ├── ru.1b13cf9a7d1d.js
+    │   │   ├── ru.1b13cf9a7d1d.js.gz
+    │   │   ├── ru.js
+    │   │   ├── ru.js.gz
+    │   │   ├── sk.9023a359dec8.js
+    │   │   ├── sk.9023a359dec8.js.gz
+    │   │   ├── sk.js
+    │   │   ├── sk.js.gz
+    │   │   ├── sl_SI.df1adf651fee.js
+    │   │   ├── sl_SI.df1adf651fee.js.gz
+    │   │   ├── sl_SI.js
+    │   │   ├── sl_SI.js.gz
+    │   │   ├── sq.ca10cd56c9bb.js
+    │   │   ├── sq.ca10cd56c9bb.js.gz
+    │   │   ├── sq.js
+    │   │   ├── sq.js.gz
+    │   │   ├── sr.609628a04008.js
+    │   │   ├── sr.609628a04008.js.gz
+    │   │   ├── sr.js
+    │   │   ├── sr.js.gz
+    │   │   ├── sv_SE.79263c0508a5.js
+    │   │   ├── sv_SE.79263c0508a5.js.gz
+    │   │   ├── sv_SE.js
+    │   │   ├── sv_SE.js.gz
+    │   │   ├── ta.096bb811f004.js
+    │   │   ├── ta.096bb811f004.js.gz
+    │   │   ├── ta.js
+    │   │   ├── ta.js.gz
+    │   │   ├── tg.4568611a86ff.js
+    │   │   ├── tg.4568611a86ff.js.gz
+    │   │   ├── tg.js
+    │   │   ├── tg.js.gz
+    │   │   ├── th_TH.9c277e0194f9.js
+    │   │   ├── th_TH.9c277e0194f9.js.gz
+    │   │   ├── th_TH.js
+    │   │   ├── th_TH.js.gz
+    │   │   ├── tr.b869f62d9cc8.js
+    │   │   ├── tr.b869f62d9cc8.js.gz
+    │   │   ├── tr.js
+    │   │   ├── tr.js.gz
+    │   │   ├── ug.f7b8a7f0117b.js
+    │   │   ├── ug.f7b8a7f0117b.js.gz
+    │   │   ├── ug.js
+    │   │   ├── ug.js.gz
+    │   │   ├── uk.2d591da6ff59.js
+    │   │   ├── uk.2d591da6ff59.js.gz
+    │   │   ├── uk.js
+    │   │   ├── uk.js.gz
+    │   │   ├── uz.55d28749510d.js
+    │   │   ├── uz.55d28749510d.js.gz
+    │   │   ├── uz.js
+    │   │   ├── uz.js.gz
+    │   │   ├── vi.ca4614a7a9af.js
+    │   │   ├── vi.ca4614a7a9af.js.gz
+    │   │   ├── vi.js
+    │   │   ├── vi.js.gz
+    │   │   ├── zh_HK.f47f8a3680d9.js
+    │   │   ├── zh_HK.f47f8a3680d9.js.gz
+    │   │   ├── zh_HK.js
+    │   │   ├── zh_HK.js.gz
+    │   │   ├── zh_MO.f58da6c5238e.js
+    │   │   ├── zh_MO.f58da6c5238e.js.gz
+    │   │   ├── zh_MO.js
+    │   │   ├── zh_MO.js.gz
+    │   │   ├── zh_SG.c59cc4d695f5.js
+    │   │   ├── zh_SG.c59cc4d695f5.js.gz
+    │   │   ├── zh_SG.js
+    │   │   ├── zh_SG.js.gz
+    │   │   ├── zh-Hans.d085d4a148f9.js
+    │   │   ├── zh-Hans.d085d4a148f9.js.gz
+    │   │   ├── zh-Hans.js
+    │   │   ├── zh-Hans.js.gz
+    │   │   ├── zh-Hant.af54da48cd77.js
+    │   │   ├── zh-Hant.af54da48cd77.js.gz
+    │   │   ├── zh-Hant.js
+    │   │   └── zh-Hant.js.gz
+    │   ├── license.5f3d874e2822.txt
+    │   ├── license.5f3d874e2822.txt.gz
+    │   ├── license.txt
+    │   ├── license.txt.gz
+    │   ├── models
+    │   │   └── dom
+    │   │       ├── model.min.9a10f8124469.js
+    │   │       ├── model.min.9a10f8124469.js.gz
+    │   │       ├── model.min.js
+    │   │       └── model.min.js.gz
+    │   ├── plugins
+    │   │   ├── accordion
+    │   │   │   ├── plugin.min.ad7041f8cd40.js
+    │   │   │   ├── plugin.min.ad7041f8cd40.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── advlist
+    │   │   │   ├── plugin.min.3c6d0c85fd56.js
+    │   │   │   ├── plugin.min.3c6d0c85fd56.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── anchor
+    │   │   │   ├── plugin.min.6f9a360d1ed0.js
+    │   │   │   ├── plugin.min.6f9a360d1ed0.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── autolink
+    │   │   │   ├── plugin.min.1482a5a54741.js
+    │   │   │   ├── plugin.min.1482a5a54741.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── autoresize
+    │   │   │   ├── plugin.min.78b55eeb97aa.js
+    │   │   │   ├── plugin.min.78b55eeb97aa.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── autosave
+    │   │   │   ├── plugin.min.c315cdbfd235.js
+    │   │   │   ├── plugin.min.c315cdbfd235.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── charmap
+    │   │   │   ├── plugin.min.0b0c078485a5.js
+    │   │   │   ├── plugin.min.0b0c078485a5.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── code
+    │   │   │   ├── plugin.min.d2e3bd99d6bc.js
+    │   │   │   ├── plugin.min.d2e3bd99d6bc.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── codesample
+    │   │   │   ├── plugin.min.638377a8901c.js
+    │   │   │   ├── plugin.min.638377a8901c.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── directionality
+    │   │   │   ├── plugin.min.6f42916ad41a.js
+    │   │   │   ├── plugin.min.6f42916ad41a.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── emoticons
+    │   │   │   ├── js
+    │   │   │   │   ├── emojiimages.1ab2fd097df3.js
+    │   │   │   │   ├── emojiimages.1ab2fd097df3.js.gz
+    │   │   │   │   ├── emojiimages.js
+    │   │   │   │   ├── emojiimages.js.gz
+    │   │   │   │   ├── emojiimages.min.d3b2eef2f78c.js
+    │   │   │   │   ├── emojiimages.min.d3b2eef2f78c.js.gz
+    │   │   │   │   ├── emojiimages.min.js
+    │   │   │   │   ├── emojiimages.min.js.gz
+    │   │   │   │   ├── emojis.7fa1cc8fdcb7.js
+    │   │   │   │   ├── emojis.7fa1cc8fdcb7.js.gz
+    │   │   │   │   ├── emojis.js
+    │   │   │   │   ├── emojis.js.gz
+    │   │   │   │   ├── emojis.min.74f5f8072608.js
+    │   │   │   │   ├── emojis.min.74f5f8072608.js.gz
+    │   │   │   │   ├── emojis.min.js
+    │   │   │   │   └── emojis.min.js.gz
+    │   │   │   ├── plugin.min.139cd97fcc29.js
+    │   │   │   ├── plugin.min.139cd97fcc29.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── fullscreen
+    │   │   │   ├── plugin.min.7516c7b966a2.js
+    │   │   │   ├── plugin.min.7516c7b966a2.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── help
+    │   │   │   ├── js
+    │   │   │   │   └── i18n
+    │   │   │   │       └── keynav
+    │   │   │   │           ├── ar.1d39c9056380.js
+    │   │   │   │           ├── ar.1d39c9056380.js.gz
+    │   │   │   │           ├── ar.js
+    │   │   │   │           ├── ar.js.gz
+    │   │   │   │           ├── bg_BG.aaf4cb391c49.js
+    │   │   │   │           ├── bg_BG.aaf4cb391c49.js.gz
+    │   │   │   │           ├── bg_BG.js
+    │   │   │   │           ├── bg_BG.js.gz
+    │   │   │   │           ├── ca.2f6ba1c640aa.js
+    │   │   │   │           ├── ca.2f6ba1c640aa.js.gz
+    │   │   │   │           ├── ca.js
+    │   │   │   │           ├── ca.js.gz
+    │   │   │   │           ├── cs.66c5ec5edb05.js
+    │   │   │   │           ├── cs.66c5ec5edb05.js.gz
+    │   │   │   │           ├── cs.js
+    │   │   │   │           ├── cs.js.gz
+    │   │   │   │           ├── da.ea9832150d40.js
+    │   │   │   │           ├── da.ea9832150d40.js.gz
+    │   │   │   │           ├── da.js
+    │   │   │   │           ├── da.js.gz
+    │   │   │   │           ├── de.d5d5265c9d4c.js
+    │   │   │   │           ├── de.d5d5265c9d4c.js.gz
+    │   │   │   │           ├── de.js
+    │   │   │   │           ├── de.js.gz
+    │   │   │   │           ├── el.4234e38887cd.js
+    │   │   │   │           ├── el.4234e38887cd.js.gz
+    │   │   │   │           ├── el.js
+    │   │   │   │           ├── el.js.gz
+    │   │   │   │           ├── en.cd43153cf3c3.js
+    │   │   │   │           ├── en.cd43153cf3c3.js.gz
+    │   │   │   │           ├── en.js
+    │   │   │   │           ├── en.js.gz
+    │   │   │   │           ├── es.0cc1d159c183.js
+    │   │   │   │           ├── es.0cc1d159c183.js.gz
+    │   │   │   │           ├── es.js
+    │   │   │   │           ├── es.js.gz
+    │   │   │   │           ├── eu.db6e77cd6919.js
+    │   │   │   │           ├── eu.db6e77cd6919.js.gz
+    │   │   │   │           ├── eu.js
+    │   │   │   │           ├── eu.js.gz
+    │   │   │   │           ├── fa.8e3b1c6c392f.js
+    │   │   │   │           ├── fa.8e3b1c6c392f.js.gz
+    │   │   │   │           ├── fa.js
+    │   │   │   │           ├── fa.js.gz
+    │   │   │   │           ├── fi.f94f79fac569.js
+    │   │   │   │           ├── fi.f94f79fac569.js.gz
+    │   │   │   │           ├── fi.js
+    │   │   │   │           ├── fi.js.gz
+    │   │   │   │           ├── fr_FR.daae5c75a0b9.js
+    │   │   │   │           ├── fr_FR.daae5c75a0b9.js.gz
+    │   │   │   │           ├── fr_FR.js
+    │   │   │   │           ├── fr_FR.js.gz
+    │   │   │   │           ├── he_IL.fca54b3a0404.js
+    │   │   │   │           ├── he_IL.fca54b3a0404.js.gz
+    │   │   │   │           ├── he_IL.js
+    │   │   │   │           ├── he_IL.js.gz
+    │   │   │   │           ├── hi.7d2880b56da7.js
+    │   │   │   │           ├── hi.7d2880b56da7.js.gz
+    │   │   │   │           ├── hi.js
+    │   │   │   │           ├── hi.js.gz
+    │   │   │   │           ├── hr.99bf3581e36a.js
+    │   │   │   │           ├── hr.99bf3581e36a.js.gz
+    │   │   │   │           ├── hr.js
+    │   │   │   │           ├── hr.js.gz
+    │   │   │   │           ├── hu_HU.16b3b04c3448.js
+    │   │   │   │           ├── hu_HU.16b3b04c3448.js.gz
+    │   │   │   │           ├── hu_HU.js
+    │   │   │   │           ├── hu_HU.js.gz
+    │   │   │   │           ├── id.628d65c36247.js
+    │   │   │   │           ├── id.628d65c36247.js.gz
+    │   │   │   │           ├── id.js
+    │   │   │   │           ├── id.js.gz
+    │   │   │   │           ├── it.053cd4e1cbf8.js
+    │   │   │   │           ├── it.053cd4e1cbf8.js.gz
+    │   │   │   │           ├── it.js
+    │   │   │   │           ├── it.js.gz
+    │   │   │   │           ├── ja.8b450dcad19c.js
+    │   │   │   │           ├── ja.8b450dcad19c.js.gz
+    │   │   │   │           ├── ja.js
+    │   │   │   │           ├── ja.js.gz
+    │   │   │   │           ├── kk.7e3d4ee1864c.js
+    │   │   │   │           ├── kk.7e3d4ee1864c.js.gz
+    │   │   │   │           ├── kk.js
+    │   │   │   │           ├── kk.js.gz
+    │   │   │   │           ├── ko_KR.2cf9d18c71f0.js
+    │   │   │   │           ├── ko_KR.2cf9d18c71f0.js.gz
+    │   │   │   │           ├── ko_KR.js
+    │   │   │   │           ├── ko_KR.js.gz
+    │   │   │   │           ├── ms.e8055c56409b.js
+    │   │   │   │           ├── ms.e8055c56409b.js.gz
+    │   │   │   │           ├── ms.js
+    │   │   │   │           ├── ms.js.gz
+    │   │   │   │           ├── nb_NO.087f71e8d53c.js
+    │   │   │   │           ├── nb_NO.087f71e8d53c.js.gz
+    │   │   │   │           ├── nb_NO.js
+    │   │   │   │           ├── nb_NO.js.gz
+    │   │   │   │           ├── nl.52633f3b3fcc.js
+    │   │   │   │           ├── nl.52633f3b3fcc.js.gz
+    │   │   │   │           ├── nl.js
+    │   │   │   │           ├── nl.js.gz
+    │   │   │   │           ├── pl.3f38b829a9a5.js
+    │   │   │   │           ├── pl.3f38b829a9a5.js.gz
+    │   │   │   │           ├── pl.js
+    │   │   │   │           ├── pl.js.gz
+    │   │   │   │           ├── pt_BR.842844c80cbc.js
+    │   │   │   │           ├── pt_BR.842844c80cbc.js.gz
+    │   │   │   │           ├── pt_BR.js
+    │   │   │   │           ├── pt_BR.js.gz
+    │   │   │   │           ├── pt_PT.d0d5984a37f6.js
+    │   │   │   │           ├── pt_PT.d0d5984a37f6.js.gz
+    │   │   │   │           ├── pt_PT.js
+    │   │   │   │           ├── pt_PT.js.gz
+    │   │   │   │           ├── ro.149e989a43df.js
+    │   │   │   │           ├── ro.149e989a43df.js.gz
+    │   │   │   │           ├── ro.js
+    │   │   │   │           ├── ro.js.gz
+    │   │   │   │           ├── ru.e6edb26958be.js
+    │   │   │   │           ├── ru.e6edb26958be.js.gz
+    │   │   │   │           ├── ru.js
+    │   │   │   │           ├── ru.js.gz
+    │   │   │   │           ├── sk.51eca8bd40f2.js
+    │   │   │   │           ├── sk.51eca8bd40f2.js.gz
+    │   │   │   │           ├── sk.js
+    │   │   │   │           ├── sk.js.gz
+    │   │   │   │           ├── sl_SI.d5801c4e3f13.js
+    │   │   │   │           ├── sl_SI.d5801c4e3f13.js.gz
+    │   │   │   │           ├── sl_SI.js
+    │   │   │   │           ├── sl_SI.js.gz
+    │   │   │   │           ├── sv_SE.d16bc95741d6.js
+    │   │   │   │           ├── sv_SE.d16bc95741d6.js.gz
+    │   │   │   │           ├── sv_SE.js
+    │   │   │   │           ├── sv_SE.js.gz
+    │   │   │   │           ├── th_TH.c54fb164cd2c.js
+    │   │   │   │           ├── th_TH.c54fb164cd2c.js.gz
+    │   │   │   │           ├── th_TH.js
+    │   │   │   │           ├── th_TH.js.gz
+    │   │   │   │           ├── tr.ff3fddcb952e.js
+    │   │   │   │           ├── tr.ff3fddcb952e.js.gz
+    │   │   │   │           ├── tr.js
+    │   │   │   │           ├── tr.js.gz
+    │   │   │   │           ├── uk.9d0c20f258d8.js
+    │   │   │   │           ├── uk.9d0c20f258d8.js.gz
+    │   │   │   │           ├── uk.js
+    │   │   │   │           ├── uk.js.gz
+    │   │   │   │           ├── vi.62e644b5b68b.js
+    │   │   │   │           ├── vi.62e644b5b68b.js.gz
+    │   │   │   │           ├── vi.js
+    │   │   │   │           ├── vi.js.gz
+    │   │   │   │           ├── zh_CN.b3f5026fc5ab.js
+    │   │   │   │           ├── zh_CN.b3f5026fc5ab.js.gz
+    │   │   │   │           ├── zh_CN.js
+    │   │   │   │           ├── zh_CN.js.gz
+    │   │   │   │           ├── zh_TW.5f3961f1c263.js
+    │   │   │   │           ├── zh_TW.5f3961f1c263.js.gz
+    │   │   │   │           ├── zh_TW.js
+    │   │   │   │           └── zh_TW.js.gz
+    │   │   │   ├── plugin.min.54cf9263065c.js
+    │   │   │   ├── plugin.min.54cf9263065c.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── image
+    │   │   │   ├── plugin.min.cecbe196f07f.js
+    │   │   │   ├── plugin.min.cecbe196f07f.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── importcss
+    │   │   │   ├── plugin.min.4fc220053ef4.js
+    │   │   │   ├── plugin.min.4fc220053ef4.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── insertdatetime
+    │   │   │   ├── plugin.min.3ef1caf06697.js
+    │   │   │   ├── plugin.min.3ef1caf06697.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── link
+    │   │   │   ├── plugin.min.20d149ae5a29.js
+    │   │   │   ├── plugin.min.20d149ae5a29.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── lists
+    │   │   │   ├── plugin.min.35c86565cc15.js
+    │   │   │   ├── plugin.min.35c86565cc15.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── media
+    │   │   │   ├── plugin.min.bc236b952a98.js
+    │   │   │   ├── plugin.min.bc236b952a98.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── nonbreaking
+    │   │   │   ├── plugin.min.9b00f4863d32.js
+    │   │   │   ├── plugin.min.9b00f4863d32.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── pagebreak
+    │   │   │   ├── plugin.min.85a61587e9b6.js
+    │   │   │   ├── plugin.min.85a61587e9b6.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── preview
+    │   │   │   ├── plugin.min.7273a7a0248f.js
+    │   │   │   ├── plugin.min.7273a7a0248f.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── quickbars
+    │   │   │   ├── plugin.min.9c8e8b91ab4b.js
+    │   │   │   ├── plugin.min.9c8e8b91ab4b.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── save
+    │   │   │   ├── plugin.min.ca83198b5d52.js
+    │   │   │   ├── plugin.min.ca83198b5d52.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── searchreplace
+    │   │   │   ├── plugin.min.b219ab84d048.js
+    │   │   │   ├── plugin.min.b219ab84d048.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── table
+    │   │   │   ├── plugin.min.69e8395efa9a.js
+    │   │   │   ├── plugin.min.69e8395efa9a.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── template
+    │   │   │   ├── plugin.min.111040220271.js
+    │   │   │   ├── plugin.min.111040220271.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── visualblocks
+    │   │   │   ├── plugin.min.f4f460e2efe3.js
+    │   │   │   ├── plugin.min.f4f460e2efe3.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   ├── visualchars
+    │   │   │   ├── plugin.min.664b14d87e30.js
+    │   │   │   ├── plugin.min.664b14d87e30.js.gz
+    │   │   │   ├── plugin.min.js
+    │   │   │   └── plugin.min.js.gz
+    │   │   └── wordcount
+    │   │       ├── plugin.min.6bdb3b70229d.js
+    │   │       ├── plugin.min.6bdb3b70229d.js.gz
+    │   │       ├── plugin.min.js
+    │   │       └── plugin.min.js.gz
+    │   ├── skins
+    │   │   ├── content
+    │   │   │   ├── dark
+    │   │   │   │   ├── content.9d73c0c01920.js
+    │   │   │   │   ├── content.9d73c0c01920.js.gz
+    │   │   │   │   ├── content.js
+    │   │   │   │   ├── content.js.gz
+    │   │   │   │   ├── content.min.8be098c8a096.css
+    │   │   │   │   ├── content.min.8be098c8a096.css.gz
+    │   │   │   │   ├── content.min.css
+    │   │   │   │   └── content.min.css.gz
+    │   │   │   ├── default
+    │   │   │   │   ├── content.0a634b446e19.js
+    │   │   │   │   ├── content.0a634b446e19.js.gz
+    │   │   │   │   ├── content.js
+    │   │   │   │   ├── content.js.gz
+    │   │   │   │   ├── content.min.css
+    │   │   │   │   ├── content.min.css.gz
+    │   │   │   │   ├── content.min.e74483078450.css
+    │   │   │   │   └── content.min.e74483078450.css.gz
+    │   │   │   ├── document
+    │   │   │   │   ├── content.49b6dec565a4.js
+    │   │   │   │   ├── content.49b6dec565a4.js.gz
+    │   │   │   │   ├── content.js
+    │   │   │   │   ├── content.js.gz
+    │   │   │   │   ├── content.min.6cb27dc9ba94.css
+    │   │   │   │   ├── content.min.6cb27dc9ba94.css.gz
+    │   │   │   │   ├── content.min.css
+    │   │   │   │   └── content.min.css.gz
+    │   │   │   ├── tinymce-5
+    │   │   │   │   ├── content.4b9826626418.js
+    │   │   │   │   ├── content.4b9826626418.js.gz
+    │   │   │   │   ├── content.js
+    │   │   │   │   ├── content.js.gz
+    │   │   │   │   ├── content.min.css
+    │   │   │   │   ├── content.min.css.gz
+    │   │   │   │   ├── content.min.e74483078450.css
+    │   │   │   │   └── content.min.e74483078450.css.gz
+    │   │   │   ├── tinymce-5-dark
+    │   │   │   │   ├── content.6bde245f4f9e.js
+    │   │   │   │   ├── content.6bde245f4f9e.js.gz
+    │   │   │   │   ├── content.js
+    │   │   │   │   ├── content.js.gz
+    │   │   │   │   ├── content.min.4e7d595a3352.css
+    │   │   │   │   ├── content.min.4e7d595a3352.css.gz
+    │   │   │   │   ├── content.min.css
+    │   │   │   │   └── content.min.css.gz
+    │   │   │   └── writer
+    │   │   │       ├── content.146f06d05a21.js
+    │   │   │       ├── content.146f06d05a21.js.gz
+    │   │   │       ├── content.js
+    │   │   │       ├── content.js.gz
+    │   │   │       ├── content.min.5647767d1db4.css
+    │   │   │       ├── content.min.5647767d1db4.css.gz
+    │   │   │       ├── content.min.css
+    │   │   │       └── content.min.css.gz
+    │   │   └── ui
+    │   │       ├── oxide
+    │   │       │   ├── content.0b79be6eec16.js
+    │   │       │   ├── content.0b79be6eec16.js.gz
+    │   │       │   ├── content.inline.b5f416a619f4.js
+    │   │       │   ├── content.inline.b5f416a619f4.js.gz
+    │   │       │   ├── content.inline.js
+    │   │       │   ├── content.inline.js.gz
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css.gz
+    │   │       │   ├── content.inline.min.css
+    │   │       │   ├── content.inline.min.css.gz
+    │   │       │   ├── content.js
+    │   │       │   ├── content.js.gz
+    │   │       │   ├── content.min.4cf4f8e8302a.css
+    │   │       │   ├── content.min.4cf4f8e8302a.css.gz
+    │   │       │   ├── content.min.css
+    │   │       │   ├── content.min.css.gz
+    │   │       │   ├── skin.37874ced270b.js
+    │   │       │   ├── skin.37874ced270b.js.gz
+    │   │       │   ├── skin.js
+    │   │       │   ├── skin.js.gz
+    │   │       │   ├── skin.min.bc4ffac21751.css
+    │   │       │   ├── skin.min.bc4ffac21751.css.gz
+    │   │       │   ├── skin.min.css
+    │   │       │   ├── skin.min.css.gz
+    │   │       │   ├── skin.shadowdom.f77887b054ee.js
+    │   │       │   ├── skin.shadowdom.f77887b054ee.js.gz
+    │   │       │   ├── skin.shadowdom.js
+    │   │       │   ├── skin.shadowdom.js.gz
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css.gz
+    │   │       │   ├── skin.shadowdom.min.css
+    │   │       │   └── skin.shadowdom.min.css.gz
+    │   │       ├── oxide-dark
+    │   │       │   ├── content.cb074b748805.js
+    │   │       │   ├── content.cb074b748805.js.gz
+    │   │       │   ├── content.inline.0b57a9b04e64.js
+    │   │       │   ├── content.inline.0b57a9b04e64.js.gz
+    │   │       │   ├── content.inline.js
+    │   │       │   ├── content.inline.js.gz
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css.gz
+    │   │       │   ├── content.inline.min.css
+    │   │       │   ├── content.inline.min.css.gz
+    │   │       │   ├── content.js
+    │   │       │   ├── content.js.gz
+    │   │       │   ├── content.min.7539d04a5374.css
+    │   │       │   ├── content.min.7539d04a5374.css.gz
+    │   │       │   ├── content.min.css
+    │   │       │   ├── content.min.css.gz
+    │   │       │   ├── skin.9c352fe6dd20.js
+    │   │       │   ├── skin.9c352fe6dd20.js.gz
+    │   │       │   ├── skin.js
+    │   │       │   ├── skin.js.gz
+    │   │       │   ├── skin.min.50f1a66e543b.css
+    │   │       │   ├── skin.min.50f1a66e543b.css.gz
+    │   │       │   ├── skin.min.css
+    │   │       │   ├── skin.min.css.gz
+    │   │       │   ├── skin.shadowdom.e64023e1a521.js
+    │   │       │   ├── skin.shadowdom.e64023e1a521.js.gz
+    │   │       │   ├── skin.shadowdom.js
+    │   │       │   ├── skin.shadowdom.js.gz
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css.gz
+    │   │       │   ├── skin.shadowdom.min.css
+    │   │       │   └── skin.shadowdom.min.css.gz
+    │   │       ├── tinymce-5
+    │   │       │   ├── content.a2393814b32f.js
+    │   │       │   ├── content.a2393814b32f.js.gz
+    │   │       │   ├── content.inline.e685ea477e9d.js
+    │   │       │   ├── content.inline.e685ea477e9d.js.gz
+    │   │       │   ├── content.inline.js
+    │   │       │   ├── content.inline.js.gz
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css
+    │   │       │   ├── content.inline.min.0120d4d3c9bb.css.gz
+    │   │       │   ├── content.inline.min.css
+    │   │       │   ├── content.inline.min.css.gz
+    │   │       │   ├── content.js
+    │   │       │   ├── content.js.gz
+    │   │       │   ├── content.min.4cf4f8e8302a.css
+    │   │       │   ├── content.min.4cf4f8e8302a.css.gz
+    │   │       │   ├── content.min.css
+    │   │       │   ├── content.min.css.gz
+    │   │       │   ├── skin.564d212841ad.js
+    │   │       │   ├── skin.564d212841ad.js.gz
+    │   │       │   ├── skin.js
+    │   │       │   ├── skin.js.gz
+    │   │       │   ├── skin.min.cf26adde21d1.css
+    │   │       │   ├── skin.min.cf26adde21d1.css.gz
+    │   │       │   ├── skin.min.css
+    │   │       │   ├── skin.min.css.gz
+    │   │       │   ├── skin.shadowdom.2df2fac40068.js
+    │   │       │   ├── skin.shadowdom.2df2fac40068.js.gz
+    │   │       │   ├── skin.shadowdom.js
+    │   │       │   ├── skin.shadowdom.js.gz
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css
+    │   │       │   ├── skin.shadowdom.min.1448b0502cbc.css.gz
+    │   │       │   ├── skin.shadowdom.min.css
+    │   │       │   └── skin.shadowdom.min.css.gz
+    │   │       └── tinymce-5-dark
+    │   │           ├── content.11d9a703395a.js
+    │   │           ├── content.11d9a703395a.js.gz
+    │   │           ├── content.inline.0caeb8632702.js
+    │   │           ├── content.inline.0caeb8632702.js.gz
+    │   │           ├── content.inline.js
+    │   │           ├── content.inline.js.gz
+    │   │           ├── content.inline.min.0120d4d3c9bb.css
+    │   │           ├── content.inline.min.0120d4d3c9bb.css.gz
+    │   │           ├── content.inline.min.css
+    │   │           ├── content.inline.min.css.gz
+    │   │           ├── content.js
+    │   │           ├── content.js.gz
+    │   │           ├── content.min.7539d04a5374.css
+    │   │           ├── content.min.7539d04a5374.css.gz
+    │   │           ├── content.min.css
+    │   │           ├── content.min.css.gz
+    │   │           ├── skin.c790e825832c.js
+    │   │           ├── skin.c790e825832c.js.gz
+    │   │           ├── skin.js
+    │   │           ├── skin.js.gz
+    │   │           ├── skin.min.14f7754863a8.css
+    │   │           ├── skin.min.14f7754863a8.css.gz
+    │   │           ├── skin.min.css
+    │   │           ├── skin.min.css.gz
+    │   │           ├── skin.shadowdom.3b7213fd03f4.js
+    │   │           ├── skin.shadowdom.3b7213fd03f4.js.gz
+    │   │           ├── skin.shadowdom.js
+    │   │           ├── skin.shadowdom.js.gz
+    │   │           ├── skin.shadowdom.min.1448b0502cbc.css
+    │   │           ├── skin.shadowdom.min.1448b0502cbc.css.gz
+    │   │           ├── skin.shadowdom.min.css
+    │   │           └── skin.shadowdom.min.css.gz
+    │   ├── themes
+    │   │   └── silver
+    │   │       ├── theme.min.2f3a8c02f139.js
+    │   │       ├── theme.min.2f3a8c02f139.js.gz
+    │   │       ├── theme.min.js
+    │   │       └── theme.min.js.gz
+    │   ├── tinymce.d.697304d3d675.ts
+    │   ├── tinymce.d.697304d3d675.ts.gz
+    │   ├── tinymce.d.ts
+    │   ├── tinymce.d.ts.gz
+    │   ├── tinymce.min.56ca3f91b207.js
+    │   ├── tinymce.min.56ca3f91b207.js.gz
+    │   ├── tinymce.min.js
+    │   └── tinymce.min.js.gz
+    ├── uoftsocial
+    │   ├── css
+    │   │   ├── main.b34f7684c824.css
+    │   │   ├── main.css
+    │   │   ├── user_profile.a8e847cbe010.css
+    │   │   └── user_profile.css
+    │   └── js
+    │       ├──       bootstrap.bundle.min.js
+    │       ├── jquery-3.5.1.min.12b69d0ae6c6.js
+    │       ├── jquery-3.5.1.min.js
+    │       ├── user_profile.85fc3a13baab.js
+    │       └── user_profile.js
+    └── vendor
+        └── select2
+            └── dist
+                └── css
+                    ├── select2.css
+                    ├── select2.css.gz
+                    ├── select2.e6de4a7c42df.css
+                    ├── select2.e6de4a7c42df.css.gz
+                    ├── select2.min.css
+                    ├── select2.min.css.gz
+                    ├── select2.min.e71c39430469.css
+                    └── select2.min.e71c39430469.css.gz
+
+126 directories, 1530 files

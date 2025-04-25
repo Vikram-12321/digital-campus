@@ -48,14 +48,14 @@ class ProfileUpdateForm(forms.ModelForm):
         ]
         widgets = {
             'current_courses': autocomplete.ModelSelect2Multiple(
-                url='course-autocomplete',
+                url='common:course-autocomplete',
                 attrs={
                     'data-placeholder': 'Select current courses...',
                     'data-minimum-input-length': 1,
                 }
             ),
             'past_courses': autocomplete.ModelSelect2Multiple(
-                url='course-autocomplete',
+                url='common:course-autocomplete',
                 attrs={
                     'data-placeholder': 'Select past courses...',
                     'data-minimum-input-length': 1,

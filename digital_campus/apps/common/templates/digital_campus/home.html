@@ -1,37 +1,46 @@
-{% extends "uoftsocial/base.html" %}
+{% extends "digital_campus/base.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-            <img class = "rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url 'posts:post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content|safe }}</p>
-            </div>
-        </article>
-    {% endfor %}
-    {% if is_paginated %}
-        
-        {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
 
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.numer|add:'-3' and num < page_obj.numer|add:'3' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
-        {% endfor %}
+  <div id="post-container">
+    {# initial page’s worth of posts #}
+    {% include 'digital_campus/post_list.html' %}
+  </div>
 
-        {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-            <!-- <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a> -->
-        {% endif %}
+  <div id="loading" class="text-center my-4" style="display:none;">
+    Loading…
+  </div>
 
-    {% endif %}
-{% endblock content %}
+  <script>
+    let page = 2;
+    let loading = false;
+
+    window.addEventListener('scroll', () => {
+      if (loading) return;
+      // when within 100px of bottom
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        loading = true;
+        document.getElementById('loading').style.display = 'block';
+
+        fetch(`?page=${page}`, {
+          headers: {'X-Requested-With': 'XMLHttpRequest'}
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.posts_html.trim()) {
+            document.getElementById('post-container')
+                    .insertAdjacentHTML('beforeend', data.posts_html);
+            page++;
+            loading = false;
+            document.getElementById('loading').style.display = 'none';
+          } else {
+            // no more posts
+            document.getElementById('loading').innerText = 'No more posts';
+          }
+        })
+        .catch(err => console.error(err));
+      }
+    });
+  </script>
+
+{% endblock %}
+

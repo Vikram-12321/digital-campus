@@ -1,0 +1,16 @@
+{% extends "digital_campus/base.html" %}
+{% block content %}
+<div class="content-section">
+  <form method="post">
+    {% csrf_token %}
+    <p class="mb-3">
+      Delete this file: <strong>{{ object.file.name|truncatechars:60 }}</strong> ?
+    </p>
+
+    <button class="btn btn-danger" type="submit">Yes, delete</button>
+    <a href="{% url 'posts:post-update' object.post.pk %}" class="btn btn-secondary">
+      Cancel
+    </a>
+  </form>
+</div>
+{% endblock %}

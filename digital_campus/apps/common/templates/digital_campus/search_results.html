@@ -1,4 +1,4 @@
-{% extends "uoftsocial/base.html" %}
+{% extends "digital_campus/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -27,7 +27,7 @@
           <img class = "rounded-circle article-img" src="{{ post.author.profile.image.url }}">
           <div class="media-body">
           <div class="article-metadata">
-              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+              <a class="mr-2" href="{% url 'common:user-posts' post.author.username %}">{{ post.author }}</a>
               <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
           </div>
           <h2><a class="article-title" href="{% url 'posts:post-detail' post.id %}">{{ post.title }}</a></h2>
@@ -45,7 +45,7 @@
             <img class = "rounded-circle article-img" src="{{ user.profile.image.url }}">
             <div class="media-body">
               <div class="article-metadata">
-                  <a class="mr-2" href="{% url 'user-posts' user.username %}">{{ user.username }}</a>
+                  <a class="mr-2" href="{% url 'common:user-posts' user.username %}">{{ user.username }}</a>
               </div>
             </div>
         </article>

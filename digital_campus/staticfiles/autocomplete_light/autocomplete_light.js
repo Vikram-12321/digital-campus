@@ -102,14 +102,14 @@ window.addEventListener("load", function () {
         /*
          * This ensures the Language file is loaded and passes it our jQuery.
          */
-        if (typeof dalLoadLanguage !== 'undefined') {
-            dalLoadLanguage($);
-        } else {
-            document.addEventListener('dal-language-loaded', function (e) {
-                // `e.lang` is the language that was loaded.
-                dalLoadLanguage($);
-            })
-        }
+        // if (typeof dalLoadLanguage !== 'undefined') {
+        //     dalLoadLanguage($);
+        // } else {
+        //     document.addEventListener('dal-language-loaded', function (e) {
+        //         // `e.lang` is the language that was loaded.
+        //         dalLoadLanguage($);
+        //     })
+        // }
 
         // Fire init event for yl.registerFunction() execution.
         var event = new CustomEvent('dal-init-function');
