@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-=byy&=^v^3&mea)0dv6i!&bwl)(yh*pms28odk*^5o8$@oc^nx"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True ## CHANGE IN PRODUCTION
+
 
 ALLOWED_HOSTS = []
 
@@ -32,25 +33,33 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'apps.common',
-    'apps.chat',
-    'apps.users',
-    'apps.posts',
+    # Django core (should come first)
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Third-party apps
+    "taggit",
     'crispy_forms',
     'crispy_bootstrap4',
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "storages",
-    "tinymce",
+    'storages',
+    'tinymce',
     'dal',
     'dal_select2',
     'corsheaders',
     'rest_framework',
     'channels',
+
+    # Local apps (alphabetical order)
+    'apps.common.apps.CommonConfig',
+    'apps.chat',
+    'apps.clubs',
+    'apps.events',
+    'apps.posts',
+    'apps.users.apps.UsersConfig',  # Note: Removed duplicate entry
 ]
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -103,6 +112,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.common.context_processors.featured_events",
+                'apps.common.context_processors.notifications',
+
             ],
         },
     },
@@ -162,6 +174,7 @@ AWS_S3_CUSTOM_DOMAIN   = 'digitalcampus-files.s3.us-east-2.amazonaws.com'
 STATIC_URL             = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 STATICFILES_STORAGE    = 'digital_campus.storage_backends.StaticStorage'
 
+
 MEDIA_URL              = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 DEFAULT_FILE_STORAGE    = 'digital_campus.storage_backends.MediaStorage'
 
@@ -207,3 +220,10 @@ AWS_DEFAULT_ACL = None
 
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_S3_ADDRESSING_STYLE = "virtual"
+
+LOGGING = {
+  'version': 1,
+  'disable_existing_loggers': False,
+  'handlers': {'console': {'class': 'logging.StreamHandler'}},
+  'root': {'handlers': ['console'], 'level': 'DEBUG'},
+}

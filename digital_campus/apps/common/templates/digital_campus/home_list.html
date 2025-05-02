@@ -1,0 +1,99 @@
+{% load static %}
+
+{% for item in items %}
+    {% if item.kind == "post" %}
+    <article class="media content-section">
+        {% if item.author.profile.image %}
+        <img class="rounded-circle article-img"
+             src="{{ item.author.profile.image.url }}" alt="{{ item.author }}">
+        {% else %}
+          <img class="rounded-circle article-img"
+              src="{% static 'digital_campus/images/default.jpg' %}"
+              alt="Default avatar">
+        {% endif %}
+      
+        <div class="collapsible-content collapsed">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a href="{% url 'common:user-posts' item.author.username %}">
+                {{ item.author }}
+              </a>
+              <small class="text-muted">
+                {{ item.date_posted|date:"F d, Y" }}
+              </small>
+            </div>
+      
+            <h2 class="article-title">
+              <a href="{% url 'posts:post-detail' item.pk %}">{{ item.title }}</a>
+            </h2>
+      
+            {% for attach in item.attachments.all %}
+              {% if attach.media_type == 'image' %}
+                <div class="post-image mb-2">
+                  <img src="{{ attach.file.url }}" class="img-fluid rounded">
+                </div>
+              {% else %}
+                <div class="post-video mb-2">
+                  <video controls muted playsinline style="max-width:100%;max-height:80vh">
+                    <source src="{{ attach.file.url }}" type="video/mp4">
+                  </video>
+                </div>
+              {% endif %}
+            {% endfor %}
+            <p class="article-content">
+              
+              {{ item.content|truncatewords:30|safe }}
+            </p>
+          </div>
+        </div>
+      
+        <div class="expand-toggle">
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        
+      </article>
+
+    {% else %}
+
+    <article class="media content-section">
+        {% if item.created_by.profile.image %}
+        <img class="rounded-circle article-img"
+             src="{{ item.created_by.profile.image.url }}" alt="{{ item.created_by }}">
+        {% else %}
+          <img class="rounded-circle article-img"
+              src="{% static 'digital_campus/images/default.jpg' %}"
+              alt="Default avatar">
+        {% endif %}
+      
+        <div class="collapsible-content collapsed">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a href="{% url 'common:user-posts' item.created_by.username %}">
+                {{ item.created_by }}
+              </a>
+              <small class="text-muted">
+                Event at {{ item.starts_at|date:"M d, Y H:i" }}
+              </small>
+            </div>
+      
+            <h2 class="article-title">
+              <a href="{% url 'events:event-detail' item.pk %}">{{ item.title }}</a>
+            </h2>
+
+            <p class="article-content">
+              
+              {{ item.description|truncatewords:30|safe }}
+            </p>
+          </div>
+        </div>
+      
+        <div class="expand-toggle">
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        
+      </article>
+
+    {% endif %}
+
+{% endfor %}
+

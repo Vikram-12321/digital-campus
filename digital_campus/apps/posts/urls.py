@@ -21,5 +21,4 @@ urlpatterns = [
         AttachmentDeleteView.as_view(),
         name="attachment-delete",
     ),
-
 ]

@@ -1,0 +1,20 @@
+{% load static %}
+<ul class="list-group mb-4">
+    {% for post in posts %}
+      <li class="list-group-item p-3 mb-2 rounded shadow-sm">
+        <article class="media">
+          {% if post.author.profile.image %}
+            <img src="{{ post.author.profile.image.url }}" alt="{{ post.author }}" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
+          {% else %}
+            <img src="{% static 'digital_campus/images/default.jpg' %}" alt="avatar" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
+          {% endif %}
+          <div class="media-body">
+            <a href="{% url 'common:user-posts' post.author.username %}" class="font-weight-bold text-dark">{{ post.author }}</a>
+            <small class="text-muted ml-2">{{ post.date_posted|date:"M d, Y" }}</small>
+            <h5 class="mt-2"><a href="{% url 'posts:post-detail' post.pk %}" class="text-info">{{ post.title }}</a></h5>
+            <p class="text-muted mb-0">{{ post.content|truncatewords:30 }}</p>
+          </div>
+        </article>
+      </li>
+    {% endfor %}
+  </ul>

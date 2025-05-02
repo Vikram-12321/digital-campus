@@ -28,8 +28,28 @@ class Profile(models.Model):
         'chat.GroupChannel', related_name='channel_members', blank=True
     )
 
+    # club_memberships = models.ManyToManyField(
+    #     "clubs.Club",
+    #     through="clubs.ClubMembership",
+    #     related_name="profiles_in_club",
+    #     blank=True,
+    # )
+
+    def clubs(self):
+        """Return active Club objects this profile belongs to."""
+        return self.clubs_joined.filter(
+            clubmembership__is_active=True
+        )
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+    
+    @property
+    def club_membership_records(self):
+        return self.club_membership_set.all()
+    
+    @property
+    def unread_notification_count(self):
+        return self.notifications.filter(unread=True).count()
 
 

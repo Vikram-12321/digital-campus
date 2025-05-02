@@ -1,0 +1,140 @@
+{% extends "digital_campus/base.html" %}
+{% block content %}
+<style>
+  /* Container becomes a 2×2 CSS grid with 1px dark gutters */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;                     /* gutter between cells */
+  background-color: #333;       /* color of the gutter */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+/* Each cell’s background and padding */
+.info-grid .info-cell {
+  background-color: #1a1a1a;    /* faint gray background */
+  padding: 1.5rem;              /* ample space around icon & text */
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Icon spacing */
+.info-cell i {
+  margin-right: 1.25rem;        /* more space between icon & text */
+  flex-shrink: 0;
+  color: #aaa;
+}
+
+/* Heading style inside each cell */
+.info-cell h6 {
+  margin-bottom: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Text below heading */
+.info-cell p {
+  margin: 0;
+  color: #ddd;
+}
+
+</style>
+<article class="container mt-4 text-light">
+
+  <h1 class="mb-2">{{ object.title }}</h1>
+  {% if object.is_featured %}
+    <span class="badge bg-warning text-dark mb-4">Featured</span>
+  {% endif %}
+
+  <p class="fs-5">{{ object.description|linebreaks }}</p>
+
+  {% if object.created_by %}
+  <p>Hosted By: {{ object.created_by }}</p>
+  {% elif object.club %}
+  <p>Hosted By: {{ object.club }}</p>
+  {% endif %}
+
+  {% if event.requirements.all %}
+  <p><strong>Tags:</strong>
+    {% for tag in event.requirements.all %}
+      <span class="badge">{{ tag }}</span>
+    {% endfor %}
+  </p>
+  {% endif %}
+
+  {% if object.duration %}
+    <p> Duration: {{object.duration}}</p>
+  {% endif %}
+  <!-- true 2×2 grid -->
+  <div class="info-grid">
+    <div class="info-cell">
+      <i class="bi bi-calendar fs-3"></i>
+      <div>
+        <h6>Date</h6>
+        <p>{{ object.starts_at|date:"l, F j, Y" }}</p>
+      </div>
+    </div>
+
+    <div class="info-cell">
+      <i class="bi bi-clock fs-3"></i>
+      <div>
+        <h6>Time</h6>
+        <p>
+          {{ object.starts_at|date:"g:i A" }}
+          {% if object.ends_at %}–{{ object.ends_at|date:"g:i A" }}{% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="info-cell">
+      <i class="bi bi-geo-alt-fill fs-3"></i>
+      <div>
+        <h6>Location</h6>
+        <p>{{ object.location }}</p>
+      </div>
+    </div>
+
+    {% if object.club %}
+    <div class="info-cell">
+      <i class="bi bi-people-fill fs-3"></i>
+      <div>
+        <h6>Organizer</h6>
+        <p>{{ object.club.name }}</p>
+      </div>
+    </div>
+    {% else %}
+    <div class="info-cell">
+      <i class="bi bi-people-fill fs-3"></i>
+      <div>
+        <h6>Host</h6>
+        <p>{{ object.created_by.username }}</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if object.attachments.exists %}
+    <div class="row row-cols-1 row-cols-md-2 g-3 mt-5">
+      {% for att in object.attachments.all %}
+        <div class="col">
+          {% if att.media_type == "image" %}
+            <img src="{{ att.file.url }}" class="img-fluid rounded">
+          {% else %}
+            <video src="{{ att.file.url }}" class="w-100 rounded" controls></video>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if user.is_staff %}
+    <a href="{% url 'events:event-toggle-feature' object.pk %}"
+       class="btn btn-sm btn-outline-light mt-4">
+      {% if object.is_featured %}Remove “Featured”{% else %}Mark as Featured{% endif %}
+    </a>
+  {% endif %}
+
+</article>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "digital_campus/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="club-hero mb-4" style="
+    background: url('{{ club.banner.url }}') center/cover no-repeat;
+    height: 250px;
+    position: relative;
+">
+  <div class="container h-100 d-flex align-items-end">
+    <div class="d-flex align-items-center">
+      {% if club.avatar %}
+        <img src="{{ club.avatar.url }}" alt="{{ club.name }}" 
+             class="rounded-circle border border-3" 
+             style="width:100px; height:100px; object-fit:cover; margin-right:1rem;">
+      {% else %}
+        <div class="rounded-circle bg-secondary" 
+             style="width:100px; height:100px; margin-right:1rem;"></div>
+      {% endif %}
+      <div>
+        <h1 class="text-white">{{ club.name }}</h1>
+          {% if request.user in club.owners.all %}
+            <form method="post" action="{% url 'clubs:toggle_featured' club.slug %}">
+              {% csrf_token %}
+                {% if club.is_featured %}
+                  <button class="btn btn-sm btn-warning">
+                      Unfeature
+                  </button>
+                  {% else %}
+                  <button class="btn btn-sm btn-outline-light">
+                    Feature
+                  </button>
+                {% endif %}
+            </form>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="mb-5">
+    <h4>Description</h4>
+    {% if club.description %}
+      <p class="lead">{{ club.description|linebreaks }}</p>
+    {% else %}
+      <p class="text-muted">No description provided.</p>
+    {% endif %}
+  </div>
+
+  <div class="mb-4">
+    <h4>Upcoming Events</h4>
+    <div class="row">
+      {% for event in club.event_set.all %}
+        <div class="col-sm-6 col-md-4 mb-4">
+          <div class="card h-100 bg-dark border-secondary">
+            {% if event.cover_image %}
+              <img src="{{ event.cover_image.url }}" 
+                   class="card-img-top" 
+                   alt="{{ event.title }}" 
+                   style="height:150px; object-fit:cover;">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">
+                <a href="{{ event.get_absolute_url }}" class="stretched-link text-decoration-none text-light">
+                  {{ event.title }}
+                </a>
+              </h5>
+              <p class="card-text text-muted mb-2">
+                {{ event.starts_at|date:"M d, Y" }} &middot; {{ event.starts_at|time:"g:i A" }}
+              </p>
+              {% if event.location %}
+                <small class="text-secondary">{{ event.location }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <p class="text-muted">No upcoming events.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

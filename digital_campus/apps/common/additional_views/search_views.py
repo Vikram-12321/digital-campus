@@ -1,17 +1,25 @@
 from rapidfuzz import process  # pip install rapidfuzz
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Q
+from django.urls import reverse
 
-#Models
+# Models
 from django.contrib.auth.models import User
 from apps.posts.models import Post
-from django.db.models import Q
+from apps.clubs.models import Club
+from apps.events.models import Event
 
-#Forms
+# Forms
 from ..forms import SearchForm
 
-#Additional 
+# Additional 
 import re
+
+# Debugging
+import logging
+logger = logging.getLogger(__name__)
+
 
 def correct_spelling(input_word, dictionary_words, scorer_threshold=75):
     """
@@ -72,121 +80,133 @@ def get_global_dictionary_of_known_words():
     return list(set(all_words))  # Return unique words
 
 
-
 def search(request):
     form = SearchForm(request.GET or None)
-    posts = []
-    users = []
+
+    # Single-select filter_by, default to 'all'
+    filter_by = request.GET.get('filter_by', 'all')
+
+    # Containers
+    posts = []; users = []; clubs = []; events = []
     corrected_query = ""
+    order_by = ''
+    query    = ''
+
+    # DEBUG: log what came in
+    logger.debug("Incoming GET params: %r", request.GET)
+
+    if not form.is_valid():
+        logger.debug("Form errors: %r", form.errors)
 
     if form.is_valid():
-        # 1. Get form fields
-        query = form.cleaned_data.get('query', '').strip()
-        filter_by = form.cleaned_data.get('filter_by', '')
-        order_by = form.cleaned_data.get('order_by', '')
+        query    = form.cleaned_data.get('query','').strip()
+        order_by = form.cleaned_data.get('order_by','')
 
-        # 2. Spelling Correction
-        query_tokens = query.lower().split()
-        dictionary_words = get_global_dictionary_of_known_words()
-
-        corrected_tokens = []
-        for token in query_tokens:
-            corrected_tokens.append(correct_spelling(token, dictionary_words, scorer_threshold=75))
+        # Spelling correction (optional “Did you mean?”)
+        tokens = re.findall(r"\w+", query.lower())
+        dict_words = get_global_dictionary_of_known_words()
+        corrected_tokens = [correct_spelling(t, dict_words) for t in tokens]
         corrected_query = " ".join(corrected_tokens)
 
-        # Decide whether to automatically use corrected_query or not:
-        # Here, we'll do a "Did you mean...?" approach, so we actually search with corrected_query:
-        # final_query = corrected_query if corrected_query else query
         final_query = query
+        qtoks = re.findall(r"\w+", final_query.lower())
 
-        # For scoring, we still need the tokens:
-        final_query_tokens = re.findall(r"\w+", final_query.lower())
-
-        # 3. Search in Posts
-        if filter_by in ['', 'posts']:
-            all_posts = Post.objects.all()
+        # POSTS
+        if filter_by in ('all','posts'):
+            qs = Post.objects.all()
             if final_query:
-                # Basic substring filter to reduce the dataset
-                all_posts = all_posts.filter(
-                    Q(title__icontains=final_query) | Q(content__icontains=final_query)
+                qs = qs.filter(
+                  Q(title__icontains=final_query) |
+                  Q(content__icontains=final_query)
                 )
+            scored = [(compute_post_score(p, qtoks), p) for p in qs]
+            scored.sort(key=lambda x: x[0], reverse=True)
+            posts = [p for _, p in scored]
 
-            # Convert to list to iterate
-            all_posts_list = list(all_posts)
-
-            # Compute scores
-            scored_posts = []
-            for post in all_posts_list:
-                post_score = compute_post_score(post, final_query_tokens)
-                scored_posts.append((post_score, post))
-
-            # Sort primarily by score (descending)
-            # Then optionally by user choice
-            if order_by == 'title':
-                # Sort by (score DESC, title ASC)
-                scored_posts.sort(key=lambda x: (x[0], x[1].title), reverse=False)
-                # That puts the smallest at top; we need to invert the score. 
-                # Easiest to do two sorts or a custom key:
-                scored_posts.sort(key=lambda x: x[0], reverse=True)
-            elif order_by == 'date_posted':
-                # Sort by (score DESC, date_posted DESC)
-                scored_posts.sort(key=lambda x: (x[0], x[1].date_posted), reverse=True)
-            else:
-                # By score only (descending)
-                scored_posts.sort(key=lambda x: x[0], reverse=True)
-
-            # Extract the posts in final order
-            posts = [item[1] for item in scored_posts]
-
-        # 4. Search in Users
-        if filter_by in ['', 'users']:
-            all_users = User.objects.all()
+        # USERS
+        if filter_by in ('all','users'):
+            u_qs = User.objects.all()
             if final_query:
-                all_users = all_users.filter(
-                    Q(username__icontains=final_query)
-                    | Q(first_name__icontains=final_query)
-                    | Q(last_name__icontains=final_query)
+                u_qs = u_qs.filter(
+                  Q(username__icontains=final_query) |
+                  Q(first_name__icontains=final_query) |
+                  Q(last_name__icontains=final_query)
                 )
+            users = list(u_qs.order_by('username') if order_by=='username' else u_qs)
 
-            # If you wanted user-specific scoring, you'd do something similar
-            # to compute_post_score. For simplicity, we'll just do an order_by if needed:
-            if order_by == 'username':
-                users = all_users.order_by('username')
-            else:
-                users = all_users
+        # CLUBS
+        if filter_by in ('all','clubs'):
+            clubs = list(
+              (Club.objects.filter(name__icontains=final_query)
+               if final_query else Club.objects.all())
+            )
 
-    # Render results
-    context = {
-        'form': form,
-        'posts': posts,
-        'users': users,
-        # So the template can show "Did you mean...?" if corrected_query != user’s original
+        # EVENTS
+        if filter_by in ('all','events'):
+            events = list(
+              (Event.objects.filter(title__icontains=final_query)
+               if final_query else Event.objects.all())
+            )
+
+    return render(request, 'digital_campus/search_results.html', {
+        'form':            form,
+        'query':           query,
+        'filter_by':       filter_by,
+        'order_by':        order_by,
         'corrected_query': corrected_query,
-    }
-    return render(request, 'digital_campus/search_results.html', context)
-
+        'posts':           posts,
+        'users':           users,
+        'clubs':           clubs,
+        'events':          events,
+    })
 
 
 def autocomplete(request):
-    """compute_post_score
-    Return JSON suggestions for the query string.
-    E.g., searching in post titles + user usernames.
-    """
-    query = request.GET.get('term', '')  # "term" is the parameter jQuery UI uses by default
-    suggestions = []
+    term = request.GET.get('term', '')
+    out  = []
 
-    if query:
-        # Let's assume we want to suggest up to 5 post titles
-        matching_posts = Post.objects.filter(title__icontains=query)[:5]
-        for post in matching_posts:
-            suggestions.append(post.title)
+    if term:
+        # — Posts (if you want) —
+        for post in Post.objects.filter(title__icontains=term)[:5]:
+            out.append({
+                'label': post.title,
+                'value': post.title,
+                'type':  'post',
+                'url':   reverse('posts:post-detail', args=[post.pk]),
+            })
 
-        # Also suggest up to 5 user usernames
-        matching_users = User.objects.filter(username__icontains=query)[:5]
-        for user in matching_users:
-            suggestions.append(user.username)
+        # — Users —
+        for user in User.objects.filter(username__icontains=term)[:5]:
+            if request.user.is_authenticated and user.pk == request.user.pk:
+                # current user → /profile/
+                url = reverse('profile')
+            else:
+                # other users → /user/{username}/
+                url = reverse('common:user-posts', args=[user.username])
 
-    # Return distinct suggestions
-    suggestions = list(set(suggestions))  # remove duplicates
-    return JsonResponse(suggestions, safe=False)
+            out.append({
+                'label': user.username,
+                'value': user.username,
+                'type':  'user',
+                'url':   url,
+            })
 
+        # — Clubs —
+        for club in Club.objects.filter(name__icontains=term)[:5]:
+            out.append({
+                'label': club.name,
+                'value': club.name,
+                'type':  'club',
+                'url':   reverse('clubs:club-detail', args=[club.slug]),
+            })
+
+        # — Events —
+        for ev in Event.objects.filter(title__icontains=term)[:5]:
+            out.append({
+                'label': ev.title,
+                'value': ev.title,
+                'type':  'event',
+                'url':   reverse('events:event-detail', args=[ev.pk]),
+            })
+
+    return JsonResponse(out, safe=False)

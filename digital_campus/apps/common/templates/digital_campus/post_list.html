@@ -1,7 +1,8 @@
 {% load static %}
+<div id="post-container" class="post-feed">
+
 {% for post in posts %}
-<article class="media content-section mb-4">
-  
+  <article class="media content-section">
   {% if post.author.profile.image %}
   <img class="rounded-circle article-img"
        src="{{ post.author.profile.image.url }}" alt="{{ post.author }}">
@@ -40,6 +41,7 @@
         {% endif %}
       {% endfor %}
       <p class="article-content">
+        
         {{ post.content|truncatewords:30|safe }}
       </p>
     </div>
@@ -48,5 +50,7 @@
   <div class="expand-toggle">
     <i class="bi bi-chevron-down"></i>
   </div>
+  
 </article>
 {% endfor %}
+</div>

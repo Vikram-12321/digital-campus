@@ -1,0 +1,17 @@
+{% load static %}
+<ul class="list-group mb-4">
+    {% for u in users %}
+      <li class="list-group-item p-2 mb-2 rounded shadow-sm">
+        <div class="media align-items-center">
+          {% if u.profile.image %}
+            <img src="{{ u.profile.image.url }}" alt="{{ u.username }}" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
+          {% else %}
+            <img src="{% static 'digital_campus/images/default.jpg' %}" alt="avatar" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
+          {% endif %}
+          <div class="media-body">
+            <a href="{% url 'common:user-posts' u.username %}" class="h5 mb-0 text-dark">@{{ u.username }}</a>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>

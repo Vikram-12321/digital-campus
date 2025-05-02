@@ -5,9 +5,8 @@ from django.forms.widgets import ClearableFileInput
 
 from .models import Post, Attachment
 
-
 class MultiFileInput(ClearableFileInput):
-    allow_multiple_selected = True                # ✅ opt-in (Django 3.2.19+)
+    allow_multiple_selected = True                
 
 
 class MultiFileField(forms.FileField):
@@ -58,4 +57,3 @@ class PostWithFilesForm(PostForm):
         }),
     )
 
-    # Meta is inherited from PostForm

@@ -1,160 +1,240 @@
-body {
-  background: #fafafa;
-  color: #333333;
-  margin-top: 5rem;
+/*  main.css  –  Dark-mode + Royal-Blue theme  ============================ */
+:root{
+  --dc-bg:#121212; --dc-card:#1e1e1e; --dc-blue:#2962ff;
+  --dc-blue-hover:#1e4be0; --dc-text:#fafafa; --dc-nav:#252525;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+/* ─── Base ───────────────────────────────────────────────────────────── */
+html,body{background:var(--dc-bg);color:var(--dc-text);margin-top:4rem;font-weight:400}
+h1,h2,h3,h4,h5,h6{color:var(--dc-text);font-weight:600} ul{margin:0}
+
+/* ─── Navbar ─────────────────────────────────────────────────────────── */
+.bg-steel{background:var(--dc-nav)!important;padding:1rem 0;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+/* .navbar-brand{margin-right:1.25rem} */
+.navbar-nav{align-items:center}
+.nav-link{color:#d0d0d0}
+.nav-link:hover,.nav-link.active{color:var(--dc-blue);font-weight:600}
+.navbar .dropdown-toggle::after{display:none}
+
+/* plus floating button */
+.btn-post-primary{
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--dc-blue);color:#fff!important;
+  transition:background .15s,box-shadow .15s,transform .15s
+}
+.btn-post-primary:hover{background:var(--dc-blue-hover);box-shadow:0 0 0 3px rgba(255,255,255,.15);transform:translateY(-1px)}
+.btn-post-primary i{line-height:1}
+
+/* avatar */
+.nav-avatar{
+  width:40px;height:40px;border-radius:50%;object-fit:cover;
+  transition:box-shadow .15s,transform .15s
+}
+.nav-avatar:hover{box-shadow:0 0 0 3px rgba(255,255,255,.15);transform:translateY(-1px)}
+
+/* ── Search group ────────────────────────────────────────────────────── */
+#dc-search-group{flex:1 1 0;min-width:0;margin:0 1rem}        /* ⬅ key: min-width:0 */
+#dc-search-group .form-control{
+  background:var(--dc-card);border:1px solid var(--dc-blue);border-right:none;
+  color:var(--dc-text);border-radius:8px 0 0 8px;min-width:0       /* ⬅ key: min-width:0 */
+}
+#dc-search-group .form-control::placeholder{color:#aaa}
+#dc-search-group .form-control:focus{border-color:var(--dc-blue-hover);box-shadow:none}
+#dc-search-group .btn-dc-search{
+  background:var(--dc-blue);color:#fff;border:none;border-radius:0 8px 8px 0;
+  transition:background .15s,box-shadow .15s,transform .15s
+}
+#dc-search-group .btn-dc-search:hover{
+  background:var(--dc-blue-hover);box-shadow:0 0 0 3px rgba(255,255,255,.15);transform:translateY(-1px)
 }
 
-ul {
-  margin: 0;
+/* phone (≤576 px) – shrink search rather than wrap */
+@media (max-width:576px){
+  /* .navbar-brand{font-size:1rem;margin-right:.5rem} */
+  #dc-search-group{min-width:140px;margin:0 .5rem}
+  .btn-post-primary{width:28px;height:28px}
+  .nav-avatar{width:34px;height:34px}
 }
 
-.bg-steel {
-  background-color: #5f788a;
+/* prevent ANY wrapping in the flex row */
+.navbar .no-wrap{flex-wrap:nowrap}
+
+/* ─── Cards / Posts (key rules) ───────────────────────────────────────── */
+.content-section,.card,.media.content-section,.modal-content{
+  background:var(--dc-card);color:var(--dc-text);
+  border:1px solid #2a2a2a;border-radius:4px;padding:10px 20px;margin-bottom:20px
+}
+.media,.media.card{background:var(--dc-card)!important;color:var(--dc-text)!important;border:1px solid #2a2a2a!important}
+a.article-title,.article-title{color:var(--dc-blue)}
+a.article-title:hover{color:var(--dc-blue-hover);text-decoration:none}
+.media.content-section .text-muted{color:#9e9e9e!important}
+.media.content-section .article-title{color:#e6e6e6!important}
+.article-content{white-space:pre-line}
+.article-img{height:65px;width:65px;margin-right:16px;object-fit:cover}
+.article-metadata{padding-bottom:1px;margin-bottom:4px;border-bottom:1px solid #2b2b2b}
+.article-metadata a:hover{color:var(--dc-blue);text-decoration:none}
+
+/* remove the top gap under fixed navbar */
+.post-feed,.profile-header-card,.events-sidebar-card{margin-top:0!important}
+
+/* (other sections from your previous file remain unchanged) */
+
+/* ===== PATCH: keep navbar in one line & let search shrink ============= */
+
+/* wrap ONLY the search + plus-button + avatar in a no-wrap flex row */
+.navbar .nav-inline        { display:flex; align-items:center; flex-wrap:nowrap; width:100%; }
+
+/* search area grows / shrinks first */
+.navbar .search-wrapper    { flex:1 1 420px; min-width:0px; }   /* desktop 420 px, phone can shrink */
+.navbar .search-wrapper .form-control{ min-width:0; }             /* allow input itself to shrink */
+
+/* gap between items */
+.navbar .nav-inline > *    { margin-right:1rem; }
+.navbar .nav-inline > *:last-child{ margin-right:0; }
+
+/* phone tweaks (≤ 576 px)  — just tighten the gaps and icons */
+@media (max-width:576px){
+  .navbar .search-wrapper   { flex:1 1 0px; }
+  /* .navbar-brand            { font-size:1rem; margin-right:.5rem; } */
+  .btn-post-primary        { width:28px; height:28px; }
+  .nav-avatar              { width:34px; height:34px; }
 }
 
-.site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+/* keep the content columnar and pin the arrow last */
+/* article.media          { display: flex; flex-direction: column; }
+article.media .expand-toggle { order: 99; }
+
+.expand-toggle         { text-align: center; cursor:pointer; margin: .5rem 0 1rem; } */
+
+
+/* ── Autocomplete: force readable text & proper container overflow ── */
+#dc-search-group {
+  position: relative;  /* ensure dropdown is positioned under this */
 }
 
-.site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
-}
-
-.site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
-}
-
-.content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
-}
-
-.article-title {
-  color: #444444;
-}
-
-a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3;
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
-
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
-
-.account-heading {
-  font-size: 2.5rem;
-}
-
-/* collapse overflow */
-.collapsible-content.collapsed {
-  /* clip to 300px or half the viewport, whichever is smaller */
-  max-height: min(500px, 80vh);
-  overflow: hidden;
-  position: relative;
-}
-.collapsible-content.collapsed::after {
-  content: "";
+#dc-search-group .ui-autocomplete {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 80px;
-  background: linear-gradient(rgba(255,255,255,0), white);
+  top: 100%;   /* directly below the input */
+  left: 0;
+  right: 0;    /* full width of search-group */
+  z-index: 2000;
+  background: var(--dc-card) !important;
+  border: 1px solid #555 !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  overflow: hidden;
 }
 
-/* constrain giant images in detail view */
-.post-image img {
-  max-width: 100%;
-  height: auto;
-  max-height: 80vh;
-  object-fit: contain;
-}
-
-/* constrain uploaded videos */
-.post-video video {
-  max-width: 100%;
-  height: auto;
-  max-height: 80vh;
-  display: block;
-  margin: 0 auto;
-}
-
-
-/* style the toggle arrow container */
-.expand-toggle {
-  text-align: center;
-  cursor: pointer;
-  margin: .5rem 0 1rem;
-}
-
-/* ensure the arrow sits on its own line at the bottom */
-article.media {
+#dc-search-group .ui-menu .ui-menu-item-wrapper {
   display: flex;
-  flex-wrap: wrap;
-}
-article.media .expand-toggle {
-  width: 100%;
-}
-
-
-
-/* Drag-and-drop zone styling */
-.upload-zone {
-  border: 2px dashed #bbb;
-  border-radius: 6px;
-  padding: 2rem;
-  text-align: center;
-  color: #888;
-  transition: background 0.2s, border-color 0.2s;
-  margin-bottom: 1rem;
-}
-.upload-zone.dragover {
-  background: #f0f8ff;
-  border-color: #78a;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: var(--dc-text) !important;  /* white text */
+  background: transparent !important;
 }
 
-/* Constrain previews inside the drop zone */
-.upload-zone img,
-.upload-zone video {
-  max-width: 200px;
-  max-height: 150px;
-  margin: .5rem;
+#dc-search-group .ui-menu-item-wrapper:hover {
+  background-color: var(--dc-blue-hover) !important;
+  color: #fff !important;
 }
 
+.ui-custom-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
 
+.ui-custom-label {
+  font-size: 0.95rem;
+  color: var(--dc-text);
+}
+
+.ui-custom-subtitle {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.search‐section h3 {
+  margin-top: 2rem;
+}
+
+/* Target your pills wrapper (you gave it class="nav nav-pills search-filters") */
+.search-filters {
+  display: flex;            /* lay children out in a row */
+  flex-wrap: nowrap;        /* don’t wrap onto multiple lines */
+  overflow-x: auto;         /* scroll horizontally if too many */
+  list-style: none;         /* remove bullets */
+  padding-left: 0;          /* remove default left indent */
+  margin-bottom: 1rem;      /* space below */
+}
+
+/* Optional: add a little gap between pills */
+.search-filters .nav-item {
+  margin-right: 0.5rem;
+}
+
+/* Hide the scrollbar but still allow scrolling (WebKit) */
+.search-filters::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.search-filters::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
+.search-filters::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ─── Search‐Pills Override ───────────────────────────────────────────────── */
+
+/* 1) Target the exact UL that has both .nav-pills and .search-filters */
+ul.nav.nav-pills.search-filters {
+  display:        flex !important;   /* row layout */
+  flex-wrap:      nowrap !important; /* never wrap to next line */
+  overflow-x:     auto;              /* horizontal scroll if needed */
+  list-style:     none !important;   /* kill bullets */
+  padding-left:   0 !important;      /* kill default indent */
+  margin-bottom:  1rem;              /* space below pills */
+}
+
+/* 2) Each LI in that UL should be inline‐flex so button width hugs content */
+ul.nav.nav-pills.search-filters > li.nav-item {
+  display:        inline-flex !important;
+  margin-right:   0.5rem;            /* gap between pills */
+}
+
+/* 3) Style the buttons themselves to match dark theme */
+ul.nav.nav-pills .nav-link {
+  background:     #1e1e1e;            /* same as your cards bg */
+  color:          #9ca3af;            /* muted text */
+  padding:        0.5rem 1rem;
+  border-radius:  999px;              /* pill shape */
+  transition:     background 0.2s, color 0.2s;
+}
+ul.nav.nav-pills .nav-link:hover {
+  background:     #374151;            /* slightly lighter on hover */
+  color:          #fafafa;            /* bright text on hover */
+}
+ul.nav.nav-pills .nav-link.active {
+  background:     var(--dc-blue);     /* your brand blue */
+  color:          #fff;               /* white text */
+}
+
+.navbar-brand {
+  padding-top:    0;    /* collapse brand’s top padding */
+  padding-bottom: 0;    /* collapse brand’s bottom padding */
+  margin-right:   1.25rem; /* keep your spacing to next item */
+  line-height:    1;    /* so its height is driven solely by the image */
+}
+
+/* 3) Constrain the logo image itself */
+.navbar-brand img {
+  max-height: 3rem;     /* or 32px—whatever visual height you want */
+  height:     auto;
+  width:      auto;
+  display:    block;     /* remove descender gaps */
+  padding:    0;
+  margin:     0;
+}

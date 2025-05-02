@@ -25,6 +25,8 @@ urlpatterns = [
     path('', include(('apps.common.urls', 'common'), namespace='common')),
     path('', include('apps.chat.urls')),
     path('', include('apps.users.urls')), 
+    path('', include(('apps.events.urls', 'events'), namespace='events')),
+    path('', include(('apps.clubs.urls', 'clubs'), namespace='clubs')),
     path('', include(('apps.posts.urls', 'posts'), namespace='posts')),
 ]
 

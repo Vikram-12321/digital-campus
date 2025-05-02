@@ -2,48 +2,105 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'common/css/user_profile.css' %}">
 <script src="{% static 'common/js/user_profile.js' %}"></script>
 
-<div class="container mt-4">
+<div class="container">
+<style>
+  /* ── Profile “quick-stats” row cards ───────────────────────────────────────── */
 
+/* Ensure the cards themselves use the dark card background & blue border */
+.row > .col-md-3 > .card {
+  background:    var(--dc-card) !important;
+  border:        1px solid var(--dc-blue) !important;
+  border-radius: 8px;
+  color:         var(--dc-text);
+  box-shadow:    none;
+}
+
+/* Card header: transparent background, light border, normal weight */
+.row > .col-md-3 > .card .card-header {
+  background:    transparent !important;
+  border-bottom: 1px solid var(--dc-blue) !important;
+  color:         var(--dc-text) !important;
+  font-weight:   500 !important;
+  padding:       0.75rem 1rem;
+}
+
+/* List-group items: transparent so card background shows through */
+.row > .col-md-3 > .card .list-group-item {
+  background:    transparent !important;
+  border:        none !important;
+  border-bottom: 1px solid var(--dc-blue) !important;
+  color:         var(--dc-text) !important;
+  font-weight:   400 !important;
+  padding:       0.5rem 1rem;
+}
+
+/* Remove final border on last item for a cleaner look */
+.row > .col-md-3 > .card .list-group-item:last-child {
+  border-bottom: none !important;
+}
+
+/* Links in those list items use your royal blue */
+.row > .col-md-3 > .card .list-group-item a {
+  color: var(--dc-blue) !important;
+  font-weight: 500;
+}
+
+/* Smaller, lighter “no data” text */
+.row > .col-md-3 > .card .list-group-item.text-muted {
+  font-size: 0.9rem;
+  color: #777 !important;
+}
+
+/* Equal height columns */
+.row > .col-md-3 {
+  display: flex;
+}
+.row > .col-md-3 > .card {
+  flex: 1;
+}
+
+/* Tighten up spacing under the row */
+.row.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+</style>
   <!-- Profile Header -->
   <div class="card mb-4">
     <div class="card-body d-flex align-items-center">
-
-      <!-- Profile Image -->
       <img 
         class="rounded-circle mr-4"
-        src="{{ profile_user.profile.image.url }}"
+        src="{% if profile_user.profile.image %}{{ profile_user.profile.image.url }}{% else %}{% static 'digital_campus/images/default.jpg' %}{% endif %}"
         alt="{{ profile_user.username }}'s profile pic"
-        style="width: 100px; height: 100px; object-fit: cover;"
+        style="width:100px;height:100px;object-fit:cover;"
       >
-
       <div>
-        <h2 class="card-title mb-1">{{ profile_user.username }}</h2>
+        <h2 class="card-title mb-1 text-white">{{ profile_user.username }}</h2>
         <p class="text-muted mb-3">{{ profile_user.profile.bio }}</p>
-        <div class="d-flex">
+        <div class="d-flex text-white">
           <span class="mr-4"><strong>{{ page_obj.paginator.count }}</strong> Posts</span>
           <span class="mr-4"><strong>{{ profile_user.profile.followers.count }}</strong> Followers</span>
-          <span class="mr-4"><strong>{{ profile_user.profile.following.count }}</strong> Following</span>
+          <span><strong>{{ profile_user.profile.following.count }}</strong> Following</span>
         </div>
-        
-        <!-- Follow/Unfollow Buttons (only if viewing someone else's profile) -->
         {% if request.user.is_authenticated and request.user != profile_user %}
           {% if profile_user.profile in request.user.profile.following.all %}
-            <!-- Already following -> show Unfollow button -->
             <form action="{% url 'common:unfollow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
-              <button type="submit" class="btn btn-danger">Unfollow</button>
+              <button class="btn btn-danger">Unfollow</button>
             </form>
           {% else %}
-            <!-- Not following -> show Follow/Request button -->
             <form action="{% url 'common:follow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
               {% if profile_user.profile.is_private %}
-                <button type="submit" class="btn btn-primary">Request to Follow</button>
+                {% if profile_user.profile in request.user.profile.following_requests.all %}
+                  <button class="btn btn-warning">Requested</button>
+                {% else %}
+                  <button class="btn btn-primary">Request to Follow</button>
+                {% endif %}
               {% else %}
-                <button type="submit" class="btn btn-primary">Follow</button>
+                <button class="btn btn-primary">Follow</button>
               {% endif %}
             </form>
           {% endif %}
@@ -52,78 +109,137 @@
     </div>
   </div>
 
-  <!-- Posts Heading -->
-  <h3 class="mb-3">Recent Posts by {{ profile_user.username }}</h3>
+  <!-- Quick-stats row -->
+  <div class="row mb-4">
+    <!-- Upcoming Events -->
+    <div class="col-md-3">
+      <div class="card events-sidebar-card h-100">
+        <div class="card-header text-white">Upcoming Events</div>
+        <ul class="list-group list-group-flush">
+          {% for event in upcoming_events %}
+            <li class="list-group-item">
+              <a href="{% url 'events:event-detail' event.pk %}">{{ event.title }}</a><br>
+              <small class="text-muted">{{ event.starts_at|date:"M d, Y H:i" }}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted">No upcoming events.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
 
-  <!-- User's Posts Loop -->
+    <!-- Academics -->
+    <div class="col-md-3">
+      <div class="card events-sidebar-card h-100">
+        <div class="card-header text-white">Academics</div>
+        <div class="card-body text-white">
+          <p><strong>Major:</strong> {{ profile_user.profile.major|default:"N/A" }}</p>
+          <p><strong>Current Courses:</strong></p>
+          <ul>
+            {% for course in current_courses %}
+              <li class="text-white">{{ course.code }} - {{ course.name }}</li>
+            {% empty %}
+              <li class="text-muted">None</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clubs & Orgs -->
+    <div class="col-md-3">
+      <div class="card events-sidebar-card h-100">
+        <div class="card-header text-white">Clubs &amp; Orgs</div>
+        <ul class="list-group list-group-flush">
+          {% for club in clubs %}
+            <li class="list-group-item">
+              <a href="{% url 'clubs:club-detail' club.pk %}">{{ club.name }}</a>
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted">Not a member of any clubs.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="col-md-3">
+      <div class="card events-sidebar-card h-100">
+        <div class="card-header text-white">Achievements</div>
+        <ul class="list-group list-group-flush">
+          {% for badge in badges %}
+            <li class="list-group-item text-white">
+              <i class="bi bi-award-fill text-warning"></i> {{ badge }}
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted">No achievements yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Posts -->
+  <h3 class="mb-3 text-white">Recent Posts by {{ profile_user.username }}</h3>
   {% for post in posts %}
-    <article class="media content-section mb-4 p-3 bg-white rounded shadow-sm">
-      <img 
-        class="rounded-circle article-img mr-3" 
-        src="{{ post.author.profile.image.url }}"
-        alt="{{ post.author.username }}'s profile picture"
-        style="width: 50px; height: 50px; object-fit: cover;"
-      >
+    <article class="media content-section mb-4">
+      {% if post.author.profile.image %}
+        <img class="rounded-circle article-img"
+             src="{{ post.author.profile.image.url }}"
+             alt="{{ post.author }}">
+      {% else %}
+        <img class="rounded-circle article-img"
+             src="{% static 'digital_campus/images/default.jpg' %}"
+             alt="{{ post.author }}">
+      {% endif %}
       <div class="media-body">
         <div class="article-metadata mb-2">
-          <a class="mr-2 font-weight-bold">
-            {{ post.author }}
-          </a>
-          <small class="text-muted">
-            {{ post.date_posted|date:"F d, Y" }}
-          </small>
+          <a class="font-weight-bold text-blue"
+             href="{% url 'common:user-posts' post.author.username %}">{{ post.author }}</a>
+          <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
         </div>
         <h5>
-          <a class="article-title text-dark" href="{% url 'posts:post-detail' post.id %}">
-            {{ post.title }}
-          </a>
+          <a class="article-title" href="{% url 'posts:post-detail' post.pk %}">{{ post.title }}</a>
         </h5>
-        <p class="article-content text-muted mb-0">
-          {{ post.content|safe }}
-        </p>
+        <p class="article-content text-muted">{{ post.content|truncatewords:30|safe }}</p>
       </div>
     </article>
+  {% empty %}
+    <p class="text-muted">No posts yet.</p>
   {% endfor %}
 
-  <!-- Pagination Controls -->
+  <!-- Pagination -->
   {% if is_paginated %}
     <nav aria-label="Post pagination">
       <ul class="pagination">
-        
         {% if page_obj.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page=1">First</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-          </li>
+          <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
         {% endif %}
-
         {% for num in page_obj.paginator.page_range %}
           {% if page_obj.number == num %}
-            <li class="page-item active">
-              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-            </li>
+            <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
           {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-            </li>
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
           {% endif %}
         {% endfor %}
-
         {% if page_obj.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-          </li>
-          <!-- 
-          <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-          </li>
-          -->
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
         {% endif %}
       </ul>
     </nav>
   {% endif %}
+
+  <!-- Recent Activity -->
+  <h4 class="mt-5 text-white">Recent Activity</h4>
+  {% for act in activities %}
+    <div class="d-flex align-items-start mb-2 text-white">
+      <i class="bi bi-clock-history me-2"></i>
+      <p class="mb-0">{{ act }}</p>
+    </div>
+  {% empty %}
+    <p class="text-muted">No recent activity.</p>
+  {% endfor %}
 
 </div>
 {% endblock content %}

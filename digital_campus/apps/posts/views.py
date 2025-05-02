@@ -3,9 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, DeleteView, UpdateView, CreateView
 from django.shortcuts import redirect
 from .models import Post, Attachment
-from .forms import PostWithFilesForm           # ← use the form that has the “files” field
+from .forms import PostWithFilesForm           
 from django.urls import reverse
-
 
 class AttachmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Attachment
@@ -51,14 +50,16 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.get_object().author == self.request.user
 
-
 class PostDetailView(DetailView):
     model = Post
 
-
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model       = Post
-    success_url = "/"
+    success_url = "/profile/"
 
     def test_func(self):
         return self.get_object().author == self.request.user
+
+
+
+

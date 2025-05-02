@@ -10,14 +10,18 @@ class SearchForm(forms.Form):
     )
 
     FILTER_CHOICES = [
-        ('', 'All'),
+        ('all', 'All'),
         ('posts', 'Posts'),
-        ('users', 'Users'),
+        ('users', 'People'),
+        ['clubs', 'Clubs'],
+        ['events', 'Events']
+
     ]
     filter_by = forms.ChoiceField(
         choices=FILTER_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control mr-sm-2'})
+        # widget=forms.Select(attrs={'class': 'form-control mr-sm-2'})
+        widget=forms.HiddenInput()
     )
 
     ORDER_CHOICES = [
