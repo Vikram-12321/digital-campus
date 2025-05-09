@@ -12,7 +12,7 @@ class ClubMembershipInline(admin.TabularInline):
     extra = 1
     autocomplete_fields = []
     raw_id_fields = ['profile']
-    fields = ('profile', 'role', 'is_active')
+    fields = ('profile', 'role', 'status')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'profile':
@@ -35,12 +35,12 @@ class ClubAdmin(admin.ModelAdmin):
         }
 
     def display_owners(self, obj):
-        owners = obj.clubmembership_set.filter(role='owner').select_related('profile__user')
+        owners = obj.club_membership_set.filter(role='owner').select_related('profile__user')
         return format_html('<br>'.join([m.profile.user.username for m in owners]))
     display_owners.short_description = 'Owners'
 
     def member_count(self, obj):
-        return obj.clubmembership_set.count()
+        return obj.club_membership_set.count()
     member_count.short_description = 'Members'
 
 
@@ -49,10 +49,10 @@ class ClubMembershipAdmin(admin.ModelAdmin):
     form = ClubMembershipForm 
     raw_id_fields = []
     autocomplete_fields = []
+    list_display = ('club', 'profile', 'role', 'status', 'joined_at')
 
-    list_display = ('club', 'profile_user', 'role', 'is_active', 'joined_at')
-    list_filter = ('club', 'role', 'is_active')
-    list_editable = ('role', 'is_active')
+    list_filter = ('club', 'role', 'status')
+    list_editable = ('role', 'status')
     search_fields = ('club__name', 'profile__user__username',)
     date_hierarchy = 'joined_at'
 

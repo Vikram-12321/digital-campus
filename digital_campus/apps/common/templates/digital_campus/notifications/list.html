@@ -1,26 +1,38 @@
 {% extends "digital_campus/base.html" %}
-{% block content %}
-  <h2>Your Notifications</h2>
-  <ul class="list-group mt-3">
-    {% for n in notifications %}
-      <li class="list-group-item d-flex justify-content-between align-items-center {% if n.unread %}fw-bold{% endif %}">
-        <div>
-          <a href="{{ n.get_target_url }}">{{ n.actor.username }} {{ n.verb }}</a>
-          <small class="text-muted d-block">{{ n.timestamp|timesince }} ago</small>
-        </div>
-        <div class="btn-group btn-group-sm">
-          <a href="{% url 'common:dismiss-notification' n.id %}"
-             class="btn btn-outline-secondary"
-             title="Dismiss">&times;</a>
-          {% if "follow" in n.verb %}
-            <a href="{% url 'common:accept-follow-request' n.actor.profile.id %}" class="btn btn-success">✓</a>
-            <a href="{% url 'common:decline-follow-request' n.actor.profile.id %}" class="btn btn-danger">✗</a>
-          {% endif %}
-        </div>
-      </li>
-    {% empty %}
-      <p>You have no notifications.</p>
-    {% endfor %}
-  </ul>
-  
-{% endblock %}
+{% load static %}
+
+{% block content%}
+<h2 class="text-light">Your Notifications</h2>
+<ul class="list-group list-group-flush mt-3">
+
+  {% for n in notifications %}
+    <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-start {% if n.unread %}font-weight-bold{% endif %}" style="border-color: #333;">
+      <div class="flex-grow-1">
+        {% if n.type == "FOLLOW_REQUEST" %}
+          {% include "digital_campus/notifications/cards/_follow_request.html" with notification=n %}
+        {% elif n.type == "FOLLOW" %}
+          {% include "digital_campus/notifications/cards/_follow.html" with notification=n %}
+        {% elif n.type == "EVENT_REQUEST" %}
+          {% include "digital_campus/notifications/cards/_event_request.html" with notification=n %}
+        {% elif n.type == "EVENT_ACCEPT" %}
+          {% include "digital_campus/notifications/cards/_event_accept.html" with notification=n %}
+        {% elif n.type == "EVENT_ATTEND" %}
+          {% include "digital_campus/notifications/cards/_event_attend.html" with notification=n %}
+        {% elif n.type == "CLUB_JOIN_REQUEST" %}
+          {% include "digital_campus/notifications/cards/_club_join_request.html" with notification=n %}
+        {% elif n.type == "CLUB_JOIN_ACCEPT" %}
+          {% include "digital_campus/notifications/cards/_club_join_accept.html" with notification=n %}
+        {% elif n.type == "CLUB_JOIN" %}
+          {% include "digital_campus/notifications/cards/_club_join.html" with notification=n %}
+        {% else %}
+          <p class="text-muted">Unknown notification type.</p>
+        {% endif %}
+        <small class="text-muted d-block">{{ n.timestamp|timesince }} ago</small>
+      </div>
+    </li>
+  {% empty %}
+    <p class="text-muted">You have no notifications.</p>
+  {% endfor %}
+
+</ul>
+{% endblock content%}

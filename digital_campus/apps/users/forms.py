@@ -44,7 +44,6 @@ class ProfileUpdateForm(forms.ModelForm):
             'is_private',
             'current_courses',
             'past_courses',
-            'group_channels',
         ]
         widgets = {
             'current_courses': autocomplete.ModelSelect2Multiple(

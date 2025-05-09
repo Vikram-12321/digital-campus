@@ -3,21 +3,20 @@
 {% block content %}
 <div class="container mt-4">
 
+  <!-- Page Header -->
   <h1 class="display-5 fw-bold text-light mb-4">Campus Events</h1>
 
-  <!-- PILL BAR -->
-  <div class="btn-group filter-scroll mb-4" role="group">
-    {% for key,label in filters %}
+  <!-- Filter Pill Bar -->
+  <div class="btn-group filter-scroll mb-4" role="group" aria-label="Event filters">
+    {% for key, label in filters %}
       <a href="?filter={{ key }}"
-         class="btn btn-pill-fixed
-                {% if filter_selected == key %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+         class="btn btn-pill-fixed {% if filter_selected == key %}btn-primary{% else %}btn-outline-secondary{% endif %}">
         {{ label }}
       </a>
     {% endfor %}
   </div>
-  
 
-  <!-- FEATURED STRIP (optional) -->
+  <!-- Featured Events Strip -->
   {% if featured %}
     <h3 class="text-light mb-3">Featured</h3>
     <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
@@ -35,45 +34,46 @@
                 {{ ev.starts_at|localtime|date:"M j, g:i A" }} · {{ ev.location }}
               </p>
             </div>
-            <a href="{{ ev.get_absolute_url }}" class="stretched-link"></a>
+            <a href="{{ ev.get_absolute_url }}" class="stretched-link" aria-label="View {{ ev.title }}"></a>
           </div>
         </div>
       {% endfor %}
     </div>
   {% endif %}
 
-  <!-- MAIN FEED -->
+  <!-- Main Event Feed -->
   <h3 class="text-light mb-3">{{ filter_label }}</h3>
-    {% for ev in events %}
+  {% for ev in events %}
     <div class="card bg-dark border-light mb-3 position-relative p-3">
-        <h5 class="text-light">{{ ev.title }}</h5>
-        <p class="text-secondary mb-1">
+      <h5 class="text-light">{{ ev.title }}</h5>
+      <p class="text-secondary mb-1">
         {{ ev.starts_at|localtime|timesince }} • {{ ev.location }}
-        </p>
-        <p class="text-muted">{{ ev.description|truncatewords:25 }}</p>
+      </p>
+      <p class="text-muted">{{ ev.description|truncatewords:25 }}</p>
 
-        {% if ev.club %}
+      {% if ev.club %}
         <span class="badge bg-info">{{ ev.club.name }}</span>
 
-        {% if user.is_authenticated and user in ev.club.members.all %}
+        {% if user.is_authenticated %}
+          {% if user in ev.club.members.all %}
             <a href="{% url 'clubs:club-leave' ev.club.pk %}"
-            class="btn btn-outline-danger btn-sm ms-2">
-            Leave Club
+               class="btn btn-outline-danger btn-sm ms-2">
+              Leave Club
             </a>
-        {% else %}
+          {% else %}
             <a href="{% url 'clubs:club-join' ev.club.pk %}"
-            class="btn btn-primary btn-sm ms-2">
-            Join Club
+               class="btn btn-primary btn-sm ms-2">
+              Join Club
             </a>
+          {% endif %}
         {% endif %}
-        {% endif %}
+      {% endif %}
 
-        <a href="{{ ev.get_absolute_url }}" class="stretched-link"></a>
+      <a href="{{ ev.get_absolute_url }}" class="stretched-link" aria-label="View {{ ev.title }}"></a>
     </div>
-    {% empty %}
+  {% empty %}
     <p class="text-muted">No events to show.</p>
-    {% endfor %}
-
+  {% endfor %}
 
 </div>
 {% endblock %}

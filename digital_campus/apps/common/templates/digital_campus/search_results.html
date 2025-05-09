@@ -1,6 +1,6 @@
 {% extends "digital_campus/base.html" %}
 {% block content %}
-<div class="container my-4">
+<div class="container">
 
   <h2 class="mb-4">Search Results for “{{ query }}”</h2>
 
@@ -14,22 +14,48 @@
     </a>?
   </p>
   {% endif %}
+  
   {% include "digital_campus/search/_filter_pills.html" %}
 
-    {% if filter_by == 'all' or filter_by == 'posts' %}
+  {% if filter_by == 'all' %}
+    {% if not posts|length == 0 %}
+      <h5>Posts</h5>
       {% include "digital_campus/search/_posts_list.html" %}
     {% endif %}
 
-    {% if filter_by == 'all' or filter_by == 'users' %}
+    {% if not users|length == 0 %}
+      <h5>People</h5>
       {% include "digital_campus/search/_users_list.html" %}
     {% endif %}
 
-    {% if filter_by == 'all' or filter_by == 'clubs' %}
+    {% if not clubs|length == 0 %}
+      <h5>Clubs</h5>
       {% include "digital_campus/search/_clubs_list.html" %}
     {% endif %}
 
-    {% if filter_by == 'all' or filter_by == 'events' %}
+    {% if not events|length == 0 %}
+      <h5>Events</h5>
       {% include "digital_campus/search/_events_list.html" %}
+    {% endif %}
+
+  {% else %}
+
+    {% if filter_by == 'posts' %}
+      {% include "digital_campus/search/_posts_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'users' %}
+      {% include "digital_campus/search/_users_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'clubs' %}
+      {% include "digital_campus/search/_clubs_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'events' %}
+      {% include "digital_campus/search/_events_list.html" %}
+    {% endif %}
+  
     {% endif %}
 
   {% if posts|length == 0 and users|length == 0 and clubs|length == 0 and events|length == 0 %}

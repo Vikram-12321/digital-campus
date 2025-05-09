@@ -1,10 +1,12 @@
 {% extends "digital_campus/base.html" %}
+{% load static %}
 {% block content %}
 
   <!-- {% include "digital_campus/search/_filter_pills.html" %} -->
+
+  {% include "digital_campus/search/_filter_pills.html" %}
   <div id="post-container">
     {# initial page’s worth of posts #}
-    
     {% include 'digital_campus/home_list.html' %}
   </div>
 
@@ -12,37 +14,6 @@
     Loading…
   </div>
 
-  <script>
-    let page = 2;
-    let loading = false;
-
-    window.addEventListener('scroll', () => {
-      if (loading) return;
-      // when within 100px of bottom
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        loading = true;
-        document.getElementById('loading').style.display = 'block';
-
-        fetch(`?page=${page}`, {
-          headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.posts_html.trim()) {
-            document.getElementById('post-container')
-                    .insertAdjacentHTML('beforeend', data.posts_html);
-            page++;
-            loading = false;
-            document.getElementById('loading').style.display = 'none';
-          } else {
-            // no more posts
-            document.getElementById('loading').innerText = 'No more posts';
-          }
-        })
-        .catch(err => console.error(err));
-      }
-    });
-  </script>
-
+  <script src="{% static 'digital_campus/js/home.js' %}"></script>
 {% endblock %}
 

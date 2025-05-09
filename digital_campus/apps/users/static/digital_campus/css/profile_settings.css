@@ -1,0 +1,82 @@
+/* ---------- dark form controls ---------- */
+input:not(.select2-search__field),
+select:not(.select2-hidden-accessible),
+textarea {
+  background-color:#121212!important;
+  color:#fafafa!important;
+  border:1px solid #555!important;
+  padding:.5rem .75rem;
+  border-radius:.4rem;
+  font-size:1rem;
+}
+input:not(.select2-search__field)::placeholder,
+textarea::placeholder{color:#888}
+
+/* File input styling */
+input.form-control-file {
+  background: transparent!important;
+  color: #bbb!important;
+  font-size: .875rem!important;
+}
+input.form-control-file::-webkit-file-upload-button {
+  background-color: #2a2a2a;
+  color: #fafafa;
+  border: none;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+}
+
+/* Select2 pills */
+.select2-container--default .select2-selection--multiple{
+  background:#121212;
+  border:1px solid #555;
+}
+.select2-selection__choice{
+  background:#2962ff!important;
+  color:#fff!important;
+  border:none!important;
+  border-radius:.25rem!important;
+}
+
+/* Select2 dropdown dark theme */
+.select2-container--default .select2-dropdown {
+  background-color: #2a2a2a;
+  color: #fafafa;
+  border: 1px solid #555;
+}
+.select2-container--default .select2-results__option {
+  padding: .5rem;
+}
+.select2-container--default .select2-results__option--highlighted {
+  background-color: #444;
+  color: #fff;
+}
+
+/* Tabs & wrappers */
+.nav-tabs { border-bottom: none !important; }
+.nav-tabs .nav-link { border: none !important; }
+.nav-tabs .nav-link.active {
+  background-color: transparent !important;
+  color:#fff !important;
+  font-weight:600;
+  text-decoration:underline;
+}
+.nav-tabs .nav-link:hover {
+  background-color: transparent !important;
+  font-weight:600;
+  text-decoration:underline;
+  color:#fff !important;
+}
+.settings-wrapper{background:#1e1e1e;color:#fafafa}
+.settings-section{background:#2a2a2a;padding:1.5rem;border-radius:.75rem}
+
+/* Buttons */
+.btn-success{background:#2e7d32;border-color:#2e7d32}
+.btn-success:hover{background:#1b5e20}
+.btn-secondary{background:#5c5c5c;border-color:#5c5c5c}
+.btn-secondary:hover{background:#444}
+
+/* Helpers */
+label{font-weight:500;margin-bottom:.4rem}
+.form-group{margin-bottom:1.25rem}
+.form-text{color:#aaa!important}

@@ -1,0 +1,136 @@
+/* ─── Navbar & Icons ───────────────────────────────────────────── */
+.navbar-nav .nav-item {
+padding: 0 0.5rem;
+}
+
+@media (max-width: 991.98px) {
+.form-inline .form-control {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+}
+
+.navbar-nav .nav-link i,
+.navbar-nav .nav-link img,
+.navbar-nav .dropdown-toggle span {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 2.4rem;
+width: 2.4rem;
+border-radius: 50%;
+}
+
+.navbar-nav .nav-link img.nav-avatar {
+object-fit: cover;
+height: 2.4rem;
+width: 2.4rem;
+border-radius: 50%;
+}
+
+/* ─── Dropdown Base ───────────────────────────────────────────── */
+.dropdown-menu.custom-dropdown-menu {
+background-color: var(--dc-card);
+border-radius: 0.75rem;
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+padding: 0;
+min-width: 180px;
+}
+
+.dropdown-divider {
+border-top: 1px solid var(--dc-blue-hover);
+}
+
+/* ─── Dropdown Items ───────────────────────────────────────────── */
+.dropdown-item {
+display: flex;
+align-items: center;
+font-weight: 500;
+padding: 0.5rem 1rem;
+color: var(--dc-text);
+transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+background-color: rgba(255, 255, 255, 0.08);
+color: var(--dc-text);
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────── */
+.tooltip-inner {
+background-color: var(--dc-card);
+color: var(--dc-text);
+border-radius: 0.4rem;
+font-size: 0.875rem;
+padding: 6px 10px;
+}
+
+.bs-tooltip-bottom .arrow::before {
+border-bottom-color: var(--dc-card);
+}
+
+.ui-autocomplete {
+    background: #1e1e1e;
+    color: white;
+    max-height: 600px; /* Increased height */
+    overflow-y: auto;
+    border-radius: 10px;
+    padding: 0.5rem 0;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+    z-index: 9999;
+  }
+  
+  .ui-search-group {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #bbb;
+    background: #1e1e1e;
+    border-top: 1px solid #333;
+  }
+  
+  .ui-search-result {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .ui-search-result:hover {
+    background: #2a2a2a;
+  }
+  
+  .ui-search-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .ui-search-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ui-search-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: white;
+  }
+  
+  .ui-search-sub {
+    font-size: 0.9rem;
+    color: #ccc; 
+    margin-top: 0.2rem;
+  }
+  
+  .ui-search-snippet {
+    font-size: 0.85rem;
+    color: #ccc; /* Also lightened */
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+
+  

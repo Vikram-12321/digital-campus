@@ -1,21 +1,36 @@
+"""
+apps/common/additional_views/follow_views.py
+
+Implements the follow system for users:
+- Sending/canceling follow requests
+- Accepting/declining follow requests
+- Viewing pending requests
+- Unfollowing users
+
+Author: Vikram Bhojanala
+Last updated: 2025-05-02
+"""
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from apps.common.models import Notification
 from django.contrib.contenttypes.models import ContentType
-
-# Models
 from django.contrib.auth.models import User
+
 from apps.users.models import Profile
+from apps.common.models import Notification
 
 
 @login_required
 def follow_user(request, username):
     """
-    1) If target is private -> add the current user's profile to target's follow_requests.
-    2) If target is public  -> immediately follow (add to each other's followers/following).
+    Follow or request to follow a user.
+    - If the target is private: send a follow request.
+    - If the target is public: immediately follow.
+    - If already requested: cancel the request.
     """
     target_user = get_object_or_404(User, username=username)
+
     if target_user == request.user:
         messages.warning(request, "You cannot follow yourself.")
         return redirect("common:user-posts", username=username)
@@ -23,50 +38,46 @@ def follow_user(request, username):
     current_profile = request.user.profile
     target_profile = target_user.profile
 
-    # Already following or requesting check:
-
     if current_profile.following_requests.filter(id=target_profile.id).exists():
-        # **Cancelling** the follow‐request:
+        # Cancel pending follow request
         current_profile.following_requests.remove(target_profile)
         target_profile.follow_requests.remove(current_profile)
 
-        # **Delete** the “requested to follow you” notification:
         Notification.objects.filter(
-            recipient   = target_user,
-            actor       = request.user,
-            verb        = "requested to follow you",
+            type = "FOLLOW_REQUEST",
+            recipient=target_user,
+            actor=request.user,
         ).delete()
 
-        messages.info(request, f"You have cancelled your request to follow {target_user.username}.")
-        return redirect('common:user-posts', username=username)
-    
-    # Private vs. Public
+        messages.info(request, f"Follow request to @{username} canceled.")
+        return redirect("common:user-posts", username=username)
+
     if target_profile.is_private:
+        # Send follow request
         target_profile.follow_requests.add(current_profile)
         current_profile.following_requests.add(target_profile)
 
         Notification.objects.create(
             recipient=target_user,
             actor=request.user,
-            verb="requested to follow you",
+            type = "FOLLOW_REQUEST",
             target_ct=ContentType.objects.get_for_model(request.user),
             target_id=request.user.id,
         )
-
-        messages.success(request, f"Follow request sent to {target_user.username}.")
+        messages.success(request, f"Follow request sent to @{username}.")
     else:
+        # Public account: follow immediately
         target_profile.followers.add(current_profile)
         current_profile.following.add(target_profile)
 
         Notification.objects.create(
             recipient=target_user,
             actor=request.user,
-            verb="started following you",
+            type = "FOLLOW",
             target_ct=ContentType.objects.get_for_model(request.user),
             target_id=request.user.id,
         )
-
-        messages.success(request, f"You are now following {target_user.username}.")
+        messages.success(request, f"You are now following @{username}.")
 
     return redirect("common:user-posts", username=username)
 
@@ -74,25 +85,26 @@ def follow_user(request, username):
 @login_required
 def unfollow_user(request, username):
     """
-    Unfollows the target user (remove each from the other's followers/following).
+    Unfollow a user and remove all associated relationship/request links.
     """
     target_user = get_object_or_404(User, username=username)
+
     if target_user == request.user:
         messages.warning(request, "You cannot unfollow yourself.")
-        return redirect("user-posts", username=username)
+        return redirect("common:user-posts", username=username)
 
     current_profile = request.user.profile
     target_profile = target_user.profile
 
-    # Check if we actually follow them:
     if current_profile.following.filter(id=target_profile.id).exists():
-        # Remove from each other's relationships
         current_profile.following.remove(target_profile)
-        current_profile.following_requests.remove(target_profile)
         target_profile.followers.remove(current_profile)
-        messages.success(request, f"You have unfollowed {target_user.username}.")
+
+        # Clean up in case there were requests
+        current_profile.following_requests.remove(target_profile)
+        messages.success(request, f"You have unfollowed @{username}.")
     else:
-        messages.info(request, f"You are not following {target_user.username}.")
+        messages.info(request, f"You are not following @{username}.")
 
     return redirect("common:user-posts", username=username)
 
@@ -100,58 +112,45 @@ def unfollow_user(request, username):
 @login_required
 def accept_follow_request(request, request_profile_id):
     """
-    Accept a follow request from profile with ID=request_profile_id.
-    1) Remove from follow_requests
-    2) Add each other to followers/following
+    Accept a follow request from another profile.
+    Establish mutual follow relationship and notify requester.
     """
-    # Current user = the private account who received requests
     current_profile = request.user.profile
-    # The user who requested to follow me
     requesting_profile = get_object_or_404(Profile, id=request_profile_id)
 
-    # Verify that requesting_profile is actually in current_profile's follow_requests
     if current_profile.follow_requests.filter(id=requesting_profile.id).exists():
-        # Remove from requests
         current_profile.follow_requests.remove(requesting_profile)
-        # Add each other to followers/following
-        current_profile.followers.add(requesting_profile)
-        requesting_profile.following.add(current_profile)
         requesting_profile.following_requests.remove(current_profile)
 
-        # 1) Notify the requester that you accepted:
+        current_profile.followers.add(requesting_profile)
+        requesting_profile.following.add(current_profile)
+
         Notification.objects.create(
             recipient=requesting_profile.user,
             actor=request.user,
-            verb="accepted your follow request",
+            type = "ACCEPT_FOLLOW_REQUEST",
             target_ct=ContentType.objects.get_for_model(request.user),
             target_id=request.user.id,
         )
 
         Notification.objects.filter(
+            type = "ACCEPT_FOLLOW_REQUEST",
             recipient=request.user,
             actor=requesting_profile.user,
-            verb="requested to follow you",
-            target_ct=ContentType.objects.get_for_model(requesting_profile.user),
-            target_id=requesting_profile.user.id,
         ).delete()
 
-        messages.success(
-            request,
-            f"You have accepted {requesting_profile.user.username}'s follow request.",
-        )
+        messages.success(request, f"You accepted @{requesting_profile.user.username}'s follow request.")
     else:
-        messages.warning(request, "No such follow request exists.")
+        messages.warning(request, "No such follow request found.")
 
-    return redirect(
-        "common:view-follow-requests"
-    )  # Adjust to wherever you want to go after acceptance
+    return redirect("common:view-follow-requests")
 
 
 @login_required
 def decline_follow_request(request, request_profile_id):
     """
-    Decline a follow request from profile with ID=request_profile_id.
-    Just remove from follow_requests without adding them to followers/following.
+    Decline a follow request from another profile.
+    Removes from requests and deletes notification.
     """
     current_profile = request.user.profile
     requesting_profile = get_object_or_404(Profile, id=request_profile_id)
@@ -161,32 +160,22 @@ def decline_follow_request(request, request_profile_id):
         requesting_profile.following_requests.remove(current_profile)
 
         Notification.objects.filter(
+            type = "ACCEPT_FOLLOW_REQUEST",
             recipient=request.user,
             actor=requesting_profile.user,
-            verb="requested to follow you",
         ).delete()
 
-        messages.info(
-            request,
-            f"You have declined {requesting_profile.user.username}'s follow request.",
-        )
+        messages.info(request, f"You declined @{requesting_profile.user.username}'s follow request.")
     else:
-        messages.warning(request, "No such follow request exists.")
+        messages.warning(request, "No such follow request found.")
 
-    return redirect(
-        "common:view-follow-requests"
-    )  # Adjust to wherever you want to go after declining
+    return redirect("common:view-follow-requests")
 
 
 @login_required
 def view_follow_requests(request):
     """
-    Show all profiles that have requested to follow the current user (if user is private).
+    Show all incoming follow requests to the current user (if their profile is private).
     """
-    current_profile = request.user.profile
-    # These are the profiles that want to follow me
-    requests_list = current_profile.follow_requests.all()
-
-    return render(
-        request, "digital_campus/follow_requests.html", {"requests_list": requests_list}
-    )
+    requests_list = request.user.profile.follow_requests.all()
+    return render(request, "digital_campus/follow_requests.html", {"requests_list": requests_list})

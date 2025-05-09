@@ -2,87 +2,270 @@
 {% load static %}
 {% block content %}
 
-<div class="club-hero mb-4" style="
-    background: url('{{ club.banner.url }}') center/cover no-repeat;
-    height: 250px;
-    position: relative;
-">
-  <div class="container h-100 d-flex align-items-end">
-    <div class="d-flex align-items-center">
-      {% if club.avatar %}
-        <img src="{{ club.avatar.url }}" alt="{{ club.name }}" 
-             class="rounded-circle border border-3" 
-             style="width:100px; height:100px; object-fit:cover; margin-right:1rem;">
-      {% else %}
-        <div class="rounded-circle bg-secondary" 
-             style="width:100px; height:100px; margin-right:1rem;"></div>
-      {% endif %}
-      <div>
-        <h1 class="text-white">{{ club.name }}</h1>
-          {% if request.user in club.owners.all %}
-            <form method="post" action="{% url 'clubs:toggle_featured' club.slug %}">
-              {% csrf_token %}
-                {% if club.is_featured %}
-                  <button class="btn btn-sm btn-warning">
-                      Unfeature
-                  </button>
-                  {% else %}
-                  <button class="btn btn-sm btn-outline-light">
-                    Feature
-                  </button>
-                {% endif %}
-            </form>
-        {% endif %}
-        
-      </div>
-    </div>
-  </div>
-</div>
+<link rel="stylesheet" href="{% static 'digital_campus/css/club-detail.css' %}">
+  
+<!-- Banner -->
+{% if club.banner %}
+  <div style="height: 250px; background: url('{{ club.banner.url }}') center/cover no-repeat;"></div>
+{% else %}
+  <img src="{% static 'admin/images/banner.jpg' %}" alt="Club banner" style="height: 250px; width: 100%; object-fit: cover;">
+{% endif %}
 
-<div class="container">
-  <div class="mb-5">
-    <h4>Description</h4>
-    {% if club.description %}
-      <p class="lead">{{ club.description|linebreaks }}</p>
+<!-- Club Info Section -->
+<div class="container position-relative">
+  <!-- Avatar floating between banner and content -->
+  <div class="position-absolute" style="top: -60px;">
+    {% if club.avatar %}
+      <img src="{{ club.avatar.url }}" alt="{{ club.name }}"
+           class="rounded-circle border border-3"
+           style="width: 120px; height: 120px; object-fit: cover; background-color: #111;">
     {% else %}
-      <p class="text-muted">No description provided.</p>
+      <img src="{% static 'digital_campus/images/default.jpg' %}" 
+           class="rounded-circle border border-3"
+           style="width: 120px; height: 120px; object-fit: cover; background-color: #111;">
     {% endif %}
   </div>
 
-  <div class="mb-4">
-    <h4>Upcoming Events</h4>
-    <div class="row">
-      {% for event in club.event_set.all %}
-        <div class="col-sm-6 col-md-4 mb-4">
-          <div class="card h-100 bg-dark border-secondary">
-            {% if event.cover_image %}
-              <img src="{{ event.cover_image.url }}" 
-                   class="card-img-top" 
-                   alt="{{ event.title }}" 
-                   style="height:150px; object-fit:cover;">
-            {% endif %}
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">
-                <a href="{{ event.get_absolute_url }}" class="stretched-link text-decoration-none text-light">
-                  {{ event.title }}
-                </a>
-              </h5>
-              <p class="card-text text-muted mb-2">
-                {{ event.starts_at|date:"M d, Y" }} &middot; {{ event.starts_at|time:"g:i A" }}
-              </p>
-              {% if event.location %}
-                <small class="text-secondary">{{ event.location }}</small>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      {% empty %}
-        <div class="col-12">
-          <p class="text-muted">No upcoming events.</p>
-        </div>
-      {% endfor %}
+  <div class="position-relative d-flex justify-content-between align-items-start ps-5 pt-4 mb-4" style="margin-left: 140px; min-height: 120px;">
+    <div>
+      <h1 class="text-white">{{ club.name }}</h1>
+      <div class="d-flex gap-2 my-2">
+        {% if club.is_featured %}
+          <span class="badge bg-warning text-dark fw-semibold px-3 py-2 mr-2">
+            <i class="bi bi-star-fill me-1"></i> Featured Club
+          </span>      
+        {% endif %}
+        <span class="badge bg-primary fw-semibold px-3 py-2 active">
+          <i class="bi bi-people-fill me-1"></i> {{ club.active_memberships.count }} members
+        </span>
+      </div>
     </div>
+
+    {% if request.user.is_authenticated %}
+      <div class="d-flex flex-column align-items-end gap-2 w-100">
+        {% if request.user.is_staff %}
+          <div class="dropdown ml-auto">
+
+            <button class="btn btn-lg p-0 m-0 border-0 bg-transparent text-white" type="button" id="clubSettingsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="bi bi-three-dots h4 m-0"></i>
+            </button>
+
+            <!-- Dropdown -->
+              <div class="dropdown-menu custom-dropdown-menu dropdown-menu-right" aria-labelledby="clubSettingsDropdown">
+                <a class="dropdown-item" href="{% url 'clubs:club-settings' club.slug %}">
+                  <i class="bi bi-gear-fill mr-2"></i> Club Settings
+                </a>
+                <form method="post" action="{% url 'clubs:toggle_featured' club.slug %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">
+                    {% if club.is_featured %}
+                      <i class="bi bi-star mr-2"></i> Unfeature
+                    {% else %}
+                      <i class="bi bi-star-fill mr-2"></i> Feature
+                    {% endif %}
+                  </button>
+                </form>
+                <form method="POST" action="{% url 'clubs:club-delete' club.slug %}">
+                  {% csrf_token %}
+                  <button class="dropdown-item text-danger" type="submit">
+                    <i class="bi bi-trash-fill mr-2"></i> Delete Club
+                  </button>
+                </form>
+              </div>
+             
+          </div>
+
+        {% elif user_membership %}
+          {% if user_membership.status == "member" and user_membership.role == "owner" %}
+            <div class="dropdown ml-auto">
+
+              <button class="btn btn-lg p-0 m-0 border-0 bg-transparent text-white" type="button" id="clubSettingsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="bi bi-three-dots h4 m-0"></i>
+              </button>
+
+              <div class="dropdown-menu custom-dropdown-menu dropdown-menu-right" aria-labelledby="clubSettingsDropdown">
+                <a class="dropdown-item" href="{% url 'clubs:club-settings' club.slug %}">
+                  <i class="bi bi-gear-fill mr-2"></i> Club Settings
+                </a>
+                <form method="POST" action="{% url 'clubs:club-delete' club.slug %}">
+                  {% csrf_token %}
+                  <button class="dropdown-item text-danger" type="submit">
+                    <i class="bi bi-trash-fill mr-2"></i> Delete Club
+                  </button>
+                </form>
+              </div>
+            </div>
+          {% elif user_membership.status == "member" and user_membership.role != "owner" %}
+            <form method="post" action="{% url 'clubs:toggle-membership' club.slug %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-danger btn-lg">
+                <i class="bi bi-person-dash-fill me-1"></i> Leave Club
+              </button>
+            </form>
+          {% elif user_membership.status == "requested" %}
+            <form method="post" action="{% url 'clubs:toggle-membership' club.slug %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-hourglass-split me-1"></i> Requested
+              </button>
+            </form>
+          {% endif %}
+        {% else %}
+          <form method="post" action="{% url 'clubs:toggle-membership' club.slug %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success btn-lg">
+              <i class="bi bi-person-plus-fill me-1"></i> Join Club
+            </button>
+          </form>
+        {% endif %}
+
+        {% if user_membership and user_membership.status == "member" or request.user.is_staff %}
+        
+          <div class="position-absolute" style="bottom: 0; right: 0;">
+
+              <button class="btn btn-primary btn-lg d-flex align-items-center " id="createDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50px; padding: 0.5rem 1.25rem;">
+                <i class="bi bi-plus-circle mr-2"></i> Create
+              </button>
+
+                <div class="dropdown-menu custom-dropdown-menu dropdown-menu-right" aria-labelledby="createDropdown">
+                  <a class="dropdown-item text-light" href="{% url 'events:event-create' %}?club={{ club.pk }}">
+
+                    <i class="bi bi-calendar-plus mr-2"></i> New Event
+                    
+                  </a>
+
+                  <a class="dropdown-item text-light" href="{% url 'posts:post-create' %}?club={{ club.pk }}">
+                    <i class="bi bi-pencil-square mr-2"></i> New Post
+                  </a>
+
+                </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
 </div>
+
+<!-- Description -->
+<div class="mb-5">
+  <h4 class="text-white fw-bold mb-2">About</h4>
+  {% if club.description %}
+    <p class="lead text-light">{{ club.description|linebreaks }}</p>
+  {% else %}
+    <p class="text-muted">No description provided.</p>
+  {% endif %}
+</div>
+
+<!-- Upcoming Events -->
+<div class="mb-5">
+  <h4 class="text-white fw-bold mb-3">Upcoming Events</h4>
+  {% if club.owned_events.all %}
+    {% for event in upcoming_events %}
+      <article class="media content-section">
+        <img class="rounded-circle article-img"
+              src="{{ event.club.avatar.url|default_if_none:'' }}"
+              alt="{{ event.club.name }}">
+    
+        <div class="collapsible-content collapsed">
+          <div class="media-body">
+            <div class="article-metadata">
+              {% if event.club %}
+                <a href="{% url 'clubs:club-detail' event.club.slug %}">
+                  {{ event.club.name }}
+                </a>
+              {% else %}
+                <a href="{% url 'common:user-posts' event.created_by.username %}">
+                  {{ event.created_by }}
+                </a>
+              {% endif %}
+              <small class="text-muted">
+                Event at {{ event.starts_at|date:"M d, Y H:i" }}
+              </small>
+            </div>
+    
+            <h2 class="article-title">
+              <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+            </h2>
+    
+            <p class="article-content">
+              {{ event.description|truncatewords:30|safe }}
+            </p>
+          </div>
+        </div>
+    
+        <div class="expand-toggle">
+          <i class="bi bi-chevron-down"></i>
+        </div>
+      </article>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">No upcoming events.</p>
+  {% endif %}
+</div>
+
+<!-- Recent Posts -->
+<div class="mb-5">
+  <h4 class="text-white fw-bold mb-3">Recent Posts</h4>
+
+  {% if club.posts_owned.all %}
+    {% for post in club.posts_owned.all %}
+      <article class="post-card mb-4 shadow-sm">
+        <div class="p-4 d-flex">
+          {% if post.author.profile.image %}
+            <img src="{{ post.author.profile.image.url }}" class="rounded-circle article-img me-3" alt="{{ post.author }}">
+          {% else %}
+            <img src="{% static 'digital_campus/images/default.jpg' %}" class="rounded-circle article-img me-3" alt="Default avatar">
+          {% endif %}
+
+          <div class="flex-grow-1">
+            <div class="article-metadata mb-2">
+              <a href="{% url 'common:user-posts' post.author.username %}" class="link-primary fw-semibold">
+                {{ post.author }}
+              </a>
+              <small class="text-muted ms-2">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+
+            <h2 class="h3 fw-bold mb-3">
+              <a href="{{ post.get_absolute_url }}" class="link-info text-decoration-none">
+                {{ post.title }}
+              </a>
+            </h2>
+
+            {% for attach in post.attachments.all %}
+              {% if attach.media_type == 'image' %}
+                <div class="mb-3">
+                  <img src="{{ attach.file.url }}" class="img-fluid rounded post-media">
+                </div>
+              {% else %}
+                <div class="mb-3">
+                  <video controls muted playsinline class="w-100 rounded post-media">
+                    <source src="{{ attach.file.url }}" type="video/mp4">
+                  </video>
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            <p class="mb-3">{{ post.content|truncatewords:30|safe }}</p>
+          </div>
+        </div>
+
+        <div class="reaction-bar">
+          <button class="btn" id="like-btn-{{ post.id }}" onclick="toggleLike('{{ post.id }}')">
+            <i class="bi bi-hand-thumbs-up"></i><span>Like</span>
+          </button>
+          <button class="btn" data-bs-toggle="collapse" data-bs-target="#comment-section-{{ post.id }}">
+            <i class="bi bi-chat-left"></i><span>Comment</span>
+          </button>
+          <button class="btn" onclick="sharePost('{{ post.id }}')">
+            <i class="bi bi-share"></i><span>Share</span>
+          </button>
+        </div>
+      </article>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">No posts from this club yet.</p>
+  {% endif %}
+</div>
+
 
 {% endblock %}

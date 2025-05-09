@@ -1,0 +1,90 @@
+{% extends "digital_campus/base.html" %}
+{% load static %}
+{% load crispy_forms_tags widget_tweaks %}
+
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'common/css/user_profile.css' %}"> -->
+
+<script src="{% static 'digital_campus/js/user_profile.js' %}"></script>
+
+<script rel="stylesheet" src="{% static 'digital_campus/css/profile_settings.css' %}"></script>
+
+{{ u_form.media }} {{ p_form.media }}
+
+
+
+<div class="container  settings-wrapper p-4 rounded shadow">
+  <h2 class="mb-4 font-weight-bold">Settings</h2>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
+    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#account" role="tab">Account</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#notifications" role="tab">Notifications</a></li>
+  </ul>
+
+  <form method="POST" enctype="multipart/form-data" class="tab-content">
+    {% csrf_token %}
+
+    <!-- ── Account ─────────────────────── -->
+    <div class="tab-pane fade show active" id="account" role="tabpanel">
+      <div class="settings-section mb-4">
+        <h5 class="text-primary mb-3">Account Information</h5>
+        {{ u_form|crispy }}
+      </div>
+    </div>
+
+    <!-- ── Profile ─────────────────────── -->
+    <div class="tab-pane fade" id="profile" role="tabpanel">
+      <div class="settings-section mb-4">
+        <h5 class="text-primary mb-3">Profile Information</h5>
+
+        <!-- Image -->
+        <div class="form-group">
+          <label>Current image:&nbsp;
+            <span class="text-muted">{{ request.user.profile.image.name|default:"default.jpg" }}</span>
+          </label><br>
+          {{ p_form.image|add_class:"form-control-file" }}
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group">
+          <label for="{{ p_form.bio.id_for_label }}">Bio</label>
+          {{ p_form.bio|add_class:"form-control"|attr:"rows:6" }}
+          {% if p_form.bio.help_text %}
+            <small class="form-text">{{ p_form.bio.help_text }}</small>
+          {% endif %}
+        </div>
+
+        <!-- Private -->
+        <div class="custom-control custom-checkbox mb-3">
+          {{ p_form.is_private|attr:"id:is_private"|add_class:"custom-control-input" }}
+          <label class="custom-control-label" for="is_private">Private profile</label>
+        </div>
+
+        <!-- Courses -->
+        <div class="form-group">
+          <label for="{{ p_form.current_courses.id_for_label }}">Current courses</label>
+          {{ p_form.current_courses }}
+        </div>
+        <div class="form-group">
+          <label for="{{ p_form.past_courses.id_for_label }}">Past courses</label>
+          {{ p_form.past_courses }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Notifications ───────────────── -->
+    <div class="tab-pane fade" id="notifications" role="tabpanel">
+      <div class="settings-section mb-4">
+        <h5 class="text-primary mb-3">Notification Preferences</h5>
+        <p class="text-muted">Coming soon&hellip;</p>
+      </div>
+    </div>
+
+    <!-- Save / Cancel -->
+    <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+    <a href="{% url 'profile' %}" class="btn btn-secondary mt-2 ml-2">Cancel</a>
+  </form>
+</div>
+{% endblock %}

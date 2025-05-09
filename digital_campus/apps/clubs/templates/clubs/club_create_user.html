@@ -1,0 +1,41 @@
+{% extends "digital_campus/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form id="club-form" method="POST" enctype="multipart/form-data" class="mt-4">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="form-group">
+      <label for="avatarPreview" class="text-light">Image Preview</label><br>
+      <img id="avatarPreview" src="#" alt="Preview" style="display:none; max-height: 150px;" class="img-thumbnail">
+    </div>
+
+    <button id="submit-btn" type="submit" class="btn btn-success mt-3">
+        <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        <i class="bi bi-plus-circle"></i> Create Club
+      </button>
+  </form>
+  
+  <script>
+    // Live Image Preview
+    document.getElementById("id_avatar").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const preview = document.getElementById("avatarPreview");
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
+  
+  </script>
+
+<script>
+    document.getElementById("club-form").addEventListener("submit", function () {
+      const btn = document.getElementById("submit-btn");
+      const spinner = document.getElementById("spinner");
+      btn.disabled = true;
+      spinner.classList.remove("d-none");
+    });
+  </script>
+
+  
+{% endblock %}

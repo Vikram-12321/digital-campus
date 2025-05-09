@@ -1,20 +1,142 @@
 {% load static %}
-<ul class="list-group mb-4">
-    {% for post in posts %}
-      <li class="list-group-item p-3 mb-2 rounded shadow-sm">
-        <article class="media">
-          {% if post.author.profile.image %}
-            <img src="{{ post.author.profile.image.url }}" alt="{{ post.author }}" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
-          {% else %}
-            <img src="{% static 'digital_campus/images/default.jpg' %}" alt="avatar" class="rounded-circle mr-3" style="width:50px;height:50px;object-fit:cover;">
-          {% endif %}
-          <div class="media-body">
-            <a href="{% url 'common:user-posts' post.author.username %}" class="font-weight-bold text-dark">{{ post.author }}</a>
-            <small class="text-muted ml-2">{{ post.date_posted|date:"M d, Y" }}</small>
-            <h5 class="mt-2"><a href="{% url 'posts:post-detail' post.pk %}" class="text-info">{{ post.title }}</a></h5>
-            <p class="text-muted mb-0">{{ post.content|truncatewords:30 }}</p>
-          </div>
-        </article>
-      </li>
-    {% endfor %}
-  </ul>
+{# ---------- helper CSS (once per page) ---------- #}
+<style>
+  /* --- Card ---------------------------------------------------------------- */
+  .post-card          { background:#1e1e1e; border-radius:0.5rem; overflow:hidden; }
+  
+  /* --- Avatar & media ------------------------------------------------------ */
+  .article-img        { width:40px; height:40px; object-fit:cover; }
+  .post-media         { max-height:450px; object-fit:cover; }
+  
+  /* --- Reaction bar -------------------------------------------------------- */
+  .reaction-bar               { display:flex; background:#212529; border-top:1px solid #333; }
+  .reaction-bar .btn          {   flex: 1;
+      border: none;
+      border-right: 1px solid #2a2a2a;
+      background: transparent;
+      color: #adb5bd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0;
+      height: 3.5rem;
+      line-height: 1;               
+      box-shadow: none !important;
+      box-sizing: border-box;
+    }
+
+  .reaction-bar .btn:last-child{ border-right:none; }
+  .reaction-bar .btn:hover     { background:#222; color:#fff; }
+  .reaction-bar .btn.active    { background:#1d1d1d; color:#0d6efd; }
+  </style>
+
+<div id="post-container" class="post-feed">
+  {% for item in posts %}
+  <article class="post-card mb-4 shadow-sm">
+
+    {# --- BODY with padding ------------------------------------------------- #}
+    <div class="p-4 d-flex">
+  
+        {# Avatar ------------------------------------------------------------ #}
+        {% if item.author.profile.image %}
+          <img src="{{ item.author.profile.image.url }}" class="rounded-circle article-img me-3" alt="{{ item.author }}">
+        {% else %}
+          <img src="{% static 'digital_campus/images/default.jpg' %}" class="rounded-circle article-img me-3" alt="Default avatar">
+        {% endif %}
+  
+        {# Content column ---------------------------------------------------- #}
+        <div class="flex-grow-1">
+  
+            <div class="article-metadata mb-2">
+              <a href="{% url 'common:user-posts' item.author.username %}" class="link-primary fw-semibold">
+                {{ item.author }}
+              </a>
+              <small class="text-muted ms-2">{{ item.date_posted|date:"F d, Y" }}</small>
+            </div>
+  
+            <h2 class="h3 fw-bold mb-3">
+              <a href="{% url 'posts:post-detail' item.pk %}" class="link-info text-decoration-none">
+                {{ item.title }}
+              </a>
+            </h2>
+  
+            {% for attach in item.attachments.all %}
+                {% if attach.media_type == 'image' %}
+                  <div class="mb-3">
+                    <img src="{{ attach.file.url }}" class="img-fluid rounded post-media">
+                  </div>
+                {% else %}
+                  <div class="mb-3">
+                    <video controls muted playsinline class="w-100 rounded post-media">
+                      <source src="{{ attach.file.url }}" type="video/mp4">
+                    </video>
+                  </div>
+                {% endif %}
+            {% endfor %}
+  
+            <p class="mb-3">{{ item.content|truncatewords:30|safe }}</p>
+        </div>
+    </div>  {# /p‑4 body #}
+  
+    {# --- FULL‑WIDTH REACTION BAR ------------------------------------------ #}
+    <div class="reaction-bar">
+        <button class="btn" id="like-btn-{{ item.id }}" onclick="toggleLike('{{ item.id }}')">
+          <i class="bi bi-hand-thumbs-up"></i><span>Like</span>
+        </button>
+        <button class="btn" data-bs-toggle="collapse" data-bs-target="#comment-section-{{ item.id }}">
+          <i class="bi bi-chat-left"></i><span>Comment</span>
+        </button>
+        <button class="btn" onclick="sharePost('{{ item.id }}')">
+          <i class="bi bi-share"></i><span>Share</span>
+        </button>
+    </div>
+  </article>  
+  {% endfor %}
+</div>
+
+
+  <script>
+    function toggleLike(postId) {
+      fetch(`/posts/${postId}/like/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+      })
+      .then(r => r.json())
+      .then(d => {
+        const span = document.getElementById(`like-count-${postId}`);
+        if (span) span.textContent = d.like_count;
+      });
+    }
+  
+    function sharePost(postId) {
+      const url = `${location.origin}/posts/${postId}/`;
+      if (navigator.share) {
+        navigator.share({ title:'Check out this post', url });
+      } else {
+        navigator.clipboard.writeText(url);
+        alert('Link copied to clipboard');
+      }
+    }
+  </script>
+  
+  <script>
+    function toggleLike(postId){
+      fetch(`/posts/${postId}/like/`,{
+        method:'POST',
+        headers:{'X-CSRFToken':'{{ csrf_token }}'}
+      })
+      .then(r=>r.json())
+      .then(data=>{
+         const btn=document.getElementById(`like-btn-${postId}`);
+         btn.classList.toggle('active', data.liked);   // add .active if liked
+      });
+    }
+    function sharePost(postId){
+      const url=`${location.origin}/posts/${postId}/`;
+      if(navigator.share){ navigator.share({title:'Check this out',url}); }
+      else{ navigator.clipboard.writeText(url); alert('Link copied'); }
+    }
+    </script>

@@ -1,6 +1,15 @@
 from django import forms
 
+
 class SearchForm(forms.Form):
+    """
+    Search form for querying content across posts, users, events, and clubs.
+    Includes:
+    - query: search input
+    - filter_by: hidden or user-selected filter category
+    - order_by: sort option for search results
+    """
+
     query = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
@@ -13,15 +22,14 @@ class SearchForm(forms.Form):
         ('all', 'All'),
         ('posts', 'Posts'),
         ('users', 'People'),
-        ['clubs', 'Clubs'],
-        ['events', 'Events']
-
+        ('clubs', 'Clubs'),
+        ('events', 'Events'),
     ]
+
     filter_by = forms.ChoiceField(
         choices=FILTER_CHOICES,
         required=False,
-        # widget=forms.Select(attrs={'class': 'form-control mr-sm-2'})
-        widget=forms.HiddenInput()
+        widget=forms.HiddenInput()  # Change to Select if you want visible filter bar
     )
 
     ORDER_CHOICES = [
@@ -29,6 +37,7 @@ class SearchForm(forms.Form):
         ('title', 'Title'),
         ('username', 'Username'),
     ]
+
     order_by = forms.ChoiceField(
         choices=ORDER_CHOICES,
         required=False,

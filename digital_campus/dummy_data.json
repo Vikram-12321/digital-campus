@@ -1,0 +1,58 @@
+{
+    "users": [
+      { "username": "alice",   "email": "alice@example.com",   "password": "password123" },
+      { "username": "bob",     "email": "bob@example.com",     "password": "password123" },
+      { "username": "charlie", "email": "charlie@example.com", "password": "password123" }
+    ],
+    "profiles": [
+      { "user": "alice",   "bio": "Math major, chess enthusiast." },
+      { "user": "bob",     "bio": "Computer science student." },
+      { "user": "charlie", "bio": "Loves board games." }
+    ],
+    "clubs": [
+      { "name": "Chess Club",      "slug": "chess-club",      "description": "Weekly chess meetups.", "is_featured": true },
+      { "name": "AI & ML Society", "slug": "ai-ml-society",    "description": "Talks on AI/ML.",       "is_featured": false }
+    ],
+    "memberships": [
+      { "profile": "alice",   "club": "chess-club",      "role": "owner" },
+      { "profile": "bob",     "club": "chess-club",      "role": "member" },
+      { "profile": "charlie", "club": "ai-ml-society",    "role": "owner" }
+    ],
+    "posts": [
+      { "author": "alice",   "title": "Welcome to Chess Club",    "content": "First meetup is this Friday at 6pm." },
+      { "author": "bob",     "title": "AI Talk Recap",            "content": "We discussed neural nets today." }
+    ],
+    "events": [
+      {
+        "title": "Friday Chess Night",
+        "description": "Casual games, snacks provided.",
+        "location": "Room 101",
+        "starts_at": "2025-05-09T18:00:00Z",
+        "ends_at":   "2025-05-09T20:00:00Z",
+        "created_by": "alice",
+        "club":       "chess-club",
+        "is_featured": false,
+        "require_request": false
+      },
+      {
+        "title": "ML Guest Lecture",
+        "description": "Deep dive into CNNs.",
+        "location": "Auditorium",
+        "starts_at": "2025-05-12T15:00:00Z",
+        "ends_at":   "2025-05-12T17:00:00Z",
+        "created_by": "charlie",
+        "club":       "ai-ml-society",
+        "is_featured": true,
+        "require_request": true
+      }
+    ],
+    "ownerships": [
+      { "event": "Friday Chess Night", "club": "chess-club" },
+      { "event": "ML Guest Lecture",   "club": "ai-ml-society" }
+    ],
+    "attendances": [
+      { "event": "Friday Chess Night", "user": "bob",     "status": "attending" },
+      { "event": "ML Guest Lecture",   "user": "alice",   "status": "requested" }
+    ]
+  }
+  

@@ -2,71 +2,11 @@
 {% load static %}
 
 {% block content %}
-<script src="{% static 'common/js/user_profile.js' %}"></script>
+<script src="{% static 'digital_campus/js/user_profile.js' %}"></script>
+<link rel="stylesheet" href="{% static 'digital_campus/css/user_posts.css' %}">
+
 
 <div class="container">
-<style>
-  /* ── Profile “quick-stats” row cards ───────────────────────────────────────── */
-
-/* Ensure the cards themselves use the dark card background & blue border */
-.row > .col-md-3 > .card {
-  background:    var(--dc-card) !important;
-  border:        1px solid var(--dc-blue) !important;
-  border-radius: 8px;
-  color:         var(--dc-text);
-  box-shadow:    none;
-}
-
-/* Card header: transparent background, light border, normal weight */
-.row > .col-md-3 > .card .card-header {
-  background:    transparent !important;
-  border-bottom: 1px solid var(--dc-blue) !important;
-  color:         var(--dc-text) !important;
-  font-weight:   500 !important;
-  padding:       0.75rem 1rem;
-}
-
-/* List-group items: transparent so card background shows through */
-.row > .col-md-3 > .card .list-group-item {
-  background:    transparent !important;
-  border:        none !important;
-  border-bottom: 1px solid var(--dc-blue) !important;
-  color:         var(--dc-text) !important;
-  font-weight:   400 !important;
-  padding:       0.5rem 1rem;
-}
-
-/* Remove final border on last item for a cleaner look */
-.row > .col-md-3 > .card .list-group-item:last-child {
-  border-bottom: none !important;
-}
-
-/* Links in those list items use your royal blue */
-.row > .col-md-3 > .card .list-group-item a {
-  color: var(--dc-blue) !important;
-  font-weight: 500;
-}
-
-/* Smaller, lighter “no data” text */
-.row > .col-md-3 > .card .list-group-item.text-muted {
-  font-size: 0.9rem;
-  color: #777 !important;
-}
-
-/* Equal height columns */
-.row > .col-md-3 {
-  display: flex;
-}
-.row > .col-md-3 > .card {
-  flex: 1;
-}
-
-/* Tighten up spacing under the row */
-.row.mb-4 {
-  margin-bottom: 1.5rem !important;
-}
-
-</style>
   <!-- Profile Header -->
   <div class="card mb-4">
     <div class="card-body d-flex align-items-center">
@@ -229,17 +169,6 @@
       </ul>
     </nav>
   {% endif %}
-
-  <!-- Recent Activity -->
-  <h4 class="mt-5 text-white">Recent Activity</h4>
-  {% for act in activities %}
-    <div class="d-flex align-items-start mb-2 text-white">
-      <i class="bi bi-clock-history me-2"></i>
-      <p class="mb-0">{{ act }}</p>
-    </div>
-  {% empty %}
-    <p class="text-muted">No recent activity.</p>
-  {% endfor %}
 
 </div>
 {% endblock content %}

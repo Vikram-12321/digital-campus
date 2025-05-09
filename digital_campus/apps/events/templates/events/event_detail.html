@@ -1,74 +1,81 @@
 {% extends "digital_campus/base.html" %}
+{% load tz %}
 {% block content %}
-<style>
-  /* Container becomes a 2×2 CSS grid with 1px dark gutters */
-.info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;                     /* gutter between cells */
-  background-color: #333;       /* color of the gutter */
-  border-radius: 0.5rem;
-  overflow: hidden;
-  margin-top: 1.5rem;
-}
+{% load static %}
 
-/* Each cell’s background and padding */
-.info-grid .info-cell {
-  background-color: #1a1a1a;    /* faint gray background */
-  padding: 1.5rem;              /* ample space around icon & text */
-  display: flex;
-  align-items: flex-start;
-}
+<!-- Event Detail CSS -->
+<link rel="stylesheet" href="{% static 'digital_campus/css/event_detail.css' %}">
 
-/* Icon spacing */
-.info-cell i {
-  margin-right: 1.25rem;        /* more space between icon & text */
-  flex-shrink: 0;
-  color: #aaa;
-}
-
-/* Heading style inside each cell */
-.info-cell h6 {
-  margin-bottom: 0.5rem;
-  color: #fff;
-  font-weight: 600;
-}
-
-/* Text below heading */
-.info-cell p {
-  margin: 0;
-  color: #ddd;
-}
-
-</style>
+<!-- Main Content -->
 <article class="container mt-4 text-light">
+  <!-- Title & Badge -->
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <h1 class="text-white">{{ event.title }}</h1>
+  
+    {% if request.user.is_authenticated and event.created_by != request.user %}
+      <form method="post" action="{% url 'events:attend-event' event.pk %}">
+        {% csrf_token %}
 
-  <h1 class="mb-2">{{ object.title }}</h1>
+        {% if attendance_status == "attending" %}
+
+          <button type="submit" class="btn btn-success default-btn btn-lg">
+            <i class="bi bi-check-circle me-1"></i> Attending
+          </button>
+
+        {% elif attendance_status == "requested" %}
+
+        <button type="submit" class="btn btn-primary default-btn btn-lg">
+          <i class="bi bi-hourglass-split me-1"></i>  Requested
+        </button>
+
+        {% else %}
+        
+          <button type="submit" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-person-plus-fill"></i> Attend
+          </button>
+        {% endif %}
+
+      </form>
+    {% endif %}
+
+  </div>
+
   {% if object.is_featured %}
     <span class="badge bg-warning text-dark mb-4">Featured</span>
   {% endif %}
 
+  <!-- Description -->
   <p class="fs-5">{{ object.description|linebreaks }}</p>
 
-  {% if object.created_by %}
-  <p>Hosted By: {{ object.created_by }}</p>
-  {% elif object.club %}
-  <p>Hosted By: {{ object.club }}</p>
-  {% endif %}
-
-  {% if event.requirements.all %}
-  <p><strong>Tags:</strong>
-    {% for tag in event.requirements.all %}
-      <span class="badge">{{ tag }}</span>
-    {% endfor %}
+  <!-- Host Info -->
+  <p>
+    <strong>Hosted By:</strong>
+    {% if object.club %}
+      <a href="{% url 'clubs:club-detail' object.club.slug %}">{{ object.club.name }}</a>
+    {% elif object.created_by %}
+      <a href="{% url 'common:user-posts' object.created_by.username %}">{{ object.created_by }}</a>
+    {% endif %}
   </p>
+  
+
+  <!-- Tag List -->
+  {% if object.requirements.all %}
+    <p>
+      <strong>Tags:</strong>
+      {% for tag in object.requirements.all %}
+        <span class="badge bg-secondary">{{ tag }}</span>
+      {% endfor %}
+    </p>
   {% endif %}
 
   {% if object.duration %}
-    <p> Duration: {{object.duration}}</p>
+    <p><strong>Duration:</strong> {{ object.duration }}</p>
   {% endif %}
-  <!-- true 2×2 grid -->
+
+  <!-- 2×2 Info Grid -->
   <div class="info-grid">
+
+    <!-- Date -->
     <div class="info-cell">
       <i class="bi bi-calendar fs-3"></i>
       <div>
@@ -77,6 +84,7 @@
       </div>
     </div>
 
+    <!-- Time -->
     <div class="info-cell">
       <i class="bi bi-clock fs-3"></i>
       <div>
@@ -88,6 +96,7 @@
       </div>
     </div>
 
+    <!-- Location -->
     <div class="info-cell">
       <i class="bi bi-geo-alt-fill fs-3"></i>
       <div>
@@ -96,39 +105,32 @@
       </div>
     </div>
 
-    {% if object.club %}
+    <!-- Organizer/Host -->
     <div class="info-cell">
       <i class="bi bi-people-fill fs-3"></i>
       <div>
-        <h6>Organizer</h6>
-        <p>{{ object.club.name }}</p>
+        <h6>{% if object.club %}Organizer{% else %}Host{% endif %}</h6>
+        <p>{% if object.club %}{{ object.club.name }}{% else %}{{ object.created_by.username }}{% endif %}</p>
       </div>
     </div>
-    {% else %}
-    <div class="info-cell">
-      <i class="bi bi-people-fill fs-3"></i>
-      <div>
-        <h6>Host</h6>
-        <p>{{ object.created_by.username }}</p>
-      </div>
-    </div>
-    {% endif %}
   </div>
 
+  <!-- Media Attachments -->
   {% if object.attachments.exists %}
     <div class="row row-cols-1 row-cols-md-2 g-3 mt-5">
       {% for att in object.attachments.all %}
         <div class="col">
           {% if att.media_type == "image" %}
-            <img src="{{ att.file.url }}" class="img-fluid rounded">
+            <img src="{{ att.file.url }}" class="img-fluid rounded" alt="Event image">
           {% else %}
-            <video src="{{ att.file.url }}" class="w-100 rounded" controls></video>
+            <video src="{{ att.file.url }}" class="w-100 rounded" controls aria-label="Event video"></video>
           {% endif %}
         </div>
       {% endfor %}
     </div>
   {% endif %}
 
+  <!-- Admin-only Featured Toggle -->
   {% if user.is_staff %}
     <a href="{% url 'events:event-toggle-feature' object.pk %}"
        class="btn btn-sm btn-outline-light mt-4">

@@ -1,0 +1,28 @@
+{% load static %}
+
+<article class="post-card mb-4 shadow-sm">
+    <div class="p-4 d-flex">
+      {% if notification.actor.profile.image %}
+        <img src="{{ notification.actor.profile.image.url }}" class="rounded-circle article-img me-3" alt="{{ notification.actor }}">
+      {% else %}
+        <img src="{% static 'digital_campus/images/default.jpg' %}" class="rounded-circle article-img me-3" alt="Default avatar">
+      {% endif %}
+      <div class="flex-grow-1">
+        <div class="article-metadata mb-1">
+          <a href="{% url 'common:user-posts' notification.actor.username %}" class="link-primary fw-semibold">
+            {{ notification.actor }}
+          </a>
+          <small class="text-muted ms-2">{{ notification.timestamp|timesince }} ago</small>
+        </div>
+        <p class="mb-0 text-light">
+          <a href="{{ notification.get_target_url }}" class="link-info text-decoration-none">
+            {{ notification.verb }}
+          </a>
+        </p>
+        <div class="mt-2">
+          <a href="{% url 'common:dismiss-notification' notification.id %}" class="btn btn-sm btn-outline-secondary">Dismiss</a>
+        </div>
+      </div>
+    </div>
+  </article>
+  

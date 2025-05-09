@@ -1,0 +1,33 @@
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background-color: #333;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .info-grid .info-cell {
+    background-color: #1a1a1a;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .info-cell i {
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+    color: #aaa;
+  }
+
+  .info-cell h6 {
+    margin-bottom: 0.5rem;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .info-cell p {
+    margin: 0;
+    color: #ddd;
+  }

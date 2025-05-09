@@ -1,0 +1,46 @@
+{% extends "digital_campus/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<h2 class="text-white mb-4">Your Events</h2>
+
+{% for membership in memberships %}
+  {% with event=membership.event %}
+    <article class="media content-section bg-dark text-light rounded shadow-sm mb-4 p-4">
+      <div class="d-flex align-items-start">
+
+        {% if event.created_by.profile.image %}
+          <img src="{{ event.created_by.profile.image.url }}" class="rounded-circle article-img me-3" alt="{{ event.created_by }}">
+        {% else %}
+          <img src="{% static 'digital_campus/images/default.jpg' %}" class="rounded-circle article-img me-3" alt="Default avatar">
+        {% endif %}
+
+        <div class="media-body">
+          <div class="article-metadata mb-2">
+            <a href="{% url 'common:user-posts' event.created_by.username %}" class="link-primary fw-semibold">
+              {{ event.created_by }}
+            </a>
+            <small class="text-muted ms-2">{{ event.starts_at|date:"F d, Y H:i" }}</small>
+          </div>
+
+          <h3 class="h4 fw-bold mb-2">
+            <a href="{{ event.get_absolute_url }}" class="link-info text-decoration-none">{{ event.title }}</a>
+          </h3>
+
+          <p class="mb-2">{{ event.description|truncatewords:30|safe }}</p>
+
+          {% if event.club %}
+            <span class="badge bg-primary">
+              <i class="bi bi-people-fill"></i> {{ event.club.name }}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  {% endwith %}
+{% empty %}
+  <p class="text-muted">You haven't created or own any events yet.</p>
+{% endfor %}
+
+{% endblock %}

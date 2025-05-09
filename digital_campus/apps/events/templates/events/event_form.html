@@ -1,34 +1,44 @@
 {% extends "digital_campus/base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 <div class="container mt-4">
+
+  <!-- Page Title -->
   <h2 class="mb-4">
     {% if view.object %}Edit Event{% else %}New Event{% endif %}
   </h2>
 
+  <!-- Show current attachments if editing and any exist -->
   {% if view.object and view.object.attachments.exists %}
     <div class="mb-4">
-      <h5>Current files</h5>
+      <h5 class="mb-3">Current Files</h5>
       <ul class="list-unstyled">
         {% for att in view.object.attachments.all %}
           <li class="d-flex align-items-center mb-2">
-            <a href="{{ att.file.url }}" target="_blank" class="me-2">
+            <a href="{{ att.file.url }}" target="_blank" class="me-3 text-decoration-none">
               {{ att.file.name|cut:'events/'|truncatechars:40 }}
             </a>
             <a href="{% url 'posts:attachment-delete' att.pk %}"
-               class="btn btn-sm btn-outline-danger">Remove</a>
+               class="btn btn-sm btn-outline-danger">
+              Remove
+            </a>
           </li>
         {% endfor %}
       </ul>
     </div>
   {% endif %}
 
-  <form method="post" enctype="multipart/form-data">
+  <!-- Event Form -->
+  <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
-    <button class="btn btn-primary">
-      {% if view.object %}Update{% else %}Create{% endif %}
-    </button>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        {% if view.object %}Update{% else %}Create{% endif %}
+      </button>
+    </div>
   </form>
 </div>
 {% endblock %}

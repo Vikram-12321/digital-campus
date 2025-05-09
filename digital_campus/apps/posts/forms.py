@@ -3,7 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.widgets import ClearableFileInput
 
-from .models import Post, Attachment
+from .models import Post, Attachment, Comment
 
 class MultiFileInput(ClearableFileInput):
     allow_multiple_selected = True                
@@ -57,3 +57,9 @@ class PostWithFilesForm(PostForm):
         }),
     )
 
+## Post Comment Form
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

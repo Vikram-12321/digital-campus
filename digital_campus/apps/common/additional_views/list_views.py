@@ -1,101 +1,140 @@
-from django.views.generic import (
-    ListView
-)   
-from django.shortcuts import render, get_object_or_404, redirect
+"""
+apps/common/additional_views/list_views.py
 
-#Models
-from django.contrib.auth.models import User
-from apps.posts.models import Post
+Feed and profile views:
+- PostListView: Main feed combining posts and upcoming events.
+- UserPostListView: Profile page showing user posts, events, and metadata.
+
+Author: Vikram Bhojanala
+Last updated: 2025-05-02
+"""
 
 from django.views.generic import ListView
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, Http404
 from django.template.loader import render_to_string
-from apps.events.models import Event
 from django.utils import timezone
 
+from django.contrib.auth.models import User
+from apps.posts.models import Post
+from apps.events.models import Event
+from itertools import chain
+
+
+
+from django.utils import timezone
+from django.http import JsonResponse, Http404
+from django.template.loader import render_to_string
+from django.views.generic import ListView
+from itertools import chain
+
+from apps.events.models import Event
+from apps.posts.models import Post
+
+
+from itertools import chain
 
 class PostListView(ListView):
-    model = Post
-    template_name = 'digital_campus/home.html'         # your home page
-    context_object_name = 'posts'
-    paginate_by = 5                            # still page under the hood
-    ordering = ['-date_posted']
+    """Home feed = mixed posts + events with filter pills and infinite scroll."""
+    model               = Post
+    template_name       = "digital_campus/home.html"
+    context_object_name = "posts"
+    paginate_by         = 5
 
+    # ---------- helpers ----------
+    def _tag(self, qs, kind, ts_attr):
+        """stamp .kind  and .timestamp onto every row"""
+        for o in qs:
+            o.kind = kind
+            o.timestamp = getattr(o, ts_attr)
+        return qs
+
+    def get_filter_by(self):
+        return self.request.GET.get("filter_by", "all")
+
+    # ---------- queryset ----------
     def get_queryset(self):
-        # grab all posts, newest first, and prefetch attachments in one go
-        return Post.objects.all()\
-                .order_by('-date_posted')\
-                .prefetch_related('attachments')
+        f = self.get_filter_by()
 
-    def get_context_data(self, **kwargs):
-        # 1) get the default context (includes `posts`, pagination, etc.)
-        context = super().get_context_data(**kwargs)
+        posts  = Post.objects.select_related("author")\
+                             .prefetch_related("attachments")\
+                             .order_by("-date_posted")
+        events = Event.objects.select_related("created_by")\
+                              .filter(starts_at__gte=timezone.now())\
+                              .order_by("starts_at")
 
-        # 2) load upcoming events
-        events = (
-            Event.objects
-                 .filter(starts_at__gte=timezone.now())
-                 .order_by('starts_at')[:20]
+        if f == "posts":
+            return self._tag(list(posts),  "post",  "date_posted")
+        if f == "events":
+            return self._tag(list(events), "event", "starts_at")
+        
+        if f == "new":
+            # newest across posts *and* events
+            mixed = chain(
+                self._tag(list(posts),  "post",  "date_posted"),
+                self._tag(list(events), "event", "starts_at"),
+            )
+            return sorted(mixed, key=lambda x: x.timestamp, reverse=True) 
+
+        # mixed - Not Optimized 
+        mixed = chain(
+            self._tag(list(posts),  "post",  "date_posted"),
+            self._tag(list(events), "event", "starts_at"),
         )
 
-        # 3) merge posts + events into items
-        items = []
-        for p in context['posts']:
-            p.kind = 'post'
-            p.timestamp = p.date_posted
-            items.append(p)
-        for e in events:
-            e.kind = 'event'
-            e.timestamp = e.starts_at
-            items.append(e)
 
-        # 4) sort by that timestamp desc
-        items.sort(key=lambda x: x.timestamp, reverse=True)
+        return sorted(mixed, key=lambda x: x.timestamp, reverse=True)
 
-        # 5) put it in the context
-        context['items'] = items
+    # ---------- context ----------
+    def get_context_data(self, **kw):
+        ctx = super().get_context_data(**kw)   # handles pagination here
+        ctx["items"]      = ctx["object_list"]
+        ctx["filter_by"]  = self.get_filter_by()
+        ctx["hide_params"] = True              # for _filter_pills.html
+        return ctx
 
-        return context
-    
-    def get(self, request, *args, **kwargs):
-        # standard setup
-        self.object_list = self.get_queryset()
+    # ---------- GET (handles Ajax) ----------
+    def get(self, request, *args, **kw):
         try:
+            self.object_list = self.get_queryset()
             context = self.get_context_data()
         except Http404:
-            # page number out of range
-            if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-                # return empty so JS knows to stop
-                return JsonResponse({'posts_html': ''})
-            # for non-AJAX, re-raise so you get the normal 404 page
+            # paginator ran out – return empty slice for AJAX
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"posts_html": ""})
             raise
 
-        # AJAX scroll request? return only the partial
-        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-            posts_html = render_to_string(
-                'digital_campus/post_list.html',
-                {'posts': context['posts']},
-                request=request
+        # Ajax branch
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            html = render_to_string(
+                "digital_campus/home_list.html",   # needs filter_by in ctx
+                context,
+                request=request,
             )
-            return JsonResponse({'posts_html': posts_html})
+            return JsonResponse({"posts_html": html})
 
-        # normal full-page load
+        # full page
         return self.render_to_response(context)
 
+
 class UserPostListView(ListView):
+    """
+    View for a user’s profile page:
+    - Lists their posts
+    - Includes recent events and profile metadata
+    """
     model = Post
-    template_name = 'digital_campus/user_posts.html'  # Where we'll render the user profile
+    template_name = 'digital_campus/user_posts.html'
     context_object_name = 'posts'
-    paginate_by = 5  # 5 posts per page
+    paginate_by = 5
 
     def dispatch(self, request, *args, **kwargs):
         username = self.kwargs.get('username')
         if request.user.is_authenticated and request.user.username == username:
-            return redirect('profile')    # your own profile URL name
+            return redirect('profile')  # update this with your profile route name
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        # fetch the user whose page we’re viewing
         self.profile_user = get_object_or_404(User, username=self.kwargs['username'])
         return (
             Post.objects
@@ -106,38 +145,29 @@ class UserPostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # 1) the user whose profile this is
         context['profile_user'] = self.profile_user
 
-        # 2) upcoming events hosted by this user
+        # Actual upcoming events by this user
         context['upcoming_events'] = (
             Event.objects
-                 .filter(created_by=self.profile_user, starts_at__gte=timezone.now())
-                 .order_by('starts_at')[:5]
+                .filter(created_by=self.profile_user, starts_at__gte=timezone.now())
+                .order_by('starts_at')[:5]
         )
 
-        # 3) “academics” — you can hook this up to real data later
-        # for now, dummy two courses
+        # Stubbed data for demonstration — replace with real queries later
         context['current_courses'] = [
             {'code': 'MAT244', 'name': 'Linear & Nonlinear Systems'},
             {'code': 'CSC263', 'name': 'Data Structures'},
         ]
-
-        # 4) clubs — stub with two sample clubs (replace with real query)
         context['clubs'] = [
-            type('C', (), {'pk':1,'name':'UofT Math Society'})(),
-            type('C', (), {'pk':2,'name':'AI & ML Club'})(),
+            type('C', (), {'pk': 1, 'name': 'UofT Math Society'})(),
+            type('C', (), {'pk': 2, 'name': 'AI & ML Club'})(),
         ]
-
-        # 5) recent activity — dummy strings
         context['activities'] = [
             "Commented on 'Quantum Mechanics Study Group'",
             "Joined event 'Chess Club Hangout'",
             "Liked a post in AI & ML Club",
         ]
-
-        # 6) badges — dummy list
         context['badges'] = [
             "Top Contributor",
             "Event Host (5 events)",
@@ -145,5 +175,3 @@ class UserPostListView(ListView):
         ]
 
         return context
-    
-    

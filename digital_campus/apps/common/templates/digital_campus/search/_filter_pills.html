@@ -1,7 +1,7 @@
-<form method="get" class="mb-4" {% if hide_params %} action="{% url 'common:home' %}" {% else %} action="{% url 'common:search' %}" {% endif %}>
+<form method="get" class="mb-4" {% if hide_params %} action="{% url 'common:digital-campus-app-home' %}" {% else %} action="{% url 'common:search' %}" {% endif %}>
 
   {# only include these when we’re on the search page #}
-  {% if not hide_params %}
+  {% if not hide_params and query%}
     <input type="hidden" name="query"    value="{{ query|default:'' }}">
     <input type="hidden" name="order_by" value="{{ order_by|default:'' }}">
   {% endif %}
@@ -15,6 +15,18 @@
           class="btn nav-link{% if filter_by == 'all' %} active{% endif %}"
         >All</button>
       </li>
+      {% if request.resolver_match.url_name != 'search' and request.resolver_match.url_name == 'digital-campus-app-home' %} 
+
+      <li class="nav-item mr-2">
+        <button
+          type="submit"
+          name="filter_by"
+          value="new"
+          class="btn nav-link{% if filter_by == 'new' %} active{% endif %}"
+        >New</button>
+      </li>
+      {% endif %}
+
       <li class="nav-item mr-2">
         <button
           type="submit"
@@ -23,6 +35,8 @@
           class="btn nav-link{% if filter_by == 'posts' %} active{% endif %}"
         >Posts</button>
       </li>
+
+      {% if request.resolver_match.url_name == 'search' and request.resolver_match.url_name != 'digital-campus-app-home' %} 
       <li class="nav-item mr-2">
         <button
           type="submit"
@@ -39,6 +53,7 @@
           class="btn nav-link{% if filter_by == 'clubs' %} active{% endif %}"
         >Clubs</button>
       </li>
+      {% endif %}
       <li class="nav-item">
         <button
           type="submit"

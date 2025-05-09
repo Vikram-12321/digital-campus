@@ -1,0 +1,472 @@
+[
+    {
+      "model": "auth.user",
+      "pk": 1,
+      "fields": {
+        "username": "alice",
+        "email": "alice@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 2,
+      "fields": {
+        "username": "bob",
+        "email": "bob@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 3,
+      "fields": {
+        "username": "charlie",
+        "email": "charlie@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 4,
+      "fields": {
+        "username": "diana",
+        "email": "diana@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 5,
+      "fields": {
+        "username": "edward",
+        "email": "edward@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 6,
+      "fields": {
+        "username": "fiona",
+        "email": "fiona@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 7,
+      "fields": {
+        "username": "george",
+        "email": "george@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 8,
+      "fields": {
+        "username": "helen",
+        "email": "helen@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 9,
+      "fields": {
+        "username": "ian",
+        "email": "ian@example.com",
+        "password": ""
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 10,
+      "fields": {
+        "username": "jane",
+        "email": "jane@example.com",
+        "password": ""
+      }
+    },
+  
+    {
+      "model": "users.profile",
+      "pk": 1,
+      "fields": {
+        "user": 1,
+        "bio": "Math major & chess enthusiast."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 2,
+      "fields": {
+        "user": 2,
+        "bio": "Computer science undergrad."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 3,
+      "fields": {
+        "user": 3,
+        "bio": "Board games lover."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 4,
+      "fields": {
+        "user": 4,
+        "bio": "Physics nerd."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 5,
+      "fields": {
+        "user": 5,
+        "bio": "Music & art fanatic."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 6,
+      "fields": {
+        "user": 6,
+        "bio": "AI hobbyist."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 7,
+      "fields": {
+        "user": 7,
+        "bio": "Sports club member."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 8,
+      "fields": {
+        "user": 8,
+        "bio": "Literature buff."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 9,
+      "fields": {
+        "user": 9,
+        "bio": "History major."
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": 10,
+      "fields": {
+        "user": 10,
+        "bio": "Environmental science student."
+      }
+    },
+  
+    {
+      "model": "clubs.club",
+      "pk": 1,
+      "fields": {
+        "name": "Chess Club",
+        "slug": "chess-club",
+        "description": "Weekly chess meetups for all levels.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": true,
+        "created_at": "2025-05-01T12:00:00Z"
+      }
+    },
+    {
+      "model": "clubs.club",
+      "pk": 2,
+      "fields": {
+        "name": "AI & ML Society",
+        "slug": "ai-ml-society",
+        "description": "Monthly talks on AI and Machine Learning.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": false,
+        "created_at": "2025-05-02T12:00:00Z"
+      }
+    },
+    {
+      "model": "clubs.club",
+      "pk": 3,
+      "fields": {
+        "name": "Photography Club",
+        "slug": "photography-club",
+        "description": "Capture the world through lenses.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": false,
+        "created_at": "2025-05-03T12:00:00Z"
+      }
+    },
+    {
+      "model": "clubs.club",
+      "pk": 4,
+      "fields": {
+        "name": "Rock Band Collective",
+        "slug": "rock-band-collective",
+        "description": "Jam sessions every weekend.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": true,
+        "created_at": "2025-05-04T12:00:00Z"
+      }
+    },
+    {
+      "model": "clubs.club",
+      "pk": 5,
+      "fields": {
+        "name": "Nature Hikers",
+        "slug": "nature-hikers",
+        "description": "Explore trails and outdoors.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": false,
+        "created_at": "2025-05-05T12:00:00Z"
+      }
+    },
+    {
+      "model": "clubs.club",
+      "pk": 6,
+      "fields": {
+        "name": "Bookworms Unite",
+        "slug": "bookworms-unite",
+        "description": "Bi-weekly book discussions.",
+        "banner": "",
+        "avatar": "",
+        "is_featured": false,
+        "created_at": "2025-05-06T12:00:00Z"
+      }
+    },
+  
+    { "model": "clubs.clubmembership", "pk": 1, "fields": { "profile": 1, "club": 1, "role": "owner",     "joined_at": "2025-05-01T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 2, "fields": { "profile": 2, "club": 1, "role": "member",    "joined_at": "2025-05-03T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 3, "fields": { "profile": 3, "club": 1, "role": "member",    "joined_at": "2025-05-04T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 4, "fields": { "profile": 4, "club": 2, "role": "owner",     "joined_at": "2025-05-02T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 5, "fields": { "profile": 5, "club": 2, "role": "moderator", "joined_at": "2025-05-03T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 6, "fields": { "profile": 6, "club": 2, "role": "member",    "joined_at": "2025-05-04T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 7, "fields": { "profile": 7, "club": 3, "role": "owner",     "joined_at": "2025-05-03T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 8, "fields": { "profile": 8, "club": 3, "role": "member",    "joined_at": "2025-05-05T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 9, "fields": { "profile": 9, "club": 4, "role": "owner",     "joined_at": "2025-05-04T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 10,"fields": { "profile":10,"club": 4, "role": "member",    "joined_at": "2025-05-06T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 11,"fields": { "profile": 1,"club": 5, "role": "owner",     "joined_at": "2025-05-05T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 12,"fields": { "profile": 2,"club": 5, "role": "member",    "joined_at": "2025-05-06T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 13,"fields": { "profile": 3,"club": 6, "role": "owner",     "joined_at": "2025-05-06T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 14,"fields": { "profile": 4,"club": 6, "role": "member",    "joined_at": "2025-05-07T12:00:00Z", "is_active": true } },
+    { "model": "clubs.clubmembership", "pk": 15,"fields": { "profile": 5,"club": 6, "role": "member",    "joined_at": "2025-05-08T12:00:00Z", "is_active": true } },
+  
+    { "model": "posts.post", "pk": 1,  "fields": { "author":1,  "title":"Welcome to Chess Club","content":"First meetup this Friday!"    ,"date_posted":"2025-05-01T08:00:00Z" } },
+    { "model": "posts.post", "pk": 2,  "fields": { "author":2,  "title":"AI Talk Recap",        "content":"Deep learning overview."   ,"date_posted":"2025-05-02T09:00:00Z" } },
+    { "model": "posts.post", "pk": 3,  "fields": { "author":3,  "title":"Photography Tips",      "content":"Rule of thirds, etc."      ,"date_posted":"2025-05-03T10:00:00Z" } },
+    { "model": "posts.post", "pk": 4,  "fields": { "author":4,  "title":"Rock Band Auditions",   "content":"Bring your guitar."        ,"date_posted":"2025-05-04T11:00:00Z" } },
+    { "model": "posts.post", "pk": 5,  "fields": { "author":5,  "title":"Hiking Next Week",      "content":"Trail maps attached."      ,"date_posted":"2025-05-05T12:00:00Z" } },
+    { "model": "posts.post", "pk": 6,  "fields": { "author":6,  "title":"New Book Discussion",   "content":"We’re reading Orwell."     ,"date_posted":"2025-05-06T13:00:00Z" } },
+    { "model": "posts.post", "pk": 7,  "fields": { "author":7,  "title":"Study Group Invite",    "content":"Join us in Lib A."         ,"date_posted":"2025-05-07T14:00:00Z" } },
+    { "model": "posts.post", "pk": 8,  "fields": { "author":8,  "title":"Math Puzzle",          "content":"Can you solve this?"      ,"date_posted":"2025-05-08T15:00:00Z" } },
+    { "model": "posts.post", "pk": 9,  "fields": { "author":9,  "title":"Chemistry Tips",       "content":"Lab safety first."        ,"date_posted":"2025-05-09T16:00:00Z" } },
+    { "model": "posts.post", "pk": 10, "fields": { "author":10, "title":"Poetry Night",         "content":"Share your poems."        ,"date_posted":"2025-05-10T17:00:00Z" } },
+    { "model": "posts.post", "pk": 11, "fields": { "author":1,  "title":"Backend Meetup",       "content":"Django best practices."   ,"date_posted":"2025-05-11T18:00:00Z" } },
+    { "model": "posts.post", "pk": 12, "fields": { "author":2,  "title":"Algo Workshop",        "content":"Sorting algorithms."      ,"date_posted":"2025-05-12T19:00:00Z" } },
+    { "model": "posts.post", "pk": 13, "fields": { "author":3,  "title":"Art Exhibition",       "content":"Local artists featured."  ,"date_posted":"2025-05-13T20:00:00Z" } },
+    { "model": "posts.post", "pk": 14, "fields": { "author":4,  "title":"Soccer Tryouts",       "content":"Come to field C."         ,"date_posted":"2025-05-14T08:00:00Z" } },
+    { "model": "posts.post", "pk": 15, "fields": { "author":5,  "title":"Jazz Night",           "content":"Live band event."         ,"date_posted":"2025-05-15T09:00:00Z" } },
+  
+    {
+      "model": "events.event",
+      "pk": 1,
+      "fields": {
+        "title": "Friday Chess Night",
+        "description": "Casual games & snacks.",
+        "location": "Room 101",
+        "starts_at": "2025-05-09T18:00:00Z",
+        "ends_at": "2025-05-09T20:00:00Z",
+        "duration": null,
+        "created_by": 1,
+        "club": 1,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 2,
+      "fields": {
+        "title": "ML Guest Lecture",
+        "description": "Deep dive into CNNs.",
+        "location": "Auditorium",
+        "starts_at": "2025-05-12T15:00:00Z",
+        "ends_at": "2025-05-12T17:00:00Z",
+        "duration": null,
+        "created_by": 3,
+        "club": 2,
+        "is_featured": true,
+        "require_request": true
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 3,
+      "fields": {
+        "title": "Photography Walk",
+        "description": "Downtown photo tour.",
+        "location": "City Center",
+        "starts_at": "2025-05-10T14:00:00Z",
+        "ends_at": "2025-05-10T16:00:00Z",
+        "duration": null,
+        "created_by": 3,
+        "club": 3,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 4,
+      "fields": {
+        "title": "Rock Jam Session",
+        "description": "Bring your instrument!",
+        "location": "Music Hall",
+        "starts_at": "2025-05-11T19:00:00Z",
+        "ends_at": "2025-05-11T21:00:00Z",
+        "duration": null,
+        "created_by": 4,
+        "club": 4,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 5,
+      "fields": {
+        "title": "Trail Hike",
+        "description": "Nature hike outdoors.",
+        "location": "Trailhead",
+        "starts_at": "2025-05-13T09:00:00Z",
+        "ends_at": "2025-05-13T12:00:00Z",
+        "duration": null,
+        "created_by": 5,
+        "club": 5,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 6,
+      "fields": {
+        "title": "Book Discussion #1",
+        "description": "Discussing '1984'.",
+        "location": "Library Room B",
+        "starts_at": "2025-05-14T17:00:00Z",
+        "ends_at": "2025-05-14T19:00:00Z",
+        "duration": null,
+        "created_by": 6,
+        "club": 6,
+        "is_featured": true,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 7,
+      "fields": {
+        "title": "Study Group: Calculus",
+        "description": "Chapter 5 problems.",
+        "location": "Math Dept",
+        "starts_at": "2025-05-15T16:00:00Z",
+        "ends_at": "2025-05-15T18:00:00Z",
+        "duration": null,
+        "created_by": 8,
+        "club": null,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 8,
+      "fields": {
+        "title": "Chemistry Lab Review",
+        "description": "Lab prep session.",
+        "location": "Chem Lab",
+        "starts_at": "2025-05-16T14:00:00Z",
+        "ends_at": "2025-05-16T16:00:00Z",
+        "duration": null,
+        "created_by": 9,
+        "club": null,
+        "is_featured": false,  
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 9,
+      "fields": {
+        "title": "Art Exhibit Opening",
+        "description": "Local artists gallery.",
+        "location": "Art Center",
+        "starts_at": "2025-05-17T18:00:00Z",
+        "ends_at": "2025-05-17T20:00:00Z",
+        "duration": null,
+        "created_by": 3,
+        "club": 3,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+    {
+      "model": "events.event",
+      "pk": 10,
+      "fields": {
+        "title": "Backend Workshop",
+        "description": "Django best practices.",
+        "location": "CS Lab",
+        "starts_at": "2025-05-18T10:00:00Z",
+        "ends_at": "2025-05-18T12:00:00Z",
+        "duration": null,
+        "created_by": 2,
+        "club": null,
+        "is_featured": false,
+        "require_request": false
+      }
+    },
+  
+    { "model": "events.eventownership", "pk": 1,  "fields": { "event":1,  "club":1, "user":null } },
+    { "model": "events.eventownership", "pk": 2,  "fields": { "event":2,  "club":2, "user":null } },
+    { "model": "events.eventownership", "pk": 3,  "fields": { "event":3,  "club":3, "user":null } },
+    { "model": "events.eventownership", "pk": 4,  "fields": { "event":4,  "club":4, "user":null } },
+    { "model": "events.eventownership", "pk": 5,  "fields": { "event":5,  "club":5, "user":null } },
+    { "model": "events.eventownership", "pk": 6,  "fields": { "event":6,  "club":6, "user":null } },
+    { "model": "events.eventownership", "pk": 7,  "fields": { "event":7,  "club":null, "user":8   } },
+    { "model": "events.eventownership", "pk": 8,  "fields": { "event":8,  "club":null, "user":9   } },
+    { "model": "events.eventownership", "pk": 9,  "fields": { "event":9,  "club":3,   "user":null } },
+    { "model": "events.eventownership", "pk":10,  "fields": { "event":10, "club":null,"user":2   } },
+  
+    { "model": "events.attendancerecord", "pk": 1,  "fields": { "event":1,  "user":2,  "status":"attending",  "requested_at":"2025-05-08T12:00:00Z", "responded_at":"2025-05-08T12:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 2,  "fields": { "event":1,  "user":3,  "status":"requested",  "requested_at":"2025-05-08T12:10:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 3,  "fields": { "event":2,  "user":1,  "status":"requested",  "requested_at":"2025-05-09T09:00:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 4,  "fields": { "event":2,  "user":5,  "status":"attending",  "requested_at":"2025-05-09T09:10:00Z", "responded_at":"2025-05-09T09:15:00Z" } },
+    { "model": "events.attendancerecord", "pk": 5,  "fields": { "event":3,  "user":4,  "status":"attending",  "requested_at":"2025-05-10T11:00:00Z", "responded_at":"2025-05-10T11:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 6,  "fields": { "event":3,  "user":6,  "status":"requested",  "requested_at":"2025-05-10T11:10:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 7,  "fields": { "event":4,  "user":7,  "status":"attending",  "requested_at":"2025-05-11T13:00:00Z", "responded_at":"2025-05-11T13:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 8,  "fields": { "event":5,  "user":2,  "status":"requested",  "requested_at":"2025-05-13T07:00:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 9,  "fields": { "event":6,  "user":3,  "status":"attending",  "requested_at":"2025-05-14T18:00:00Z", "responded_at":"2025-05-14T18:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 10, "fields": { "event":7,  "user":5,  "status":"attending",  "requested_at":"2025-05-15T15:00:00Z", "responded_at":"2025-05-15T15:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 11, "fields": { "event":8,  "user":8,  "status":"requested",  "requested_at":"2025-05-16T14:30:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 12, "fields": { "event":9,  "user":1,  "status":"attending",  "requested_at":"2025-05-17T19:00:00Z", "responded_at":"2025-05-17T19:05:00Z" } },
+    { "model": "events.attendancerecord", "pk": 13, "fields": { "event":10, "user":4,  "status":"attending",  "requested_at":"2025-05-18T10:05:00Z", "responded_at":"2025-05-18T10:10:00Z" } },
+    { "model": "events.attendancerecord", "pk": 14, "fields": { "event":10, "user":9,  "status":"requested",  "requested_at":"2025-05-18T11:00:00Z", "responded_at":null } },
+    { "model": "events.attendancerecord", "pk": 15, "fields": { "event":5,  "user":10, "status":"attending",  "requested_at":"2025-05-13T08:00:00Z", "responded_at":"2025-05-13T08:05:00Z" } }
+  ]

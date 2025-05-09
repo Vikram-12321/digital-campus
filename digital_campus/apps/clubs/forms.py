@@ -2,27 +2,24 @@ from .models import Club, ClubMembership
 from django import forms
 from django.contrib.auth.models import User
 from apps.users.models import Profile
+from django.core.exceptions import ValidationError
 
-class ClubSignupForm(forms.ModelForm):
+class ClubCreateForm(forms.ModelForm):
     class Meta:
         model  = Club
-        fields = ["name", "slug", "description", "banner", "avatar"]
-    #
-    # save() now puts the creator into **both** owners & members
-    #
-    def save(self, creator, commit=True):
-        club = super().save(commit=False)
-        if commit:
-            club.save()
-            club.owners.add(creator)    # ⇦ here
-            club.members.add(creator)
-        return club
+        fields = ["name", "description", "banner", "avatar"]
+
+    def clean_name(self):
+        name = self.cleaned_data["name"].strip()
+        if Club.objects.filter(name__iexact=name).exists():
+            raise ValidationError("A club with this name already exists.")
+        return name
 
 
 class ClubMembershipForm(forms.ModelForm):
     class Meta:
         model = ClubMembership
-        fields = ['profile', 'club', 'role', 'is_active']
+        fields = ['profile', 'club', 'role']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

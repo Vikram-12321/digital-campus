@@ -1,0 +1,45 @@
+  /* --- Card ---------------------------------------------------------------- */
+  .post-card          { background:#1e1e1e; border-radius:0.5rem; overflow:hidden; }
+  
+  /* --- Avatar & media ------------------------------------------------------ */
+  .article-img        { width:40px; height:40px; object-fit:cover; }
+  .post-media         { max-height:450px; object-fit:cover; }
+  
+  /* --- Reaction bar -------------------------------------------------------- */
+  .reaction-bar               { display:flex; background:#212529; border-top:1px solid #333; }
+  .reaction-bar .btn          {   flex: 1;
+      border: none;
+      border-right: 1px solid #2a2a2a;
+      background: transparent;
+      color: #adb5bd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0;
+      height: 3.5rem;
+      line-height: 1;               
+      box-shadow: none !important;
+      box-sizing: border-box;
+    }
+
+  .reaction-bar .btn:last-child{ border-right:none; }
+  .reaction-bar .btn:hover     { background:#222; color:#fff; }
+  .reaction-bar .btn.active    { background:#1d1d1d; color:#0d6efd; }
+
+
+/* static/admin/css/clubs.css */
+select[data-name="profile"] {
+    min-width: 300px;
+    height: 200px;
+}
+
+select[data-name="profile"] option {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

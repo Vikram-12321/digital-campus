@@ -1,12 +1,57 @@
 {% load static %}
-<ul class="list-group mb-4">
-    {% for club in clubs %}
-      <li class="list-group-item p-3 mb-2 rounded shadow-sm d-flex justify-content-between align-items-center">
+{# Only include this CSS block once per page #}
+<style>
+  .club-card {
+    background: #1e1e1e;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .club-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+  .club-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+  }
+</style>
+
+<div class="post-feed">
+  {% for club in clubs %}
+  <article class="club-card mb-4 shadow-sm">
+    <div class="p-4 d-flex justify-content-between align-items-start">
+      <div class="d-flex">
+        {% if club.owner.profile.image %}
+          <img src="{{ club.owner.profile.image.url }}" class="rounded-circle club-img me-3" alt="{{ club.name }}">
+        {% else %}
+          <img src="{% static 'digital_campus/images/default.jpg' %}" class="rounded-circle club-img me-3" alt="Default avatar">
+        {% endif %}
+
         <div>
-          <h5 class="mb-1"><a href="{% url 'clubs:club-detail' club.slug %}" class="text-primary">{{ club.name }}</a></h5>
-          <small class="text-muted">Hosted by {{ club.owner.user.username }}</small>
+          <h5 class="fw-semibold mb-1">
+            <a href="{% url 'clubs:club-detail' club.slug %}" class="link-primary text-decoration-none">
+              {{ club.name }}
+            </a>
+          </h5>
+          <div class="d-flex gap-2 mb-2">
+            {% if club.is_featured %}
+              <span class="badge bg-warning text-dark fw-semibold club-badge">
+                <i class="bi bi-star-fill me-1"></i> Featured Club
+              </span>
+            {% endif %}
+            <span class="badge bg-primary fw-semibold club-badge">
+              <i class="bi bi-people-fill me-1"></i> {{ club.active_memberships.count }} members
+            </span>
+          </div>
+          <p class="text-muted mb-0 small">{{ club.description|truncatewords:20 }}</p>
         </div>
+      </div>
+
+      <div>
         <a href="{% url 'clubs:club-detail' club.slug %}" class="btn btn-outline-primary btn-sm">View</a>
-      </li>
-    {% endfor %}
-  </ul>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
