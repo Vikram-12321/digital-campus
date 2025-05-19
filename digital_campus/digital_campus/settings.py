@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
+import sys
+sys.dont_write_bytecode = True
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,9 +33,7 @@ SECRET_KEY = "django-insecure-=byy&=^v^3&mea)0dv6i!&bwl)(yh*pms28odk*^5o8$@oc^nx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True ## CHANGE IN PRODUCTION
 
-
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -56,11 +61,15 @@ INSTALLED_APPS = [
     'channels',
 
     # Local apps (alphabetical order)
+    'digital_campus',
     'apps.common.apps.CommonConfig',
     'apps.chat',
     'apps.clubs',
     'apps.events',
     'apps.posts',
+    'apps.search',
+    'apps.connections',
+    'apps.notifications',
     'apps.users.apps.UsersConfig',  # Note: Removed duplicate entry
 ]
 
@@ -96,8 +105,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 
@@ -167,18 +175,45 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
+AWS_STATIC_BUCKET = os.getenv("AWS_STATIC_BUCKET", "digitalcampus-files")
+AWS_MEDIA_BUCKET  = os.getenv("AWS_MEDIA_BUCKET",  "digitalcampus-files")
 
-
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            # your media bucket
+            "bucket_name": AWS_MEDIA_BUCKET,
+            "location": "media", 
+            # turn off public ACL by default
+            "default_acl": None,
+            # region & custom domain only if you need them:
+            "region_name": "us-east-2",
+            "endpoint_url": None,          # e.g. for DO Spaces or R2
+            "addressing_style": "virtual", # or "path"
+            "custom_domain": None,         # if you have a CloudFront/CNAME
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3StaticStorage",
+        "OPTIONS": {
+            # your static files bucket
+            "bucket_name": AWS_STATIC_BUCKET,
+            # "default_acl": "public-read",  # static assets are usually public
+            "default_acl": None,
+            "region_name": "us-east-2",
+            "addressing_style": "virtual",
+            # if you front with CloudFront and want signed URLs:
+            # "cloudfront_key_id": os.environ.get("AWS_CF_KEY_ID"),
+            # "cloudfront_key": os.environ.get("AWS_CF_KEY"),
+        },
+    },
+}
 
 # Static and Media files (all served from S3 bucket via storages)
-AWS_S3_CUSTOM_DOMAIN   = 'digitalcampus-files.s3.us-east-2.amazonaws.com'
 
-STATIC_URL             = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-STATICFILES_STORAGE    = 'digital_campus.storage_backends.StaticStorage'
-
-
-MEDIA_URL              = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-DEFAULT_FILE_STORAGE    = 'digital_campus.storage_backends.MediaStorage'
+STATIC_URL             = "/static/"
+MEDIA_URL              = "media/"
 
 # local dev fallback dirs (collected but not served)
 STATIC_ROOT            = BASE_DIR / 'staticfiles'
@@ -215,17 +250,31 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = "digitalcampus-files"
-AWS_S3_FILE_OVERWRITE = False
-AWS_S3_ACL = None
-AWS_DEFAULT_ACL = None
 
-AWS_S3_REGION_NAME = 'us-east-2'
-AWS_S3_ADDRESSING_STYLE = "virtual"
+
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_ACL = None   
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
 
 LOGGING = {
   'version': 1,
   'disable_existing_loggers': False,
-  'handlers': {'console': {'class': 'logging.StreamHandler'}},
-  'root': {'handlers': ['console'], 'level': 'DEBUG'},
+  'handlers': {
+    'null': {'class': 'logging.NullHandler'},
+  },
+  'loggers': {
+    'botocore': {
+      'handlers': ['null'],
+      'level': 'WARNING',
+      'propagate': False,
+    },
+    'boto3': {
+      'handlers': ['null'],
+      'level': 'WARNING',
+      'propagate': False,
+    },
+  },
 }

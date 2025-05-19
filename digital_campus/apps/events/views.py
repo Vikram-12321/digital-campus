@@ -21,7 +21,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 
-from apps.common.models import Notification
+from apps.notifications.models import Notification
 
 from .models import Event, EventAttachment, AttendanceRecord, EventOwnership
 from .forms import EventWithFilesForm, EventForm
@@ -205,48 +205,40 @@ def attend_event(request, event_id):
         
     event = get_object_or_404(Event, pk=event_id)
     record = AttendanceRecord.objects.filter(event=event, user=request.user).first()
-
-
-    if event.require_request:
-
-        Notification.objects.create(
-            recipient=event.created_by,
-            actor=request.user,
-            type = "EVENT_REQUEST",
-            verb= f"has requested to attend {event.title}",
-            target_ct=ContentType.objects.get_for_model(request.user),
-            target_id=request.user.id,
-        )
-
-    else:
-        Notification.objects.create(
-            recipient=event.created_by,
-            actor=request.user,
-            type = "EVENT_ATTEND",
-            # verb=f"is now attending {event.title}" ,
-            target_ct=ContentType.objects.get_for_model(request.user),
-            target_id=request.user.id,
-        )
+    status = "None"
+    responded_at = None
+    notification_type_set = "None"
 
     if record:
-        # Toggle: if attending, delete; if requested, delete
         record.delete()
         messages.info(request, "You've stopped attending this event.")
-    else:
-        # Add new record
-        # needs_approval = event.require_request or event.requirements.exists()
 
-        needs_approval = event.require_request
-        status = AttendanceRecord.STATUS_REQUESTED if needs_approval else AttendanceRecord.STATUS_ATTENDING
+    else: 
+        if event.require_request:
+            notification_type_set = "EVENT_REQUEST"
+            status = AttendanceRecord.STATUS_REQUESTED
+            responded_at=timezone.now()
+            messages.success(request, "Request sent to host for approval.")
+
+        else:
+            notification_type_set = "EVENT_ATTEND"
+            status = AttendanceRecord.STATUS_ATTENDING
+            messages.success(request, "You're now attending!")
+
+
+        Notification.create_notification(
+            recipient=event.created_by,
+            actor=request.user,
+            notification_type = notification_type_set,
+            target=request.user,
+        )
 
         AttendanceRecord.objects.create(
             event=event,
             user=request.user,
             status=status,
-            responded_at=timezone.now() if not needs_approval else None
+            responded_at=responded_at 
         )
-
-        messages.success(request, "You're now attending!" if not needs_approval else "Request sent to host for approval.")
 
     return redirect("events:event-detail", pk=event_id)
 

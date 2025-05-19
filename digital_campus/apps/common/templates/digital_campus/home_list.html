@@ -7,7 +7,6 @@
 
 {% for item in items %}
   {% if item.kind == "post" %}
-
   <article class="post-card mb-4 shadow-sm">
 
     {# --- BODY with padding ------------------------------------------------- #}
@@ -69,17 +68,22 @@
   
   </article>  
 
-{% else %}
+{% elif item.kind == "event" %}
   <!-- -------- EVENT CARD -------- -->
   <article class="media content-section bg-dark text-light rounded shadow-sm mb-4 p-4">
 
     {% if item.created_by.profile.image %}
+
       <img src="{{ item.created_by.profile.image.url }}" alt="{{ item.created_by }}"
            class="rounded-circle article-img me-3">
+
     {% else %}
+
       <img src="{% static 'digital_campus/images/default.jpg' %}" alt="Default avatar"
            class="rounded-circle article-img me-3">
+
     {% endif %}
+
 
     <div class="media-body">
       <div class="article-metadata mb-2">

@@ -10,13 +10,13 @@
         {{ req_profile.user.username }}
         
         <!-- Accept Button -->
-        <form action="{% url 'common:accept-follow-request' req_profile.id %}" method="post" style="display:inline;">
+        <form action="{% url 'connections:accept-follow-request' req_profile.id %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button type="submit" class="btn btn-sm btn-success">Accept</button>
         </form>
         
         <!-- Decline Button -->
-        <form action="{% url 'common:decline-follow-request' req_profile.id %}" method="post" style="display:inline;">
+        <form action="{% url 'connections:decline-follow-request' req_profile.id %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button type="submit" class="btn btn-sm btn-danger">Decline</button>
         </form>

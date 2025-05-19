@@ -1,5 +1,4 @@
-from django.views import View
-from django.views.generic import TemplateView, UpdateView, DeleteView
+from django.views.generic import View, TemplateView, UpdateView, DeleteView, CreateView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
@@ -7,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, DetailView
 from django.utils.timezone import now
 
-from apps.common.models import Notification
+from apps.notifications.models import Notification
 from .models import Club, ClubMembership
 from .forms import ClubCreateForm
 from django.db import models
@@ -15,65 +14,39 @@ from django.urls import reverse_lazy
 from apps.events.models import Event
 from django.contrib.contenttypes.models import ContentType
 
-## CLUB STUFF ##
-
-class JoinClubView(LoginRequiredMixin, View):
-
-    
-    def post(self, request, pk, *args, **kwargs):
-        club = get_object_or_404(Club, pk=pk)
-        club.members.add(request.user)
-        owners = club.club_membership_set.select_related("profile__user").filter(role="owner")
-
-        for owner_membership in owners:
-            Notification.objects.create(
-                recipient=owner_membership.profile.user,
-                actor=request.user,
-                type = "CLUB_JOIN_REQUEST",
-                verb=f"has requested to join {club.name}" if club.require_request else f"has joined {club.name}",
-                target_ct=ContentType.objects.get_for_model(request.user),
-                target_id=request.user.id,
-            )
-
-        return redirect(request.META.get("HTTP_REFERER", "/events/"))
-
-class LeaveClubView(LoginRequiredMixin, View):
-    def post(self, request, pk, *args, **kwargs):
-        club = get_object_or_404(Club, pk=pk)
-        club.members.remove(request.user)
-        messages.success(request, f"You have left the club '{club.name}'.")
-        return redirect(request.META.get("HTTP_REFERER", "/events/"))
-
 class ClubCreateView(LoginRequiredMixin, CreateView):
     model = Club
     form_class = ClubCreateForm
     template_name = "clubs/club_create_user.html"
-    success_url = reverse_lazy("clubs:user-clubs")  # or redirect to detail if preferred
+    success_url = reverse_lazy("clubs:user-clubs")
 
-    def dispatch(self, request, *args, **kwargs):
-        if ClubMembership.objects.filter(
-            profile=request.user.profile, role="owner"
-        ).count() >= 5:
-            messages.warning(request, "You’ve reached your club creation limit (5).")
-            return redirect("clubs:user-clubs")
-        return super().dispatch(request, *args, **kwargs)
-    
     def form_valid(self, form):
         club = form.save(commit=False)
-        if self.request.user.is_authenticated:
-            club.creator = self.request.user.profile
+        user = self.request.user
+
+        if user.is_authenticated:
+            club.creator = user.profile
         club.save()
 
-        if self.request.user.is_authenticated:
-            ClubMembership.objects.create(
-                club=club,
-                profile=self.request.user.profile,
-                role="owner",
-                status=ClubMembership.STATUS_MEMBER
-            )
-        return redirect(club.get_absolute_url())
+        # Re-check after saving
+        owner_count = ClubMembership.objects.filter(
+            profile=user.profile,
+            role="owner"
+        ).count()
 
-    
+        if owner_count >= 5:
+            club.delete()
+            messages.warning(self.request, "You’ve reached your club creation limit (5).")
+            return redirect("clubs:user-clubs")
+
+        ClubMembership.objects.create(
+            club=club,
+            profile=user.profile,
+            role="owner",
+            status=ClubMembership.STATUS_MEMBER
+        )
+
+        return redirect(club.get_absolute_url())
     
 class ClubDetailView(DetailView):
     model = Club
@@ -94,7 +67,6 @@ class ClubDetailView(DetailView):
         else:
             context["user_membership"] = None
 
-        # context.[""]
         # Get upcoming events that the club owns, sorted by date
         context['upcoming_events'] = (
             club.events_owned.filter(starts_at__gte=now()).order_by('starts_at')
@@ -118,8 +90,11 @@ class ToggleMembershipView(LoginRequiredMixin, View):
         club = get_object_or_404(Club, slug=slug)
         profile = request.user.profile
 
-        membership, created = ClubMembership.objects.get_or_create(club=club, profile=profile)
+        membership, created = ClubMembership.objects.get_or_create(
+            club=club, profile=profile
+        )
 
+        # ——— Case: Already a member or has a pending request ——— #
         if not created:
             if membership.status == ClubMembership.STATUS_MEMBER:
                 membership.delete()
@@ -127,52 +102,39 @@ class ToggleMembershipView(LoginRequiredMixin, View):
             elif membership.status == ClubMembership.STATUS_REQUESTED:
                 membership.delete()
                 messages.info(request, "Your membership request was cancelled.")
+            return redirect("clubs:club-detail", slug=slug)
+
+        # ——— Case: New membership request or join ——— #
+        # 1. Set membership status
+        if club.require_request:
+            membership.status = ClubMembership.STATUS_REQUESTED
+            notification_type = "CLUB_JOIN_REQUEST"
+            messages.info(request, "Membership request sent to club admins.")
         else:
-            # Fetch club owners and optimize query
-            owners = club.club_membership_set.select_related("profile__user").filter(role="owner")
+            membership.status = ClubMembership.STATUS_MEMBER
+            membership.responded_at = now()
+            notification_type = "CLUB_JOIN"
+            messages.success(request, "You are now a member!")
 
-            # Use bulk_create for efficient notification creation
-            user_ct = ContentType.objects.get_for_model(request.user)
+        # 2. Notify owners efficiently
+        owners = club.club_membership_set.select_related("profile__user").filter(role="owner")
+        target_ct = ContentType.objects.get_for_model(request.user)
+        target_id = request.user.id
 
+        notifications = [
+            Notification(
+                recipient=owner.profile.user,
+                actor=request.user,
+                notification_type=notification_type,
+                target_ct=target_ct,
+                target_id=target_id,
+            )
+            for owner in owners
+        ]
+        Notification.objects.bulk_create(notifications)
 
-            if club.require_request:
-                membership.status = ClubMembership.STATUS_REQUESTED
-                messages.info(request, "Membership request sent to club admins.")
-
-                notifications = [
-                    Notification(
-                        recipient=owner.profile.user,
-                        actor=request.user,
-                        type = "CLUB_JOIN",
-                        verb=f"has joined {club.name}",
-                        target_ct=user_ct,
-                        target_id=request.user.id,
-                    )
-                    for owner in owners
-                ]
-                Notification.objects.bulk_create(notifications)
-
-
-            else:
-                membership.status = ClubMembership.STATUS_MEMBER
-                membership.responded_at = timezone.now()
-
-                notifications = [
-                    Notification(
-                        recipient=owner.profile.user,
-                        actor=request.user,
-                        type = "CLUB_JOIN_REQUEST",
-                        verb=f"has requested to join {club.name}",
-                        target_ct=user_ct,
-                        target_id=request.user.id,
-                    )
-                    for owner in owners
-                ]
-                Notification.objects.bulk_create(notifications)
-
-                messages.success(request, "You are now a member!")
-
-            membership.save()
+        # 3. Save membership
+        membership.save()
 
         return redirect("clubs:club-detail", slug=slug)
     

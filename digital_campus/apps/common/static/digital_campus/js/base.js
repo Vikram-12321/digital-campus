@@ -96,3 +96,6 @@ function initCollapsibles() {
       `).appendTo(ul);
     };
   });
+
+
+  console.log('base.js loaded');

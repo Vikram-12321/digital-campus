@@ -3,15 +3,12 @@
 {% load crispy_forms_tags widget_tweaks %}
 
 {% block content %}
-<!-- <link rel="stylesheet" href="{% static 'common/css/user_profile.css' %}"> -->
 
 <script src="{% static 'digital_campus/js/user_profile.js' %}"></script>
 
-<script rel="stylesheet" src="{% static 'digital_campus/css/profile_settings.css' %}"></script>
+<link rel="stylesheet" href="{% static 'digital_campus/css/profile_settings.css?v=1.2' %}">
 
 {{ u_form.media }} {{ p_form.media }}
-
-
 
 <div class="container  settings-wrapper p-4 rounded shadow">
   <h2 class="mb-4 font-weight-bold">Settings</h2>

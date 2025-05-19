@@ -10,12 +10,40 @@ function toggleLike(postId) {
     });
   }
   
-  function sharePost(postId) {
-    const url = `${location.origin}/posts/${postId}/`;
-    if (navigator.share) {
-      navigator.share({ title: '{{ object.title }}', url });
-    } else {
-      navigator.clipboard.writeText(url);
-      alert('Link copied to clipboard');
-    }
-  }
+function toggleShareMenu(postId) {
+  // Collapse all open menus
+  document.querySelectorAll('.share-menu.collapse.show').forEach(el => {
+    bootstrap.Collapse.getInstance(el)?.hide();
+  });
+
+  const menu = document.getElementById(`share-menu-${postId}`);
+  const collapse = new bootstrap.Collapse(menu, { toggle: true });
+
+  const url = `${location.origin}/post/${postId}/`;
+  const title = '{{ object.title|escapejs }}';
+
+  document.getElementById(`twitter-share-${postId}`).href =
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+
+  document.getElementById(`whatsapp-share-${postId}`).href =
+    `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`;
+}
+
+function closeShareMenu(postId) {
+  const menu = document.getElementById(`share-menu-${postId}`);
+  bootstrap.Collapse.getInstance(menu)?.hide();
+}
+
+function copyLink(postId) {
+  const url = `${location.origin}/posts/${postId}/`;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('Link copied to clipboard!');
+  });
+}
+
+function copyInstagramLink(postId) {
+  const url = `${location.origin}/posts/${postId}/`;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('Instagram doesn\'t support web sharing. Link copied!');
+  });
+}

@@ -26,12 +26,12 @@
         </div>
         {% if request.user.is_authenticated and request.user != profile_user %}
           {% if profile_user.profile in request.user.profile.following.all %}
-            <form action="{% url 'common:unfollow-user' profile_user.username %}" method="post" class="mt-3">
+            <form action="{% url 'connections:unfollow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
               <button class="btn btn-danger">Unfollow</button>
             </form>
           {% else %}
-            <form action="{% url 'common:follow-user' profile_user.username %}" method="post" class="mt-3">
+            <form action="{% url 'connections:follow-user' profile_user.username %}" method="post" class="mt-3">
               {% csrf_token %}
               {% if profile_user.profile.is_private %}
                 {% if profile_user.profile in request.user.profile.following_requests.all %}

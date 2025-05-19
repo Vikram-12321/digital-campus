@@ -1,0 +1,14 @@
+AWS_S3_CUSTOM_DOMAIN   = 'digitalcampus-files.s3.us-east-2.amazonaws.com' ## Change 
+
+STATICFILES_STORAGE = 'digital_campus.storage_backends.StaticStorage' ## Change
+
+DEFAULT_FILE_STORAGE    = 'digital_campus.storage_backends.MediaStorage' ## Change
+AWS_DEFAULT_ACL = None  # Fallback ACL (## Change)
+AWS_S3_REGION_NAME = 'us-east-2' ## Change
+AWS_S3_ADDRESSING_STYLE = "virtual" ## Change
+AWS_STORAGE_BUCKET_NAME = "digitalcampus-files" ## Change
+AWS_S3_FILE_OVERWRITE = False ## Change
+AWS_S3_ACL = None ## Change
+AWS_QUERYSTRING_AUTH = False  # Disables signed URLs (## Change)
+AWS_STATIC_BUCKET=digitalcampus-files
+AWS_MEDIA_BUCKET=digitalcampus-files

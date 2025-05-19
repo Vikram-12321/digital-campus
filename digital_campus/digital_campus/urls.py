@@ -28,6 +28,9 @@ urlpatterns = [
     path('', include(('apps.events.urls', 'events'), namespace='events')),
     path('', include(('apps.clubs.urls', 'clubs'), namespace='clubs')),
     path('', include(('apps.posts.urls', 'posts'), namespace='posts')),
+    path('', include(("apps.search.urls", 'search'), namespace = 'search')),
+    path('', include(("apps.connections.urls", 'connections'), namespace = 'connections')),
+    path('', include(("apps.notifications.urls", 'notifications'), namespace = 'notifications')),
 ]
 
 if settings.DEBUG:

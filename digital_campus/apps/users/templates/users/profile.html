@@ -53,22 +53,31 @@
   
     {# ──────────── three-dot menu (absolute top-right) ──────────── #}
     <div class="dropdown position-absolute" style="top:6px; right:6px;">
-      <button class="btn border-0 bg-transparent text-white fs-5"
-      id="postMenu{{ post.pk }}"
-      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="bi bi-three-dots" style="font-size: 1.5rem;"></i>
-        </button>
+
+
+      <button class="btn border-0 bg-transparent text-white fs-5" id="postMenu{{ post.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="bi bi-three-dots" style="font-size: 1.5rem;"></i>
+      </button>
   
-        <div class="dropdown-menu dropdown-menu-right bg-dark text-white border-0 shadow"
-        aria-labelledby="postMenu{{ post.pk }}">
-     <a class="dropdown-item text-white" href="{% url 'posts:post-update' post.pk %}">Edit</a>
-     <a class="dropdown-item text-danger"
-        data-toggle="modal"
-        data-target="#deleteModal{{ post.pk }}">
-         Delete
-     </a>
-   </div>
-   
+
+
+      <div class="dropdown-menu custom-dropdown-menu dropdown-menu-right">
+        
+          <a class="dropdown-item d-flex align-items-center" href="{% url 'posts:post-update' post.pk %}">
+            <i class="bi bi-pencil-square mr-2"></i> Edit
+          </a>
+
+
+          <a class="dropdown-item d-flex align-items-center text-danger" 
+            data-toggle="modal"
+            data-target="#deleteModal{{ post.pk }}">
+
+            <i class="bi bi-trash mr-2"> </i> Delete
+
+          </a>
+
+      </div>
+
     </div>
   
     {# ──────────── main post body ──────────── #}

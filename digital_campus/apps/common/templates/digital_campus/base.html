@@ -34,7 +34,7 @@
           <div class="nav-inline">
             <div class="search-wrapper">
               <!-- Search Form -->
-              <form class="form-inline flex-grow-1 my-2 my-lg-0" method="GET" action="{% url 'common:search' %}">
+              <form class="form-inline flex-grow-1 my-2 my-lg-0" method="GET" action="{% url 'search:search' %}">
                 <div id="dc-search-group" class="input-group w-100">
                   <input type="search" name="query" id="id_search_input" class="form-control" placeholder="Search posts or users…" value="{{ request.GET.query|default_if_none:'' }}" aria-label="Search">
                   <div class="input-group-append">
@@ -99,7 +99,7 @@
                     <div class="dropdown-item text-muted text-center py-3">No new notifications</div>
                   {% endif %}
                   <div class="dropdown-divider m-0"></div>
-                  <a class="dropdown-item text-center text-primary py-2" href="{% url 'common:notifications' %}">View All Notifications</a>
+                  <a class="dropdown-item text-center text-primary py-2" href="{% url 'notifications:notifications' %}">View All Notifications</a>
                     </div>
               </li>
               
@@ -232,7 +232,7 @@
 
       <!-- 5) Your scripts -->
       <script>
-        const autocompleteURL = "{% url 'common:autocomplete' %}";
+        const autocompleteURL = "{% url 'search:autocomplete' %}";
       </script>
       
       <script src="{% static 'digital_campus/js/upload_and_autoplay.js' %}"></script>

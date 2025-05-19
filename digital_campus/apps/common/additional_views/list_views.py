@@ -20,8 +20,6 @@ from apps.posts.models import Post
 from apps.events.models import Event
 from itertools import chain
 
-
-
 from django.utils import timezone
 from django.http import JsonResponse, Http404
 from django.template.loader import render_to_string
@@ -59,6 +57,7 @@ class PostListView(ListView):
         posts  = Post.objects.select_related("author")\
                              .prefetch_related("attachments")\
                              .order_by("-date_posted")
+        
         events = Event.objects.select_related("created_by")\
                               .filter(starts_at__gte=timezone.now())\
                               .order_by("starts_at")

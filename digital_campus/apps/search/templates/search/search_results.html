@@ -1,0 +1,66 @@
+{% extends "digital_campus/base.html" %}
+{% block content %}
+<div class="container">
+
+  <h2 class="mb-4">Search Results for “{{ query }}”</h2>
+
+  {# “Did you mean?” and result sections unchanged… #}
+  {% if corrected_query and corrected_query != query %}
+
+  <p>
+    Did you mean:
+    <a href="{% url 'search:search' %}?query={{ corrected_query|urlencode }}&filter_by={{ filter_by }}&order_by={{ order_by|urlencode }}">
+      {{ corrected_query }}
+    </a>?
+  </p>
+  {% endif %}
+  
+  {% include "search/helpers/_filter_pills.html" %}
+
+  {% if filter_by == 'all' %}
+    {% if not posts|length == 0 %}
+      <h5>Posts</h5>
+      {% include "search/helpers/_posts_list.html" %}
+    {% endif %}
+
+    {% if not users|length == 0 %}
+      <h5>People</h5>
+      {% include "search/helpers/_users_list.html" %}
+    {% endif %}
+
+    {% if not clubs|length == 0 %}
+      <h5>Clubs</h5>
+      {% include "search/helpers/_clubs_list.html" %}
+    {% endif %}
+
+    {% if not events|length == 0 %}
+      <h5>Events</h5>
+      {% include "search/helpers/_events_list.html" %}
+    {% endif %}
+
+  {% else %}
+
+    {% if filter_by == 'posts' %}
+      {% include "search/helpers/_posts_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'users' %}
+      {% include "search/helpers/_users_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'clubs' %}
+      {% include "search/helpers/_clubs_list.html" %}
+    {% endif %}
+
+    {% if filter_by == 'events' %}
+      {% include "search/helpers/_events_list.html" %}
+    {% endif %}
+  
+    {% endif %}
+
+  {% if posts|length == 0 and users|length == 0 and clubs|length == 0 and events|length == 0 %}
+    <p>No results found.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

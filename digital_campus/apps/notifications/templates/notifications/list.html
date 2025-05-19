@@ -1,0 +1,38 @@
+{% extends "digital_campus/base.html" %}
+{% load static %}
+
+{% block content%}
+
+<h2 >Your Notifications</h2>
+
+
+<ul class="p=0 mt-3">
+
+  {% for n in notifications %}
+
+        {% if n.notification_type == "FOLLOW_REQUEST" %}
+          {% include "notifications/cards/_follow_request.html" with notification=n %}
+        {% elif n.notification_type == "FOLLOW" %}
+          {% include "notifications/cards/_follow.html" with notification=n %}
+        {% elif n.notification_type == "EVENT_REQUEST" %}
+          {% include "notifications/cards/_event_request.html" with notification=n %}
+        {% elif n.notification_type == "EVENT_ACCEPT" %}
+          {% include "notifications/cards/_event_accept.html" with notification=n %}
+        {% elif n.notification_type == "EVENT_ATTEND" %}
+          {% include "notifications/cards/_event_attend.html" with notification=n %}
+        {% elif n.notification_type == "CLUB_JOIN_REQUEST" %}
+          {% include "notifications/cards/_club_join_request.html" with notification=n %}
+        {% elif n.notification_type == "CLUB_JOIN_ACCEPT" %}
+          {% include "notifications/cards/_club_join_accept.html" with notification=n %}
+        {% elif n.notification_type == "CLUB_JOIN" %}
+          {% include "notifications/cards/_club_join.html" with notification=n %}
+        {% endif %}
+
+  {% empty %}
+
+    <p class="text-muted">You have no notifications.</p>
+
+  {% endfor %}
+
+</ul>
+{% endblock content%}
