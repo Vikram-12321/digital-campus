@@ -5,8 +5,7 @@ class GroupChannel(models.Model):
 
     def __str__(self):
         return self.name
-    
-# channels/models.py
+# chat/models.py
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
@@ -29,9 +28,8 @@ class ChatRoom(models.Model):
     # Optional group icon
     room_icon = models.ImageField(upload_to='chat_room_icons/', null=True, blank=True)
 
-    def __str__(self):
-        room_type = "Private DM" if self.is_private else "Group Chat"
-        return f"{self.name} ({room_type})"
+    class Meta:
+        indexes = [models.Index(fields=['name'])]
 
 class ChatMessage(models.Model):
     room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
@@ -53,15 +51,18 @@ class ChatAttachment(models.Model):
     # We'll store a thumbnail if it's an image. (Optional)
     thumbnail = models.ImageField(upload_to='chat_attachments/thumbnails/', null=True, blank=True)
 
+    @property
+    def is_image(self):
+        return self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp'))
+
     def save(self, *args, **kwargs):
         """
         Override save to create a thumbnail if it's an image.
         """
-        super().save(*args, **kwargs)
-        
-        # Generate thumbnail if it's an image
-        if self.file and self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-            self.generate_thumbnail()
+        first_save = self.pk is None
+        super().save(*args, **kwargs)          # one DB hit
+        if first_save and self.is_image:
+            self.generate_thumbnail()   
 
     def generate_thumbnail(self):
         """

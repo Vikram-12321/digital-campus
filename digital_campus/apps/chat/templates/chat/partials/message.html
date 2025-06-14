@@ -1,0 +1,20 @@
+{# msg = ChatMessage instance passed by parent #}
+<div class="media mb-3">
+    <img src="{{ msg.user.profile.profile_pic.url|default:'https://via.placeholder.com/40' }}"
+         class="mr-3 rounded-circle" width="40" height="40">
+    <div class="media-body">
+        <h6 class="mt-0 mb-1">{{ msg.user.username }}
+            <small class="text-muted">{{ msg.timestamp|naturaltime }}</small>
+        </h6>
+        {% if msg.content %}<p class="mb-1">{{ msg.content }}</p>{% endif %}
+        {% for att in msg.attachments.all %}
+            <a href="{{ att.file.url }}" target="_blank">
+                {% if att.is_image %}
+                    <img src="{{ att.thumbnail.url|default:att.file.url }}" class="img-fluid mb-1" style="max-width:200px;">
+                {% else %}
+                    <i class="bi bi-file-earmark"></i> {{ att.file.name|basename }}
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+</div>

@@ -1,5 +1,5 @@
 # chat/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import ChatRoom, ChatMessage, ChatAttachment
@@ -13,19 +13,21 @@ def chat_room(request, room_name):
     Render the chat page for a given room and ensure
     the current user is a participant in that room.
     """
-    room, created = ChatRoom.objects.get_or_create(name=room_name)
+    room = get_object_or_404(ChatRoom, name=room_name)
+
     
     # Make sure the user is a participant
     if request.user not in room.participants.all():
         room.participants.add(request.user)
     
     # Load previous messages to display
-    messages = room.messages.select_related('user').order_by('timestamp')
+    messages = room.messages.select_related('user').prefetch_related('attachments').order_by('timestamp')
     
     return render(request, 'chat/chat_room.html', {
         'room_name': room_name,
         'messages': messages,  # pass these to the template
     })
+
 
 @csrf_exempt
 @login_required
@@ -120,3 +122,4 @@ def add_user_to_group(request, room_name):
         except (User.DoesNotExist, ChatRoom.DoesNotExist):
             pass
         return redirect('chat-room', room_name=room_name)
+

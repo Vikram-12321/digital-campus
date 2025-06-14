@@ -1,175 +1,161 @@
+{% extends "digital_campus/base.html" %}
+
 {% load static %}
-{% load custom_filters %}
+{% block content %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Chat - {{ room_name }}</title>
+    <meta charset="UTF-8">
+    <title>{{ room.name }}</title>
+
+    <!--  Bootstrap 4  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css">
+    <!--  Bootstrap-Icons  -->
+    <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}">
+    <!--  Chat CSS  -->
     <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
 </head>
-<body>
-<div id="chat-container">
-    <!-- Left side: room list (optional if you have multiple rooms) -->
-    <div id="rooms-list">
-        <!-- You could dynamically list rooms the user is in -->
-        <div class="room-item">{{ room_name }}</div>
-    </div>
+<body class="bg-dark text-light d-flex flex-column vh-100">
 
-    <!-- Right side: main chat -->
-    <div id="chat-content">
-        <div id="chat-log">
-            <!-- Render old messages from the DB first -->
-            {% for msg in messages %}
-                <div class="chat-message">
-                    <img class="profile-pic" src="{{ msg.user.profile.image.url }}" alt="Profile">
-                    <span class="username">{{ msg.user.username }}</span>
-                    <span class="timestamp">{{ msg.timestamp|date:"H:i" }}</span>
-                    <div class="message-content">
-                        {{ msg.content }}
-                    </div>
-                    
-                    {% if msg.attachments.all %}
-                        <div class="attachments">
-                            {% for attach in msg.attachments.all %}
-                                {% if attach.file.name|lower|endswith:".png" or attach.file.name|lower|endswith:".jpg" or attach.file.name|lower|endswith:".jpeg" or attach.file.name|lower|endswith:".gif" %}
-                                    <!-- Image preview -->
-                                    {% if attach.thumbnail %}
-                                        <img src="{{ attach.thumbnail.url }}" style="max-width:200px;"/>
-                                    {% else %}
-                                        <img src="{{ attach.file.url }}" style="max-width:200px;"/>
-                                    {% endif %}
-                                {% elif attach.file.name|lower|endswith:".mp4" or attach.file.name|lower|endswith:".mov" or attach.file.name|lower|endswith:".webm" %}
-                                    <!-- Video preview -->
-                                    <video controls width="300">
-                                        <source src="{{ attach.file.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                {% else %}
-                                    <!-- Generic file link -->
-                                    <a href="{{ attach.file.url }}" target="_blank">Download File</a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
+<!-- ---------- HEADER ---------- -->
+<nav class="navbar navbar-dark bg-secondary">
+    <span class="navbar-brand mb-0 h5">
+        <i class="bi bi-chat-dots"></i> {{ room.name }}
+    </span>
+</nav>
 
-        <div id="typing-indicator" style="display:none;"></div>
+<!-- ---------- MESSAGES ---------- -->
+<main id="messages-container" class="flex-grow-1 overflow-auto p-3">
+    {% for msg in messages %}
+        {% include "chat/partials/message.html" with msg=msg %}
+    {% endfor %}
+</main>
 
-        <div id="message-input-container">
-            <input id="chat-message-input" type="text" placeholder="Type your message...">
-            <button id="chat-message-send">Send</button>
-        </div>
-
-        <!-- File Upload Form -->
-        <form id="fileUploadForm" enctype="multipart/form-data" method="POST" style="padding:10px;">
-            {% csrf_token %}
-            <input type="file" name="file" id="fileInput">
-            <input type="hidden" name="room_name" value="{{ room_name }}">
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+<!-- ---------- TYPING INDICATOR ---------- -->
+<div id="typing-indicator" class="px-3 py-1 text-muted small" style="display:none;">
+    <i class="bi bi-pencil"></i> <span id="typing-user"></span> is typing…
 </div>
 
-<script src="{% static 'digital_campus/js/jquery-3.5.1.min.js' %}"></script>
-<script>
-  const roomName = "{{ room_name }}";
-  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const chatSocket = new WebSocket(
-      protocol + '://' + window.location.host + '/ws/chat/' + roomName + '/'
-  );
+<!-- ---------- COMPOSER ---------- -->
+<form id="composer" class="d-flex p-2 border-top bg-secondary" autocomplete="off">
+    <input id="msg-input" class="form-control mr-2" placeholder="Type a message…" />
+    <label class="btn btn-outline-light mb-0 mr-2">
+        <i class="bi bi-paperclip"></i>
+        <input id="file-input" type="file" hidden>
+    </label>
+    <button id="send-btn" class="btn btn-primary"><i class="bi bi-send"></i></button>
+</form>
 
-  const chatLog = document.querySelector("#chat-log");
-  const typingIndicator = document.querySelector("#typing-indicator");
-  const chatMessageInput = document.querySelector("#chat-message-input");
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{% static 'chat/js/chat.js' %}"></script>
 
-  chatSocket.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      if (data.type === 'text') {
-          // Create a new DOM element for the message
-          const msgDiv = document.createElement('div');
-          msgDiv.classList.add('chat-message');
-          
-          // Profile pic
-          const profilePic = document.createElement('img');
-          profilePic.classList.add('profile-pic');
-          profilePic.src = data.profile_pic_url ? data.profile_pic_url : '{% static "media/default.jpg" %}';
-          msgDiv.appendChild(profilePic);
-          
-          // Username
-          const usernameSpan = document.createElement('span');
-          usernameSpan.classList.add('username');
-          usernameSpan.textContent = data.username;
-          msgDiv.appendChild(usernameSpan);
+<!-- Feed template-vars to JS -->
+ <script>
+    // chat.js
+(function () {
+  const { roomName, userName, uploadUrl, csrfToken } = window.CHAT;
+  const socket = new WebSocket(`ws://${location.host}/ws/chat/${roomName}/`);
 
-          // Timestamp
-          const timestampSpan = document.createElement('span');
-          timestampSpan.classList.add('timestamp');
-          timestampSpan.textContent = " " + data.timestamp;
-          msgDiv.appendChild(timestampSpan);
+  /* ---------- DOM ---------- */
+  const $messages = $('#messages-container');
+  const $msgInput = $('#msg-input');
+  const $typing = $('#typing-indicator');
+  const $typingUser = $('#typing-user');
+  const $fileInput = $('#file-input');
 
-          // Message content
-          const contentDiv = document.createElement('div');
-          contentDiv.classList.add('message-content');
-          contentDiv.textContent = data.message;
-          msgDiv.appendChild(contentDiv);
+  /* ---------- Helpers ---------- */
+  const scrollBottom = () => $messages.prop('scrollTop', $messages.prop('scrollHeight'));
 
-          chatLog.appendChild(msgDiv);
-          chatLog.scrollTop = chatLog.scrollHeight;
-      } else if (data.type === 'typing') {
-          typingIndicator.style.display = 'block';
-          typingIndicator.textContent = data.user + " is typing...";
-          setTimeout(() => {
-              typingIndicator.style.display = 'none';
-          }, 2000);
+  const renderMessage = data => {
+    const { username, message, profile_pic_url, timestamp } = data;
+
+    const $media = $(`
+      <div class="media mb-3">
+         <img src="${profile_pic_url || 'https://via.placeholder.com/40'}"
+              class="mr-3 rounded-circle" width="40" height="40">
+         <div class="media-body">
+             <h6 class="mt-0 mb-1">${username}
+               <small class="text-muted">${timestamp}</small>
+             </h6>
+             <p class="mb-1">${message || ''}</p>
+         </div>
+      </div>`);
+    $messages.append($media);
+    scrollBottom();
+  };
+
+  /* ---------- WebSocket events ---------- */
+  socket.onmessage = e => {
+    const data = JSON.parse(e.data);
+    if (data.type === 'typing') {
+      if (data.user !== userName) {
+        $typingUser.text(data.user);
+        $typing.show();
+        clearTimeout($typing.data('timeout'));
+        $typing.data('timeout', setTimeout(() => $typing.hide(), 1500));
       }
+    } else {
+      $typing.hide();
+      renderMessage(data);
+    }
   };
 
-  chatSocket.onclose = function(e) {
-      console.error('Chat socket closed unexpectedly');
-  };
+  socket.onclose = () => console.warn('Socket closed');
 
-  // Send message
-  document.querySelector("#chat-message-send").onclick = function(e) {
-      const message = chatMessageInput.value.trim();
-      if (message.length > 0) {
-          chatSocket.send(JSON.stringify({
-              'message': message,
-              'type': 'text'
-          }));
-          chatMessageInput.value = '';
-      }
-  };
-
-  // Typing indicator
-  chatMessageInput.onkeyup = function(e) {
-      chatSocket.send(JSON.stringify({
-          'type': 'typing'
-      }));
-  };
-
-  // File upload
-  $("#fileUploadForm").submit(function(e) {
-      e.preventDefault();
-      let formData = new FormData(this);
-      $.ajax({
-          url: "{% url 'chat-file-upload' %}",
-          type: 'POST',
-          data: formData,
-          contentType: false,
-          processData: false,
-          success: function(response) {
-              // Optionally, you could send a message about the new file
-              chatSocket.send(JSON.stringify({
-                  'message': 'Uploaded a file',
-                  'type': 'text'
-              }));
-          },
-          error: function(err) {
-              console.log(err);
-          }
-      });
+  /* ---------- Send text ---------- */
+  $('#composer').on('submit', e => {
+    e.preventDefault();
+    const msg = $msgInput.val().trim();
+    if (msg) {
+      socket.send(JSON.stringify({ message: msg }));
+      $msgInput.val('');
+    }
   });
+
+  /* ---------- Typing indicator ---------- */
+  let typingTimeout;
+  $msgInput.on('input', () => {
+    clearTimeout(typingTimeout);
+    socket.send(JSON.stringify({ type: 'typing' }));
+    typingTimeout = setTimeout(() => {}, 1000);
+  });
+
+  /* ---------- File upload ---------- */
+  $fileInput.on('change', () => {
+    const file = $fileInput[0].files[0];
+    if (!file) return;
+
+    const form = new FormData();
+    form.append('file', file);
+    form.append('room_name', roomName);
+
+    fetch(uploadUrl, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrfToken },
+      body: form,
+    })
+    .then(r => r.json())
+    .then(() => {
+        socket.send(JSON.stringify({ message: `${userName} sent a file.` }));
+    })
+    .catch(console.error);
+  });
+
+  /* ---------- Auto-scroll on load ---------- */
+  $(document).ready(scrollBottom);
+})();
+
+ </script>
+<script>
+  window.CHAT = {
+      roomName: "{{ room.name|escapejs }}",
+      userName: "{{ request.user.username|escapejs }}",
+      uploadUrl: "{% url 'chat-file-upload' %}",
+      csrfToken: "{{ csrf_token }}",
+  };
 </script>
 </body>
 </html>
+
+{% endblock %}

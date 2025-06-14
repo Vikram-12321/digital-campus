@@ -1,4 +1,4 @@
-# channels/consumers.py
+# chat/consumers.py
 
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -7,26 +7,23 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from .models import ChatRoom, ChatMessage, ChatAttachment
 
-class ChatConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f"chat_{self.room_name}"
 
-        # Permission check: Only participants can join
-        user = self.scope['user']
-        room = await self.get_room(self.room_name)
+class ChatConsumer(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        user = self.scope["user"]
         if user.is_anonymous:
-            await self.close()
-        else:
-            is_participant = await self.is_participant(room, user)
-            if not is_participant:
-                await self.close()
-            else:
-                await self.channel_layer.group_add(
-                    self.room_group_name,
-                    self.channel_name
-                )
-                await self.accept()
+            return await self.close()
+
+        self.room_name      = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group     = f"chat_{self.room_name}"
+        self.room           = await self.get_room(self.room_name)
+
+        if not await self.is_participant(self.room, user):
+            return await self.close()
+
+        await self.channel_layer.group_add(self.room_group, self.channel_name)
+        await self.accept()
 
     async def disconnect(self, code):
         await self.channel_layer.group_discard(
