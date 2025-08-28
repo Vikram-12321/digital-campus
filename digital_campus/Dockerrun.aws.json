@@ -1,0 +1,10 @@
+{
+  "AWSEBDockerrunVersion": 1,
+  "Image": { "Name": "public.ecr.aws/docker/library/python:3.12-slim", "Update": "true" },
+  "Ports": [ { "ContainerPort": "8000" } ],
+  "ContainerCommands": {
+    "01_migrate": "python manage.py migrate --noinput",
+    "02_collect": "python manage.py collectstatic --noinput",
+    "03_seed": "python manage.py seed_demo || true"
+  }
+}

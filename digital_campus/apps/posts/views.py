@@ -56,7 +56,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return redirect(post.get_absolute_url())
 
 
-
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model         = Post
     form_class    = PostWithFilesForm
@@ -78,6 +77,12 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
+        # Provide a simple boolean for whether current user liked the post
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'profile'):
+            context['liked'] = PostLike.objects.filter(post=self.object, user=user.profile).exists()
+        else:
+            context['liked'] = False
         return context
 
 
@@ -92,6 +97,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 ## Post Like View
 @login_required
 def like_post(request, post_id):
+    if request.method != 'POST':
+        return JsonResponse({'detail': 'Method not allowed'}, status=405)
     post = get_object_or_404(Post, id=post_id)
     like, created = PostLike.objects.get_or_create(post=post, user=request.user.profile)
     if not created:

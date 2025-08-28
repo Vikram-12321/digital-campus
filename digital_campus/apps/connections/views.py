@@ -32,7 +32,6 @@ def _notify(recipient: User, actor: User, notif_type: str) -> None:
         target = actor
     )
 
-
 # ───────────────────────────────────────────────────────────
 # Follow / Request
 # ───────────────────────────────────────────────────────────

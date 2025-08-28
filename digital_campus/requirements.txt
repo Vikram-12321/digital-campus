@@ -58,3 +58,5 @@ urllib3==1.26.20
 websocat==1.13.0
 whitenoise==6.8.2
 zope.interface==7.2
+psycopg[binary]
+dj-database-url
